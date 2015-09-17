@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="textEntryBackground">#FF7043</color>
+    <color name="entryCardBackground">#FFFFFF</color>
+    <color name="mainBackground">#eaeaea</color>
+</resources>

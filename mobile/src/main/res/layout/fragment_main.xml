@@ -11,12 +11,12 @@
         android:layout_height="match_parent"
         android:layout_above="@+id/textEntryLayout">
         <include layout="@layout/fragment_calendar_review"></include>
-        <include layout="@layout/entry_card"></include>
-        <include layout="@layout/entry_card"></include>
-        <include layout="@layout/entry_card"></include>
-        <include layout="@layout/entry_card"></include>
-        <include layout="@layout/entry_card"></include>
-        <include layout="@layout/entry_card"></include>
+
+        <ListView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/listView" />
+
     </LinearLayout>
 
     <RelativeLayout
@@ -44,6 +44,7 @@
             android:text="Submit"
             android:id="@+id/submitButton"
             android:layout_alignParentEnd="false"
-            android:layout_alignParentRight="true" />
+            android:layout_alignParentRight="true"
+            android:onClick="onSubmit" />
     </RelativeLayout>
 </RelativeLayout>

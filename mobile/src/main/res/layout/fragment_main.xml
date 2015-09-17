@@ -47,6 +47,7 @@
             android:id="@+id/submitButton"
             android:layout_alignParentEnd="false"
             android:layout_alignParentRight="true"
-            android:onClick="onSubmit" />
+            android:onClick="onSubmit"
+            android:layout_alignBottom="@+id/textEntry" />
     </RelativeLayout>
 </RelativeLayout>

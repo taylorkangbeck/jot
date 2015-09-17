@@ -2,6 +2,7 @@ package com.taylorandtucker.jot.ui;
 
 import android.app.Activity;
 import android.content.ContentValues;
+import android.content.Context;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -9,6 +10,7 @@ import android.support.v4.content.CursorLoader;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
@@ -86,16 +88,23 @@ public class PlaceholderFragment extends Fragment implements LoaderManager.Loade
     private void onSubmit()
     {
         EditText entryText = (EditText) getActivity().findViewById(R.id.textEntry);
-        final Entry entry = new Entry(entryText.getText().toString());
+        if (!entryText.equals("")) {
+            final Entry entry = new Entry(entryText.getText().toString());
 
-        //putEntry
-        ContentValues values = new ContentValues();
-        values.put(Contract._ID, entry.getId());
-        values.put(Contract.COLUMN_DATE, entry.getCreatedOn().toString());
-        values.put(Contract.COLUMN_BODY, entry.getBody());
-        getActivity().getContentResolver().insert(DBContentProvider.CONTENT_URI, values);
+            //putEntry
+            ContentValues values = new ContentValues();
+            values.put(Contract._ID, entry.getId());
+            values.put(Contract.COLUMN_DATE, entry.getCreatedOn().toString());
+            values.put(Contract.COLUMN_BODY, entry.getBody());
+            getActivity().getContentResolver().insert(DBContentProvider.CONTENT_URI, values);
 
-        
+            View view = getActivity().getCurrentFocus();
+            if (view != null) {
+                InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+                imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
+                entryText.setText("");
+            }
+        }
     }
 
     @Override

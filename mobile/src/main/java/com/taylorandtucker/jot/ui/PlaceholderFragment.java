@@ -1,22 +1,24 @@
 package com.taylorandtucker.jot.ui;
 
 import android.app.Activity;
-import android.app.LoaderManager;
-import android.content.Loader;
+import android.content.ContentValues;
 import android.database.Cursor;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.content.CursorLoader;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
+import android.support.v4.app.LoaderManager;
+import android.support.v4.content.Loader;
 
 import com.taylorandtucker.jot.Entry;
 import com.taylorandtucker.jot.R;
-import com.taylorandtucker.jot.localdb.DBUtils;
+import com.taylorandtucker.jot.localdb.DBContentProvider;
+import com.taylorandtucker.jot.localdb.EntriesContract.Contract;
 
 /**
  * Created by Taylor on 9/16/2015.
@@ -29,7 +31,7 @@ public class PlaceholderFragment extends Fragment implements LoaderManager.Loade
     private static final String ARG_SECTION_NUMBER = "section_number";
 
     private CardCursorAdapter cardCursorAdapter;
-    private String LOADER_ID = "entriesLoader";
+    private int LOADER_ID = 1;
 
     /**
      * Returns a new instance of this fragment for the given section
@@ -51,29 +53,18 @@ public class PlaceholderFragment extends Fragment implements LoaderManager.Loade
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_main, container, false);
 
-        //entries feed adapter
-        final ListView entriesFeed = (ListView) getActivity().findViewById(R.id.listView);
-        new AsyncTask<Void, Void, Void>() {
-            @Override
-            protected Void doInBackground(Void... params) {
-                Cursor entriesCursor = DBUtils.getInstance(getContext()).getAllEntriesQuery();
-                cardCursorAdapter = new CardCursorAdapter(getContext(), entriesCursor);
-                return null;
-            }
-
-            @Override
-            protected void onPostExecute(Void aVoid) {
-                entriesFeed.setAdapter(cardCursorAdapter);
-            }
-        }.execute();
-
-
         return rootView;
     }
 
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
+
+        //entries feed adapter
+        getLoaderManager().initLoader(LOADER_ID, null, this);
+        final ListView entriesFeed = (ListView) getActivity().findViewById(R.id.listView);
+        cardCursorAdapter = new CardCursorAdapter(getContext(), null);
+        entriesFeed.setAdapter(cardCursorAdapter);
 
         // submit listener
         Button submitButton = (Button) getActivity().findViewById(R.id.submitButton);
@@ -95,34 +86,40 @@ public class PlaceholderFragment extends Fragment implements LoaderManager.Loade
     private void onSubmit()
     {
         EditText entryText = (EditText) getActivity().findViewById(R.id.textEntry);
-        final Entry newEntry = new Entry(entryText.getText().toString());
-        new AsyncTask<Void, Void, Void>() {
-            @Override
-            protected Void doInBackground(Void... params) {
-                DBUtils.getInstance(getContext()).putEntry(newEntry);
-                return null;
-            }
+        final Entry entry = new Entry(entryText.getText().toString());
 
-            @Override
-            protected void onPostExecute(Void aVoid) {
-                cardCursorAdapter.notifyDataSetChanged();
-            }
-        }.execute();
+        //putEntry
+        ContentValues values = new ContentValues();
+        values.put(Contract._ID, entry.getId());
+        values.put(Contract.COLUMN_DATE, entry.getCreatedOn().toString());
+        values.put(Contract.COLUMN_BODY, entry.getBody());
+        getActivity().getContentResolver().insert(DBContentProvider.CONTENT_URI, values);
+
+        
     }
 
     @Override
     public Loader<Cursor> onCreateLoader(int id, Bundle args) {
-        return null;
+        String[] projection = {
+                Contract._ID,
+                Contract.COLUMN_DATE,
+                Contract.COLUMN_BODY
+        };
+        String sortOrder = Contract._ID + " DESC"; //ordering by descending id (couldn't get date to work)
+
+        CursorLoader cursorLoader = new CursorLoader(getContext(),
+                DBContentProvider.CONTENT_URI, projection, null, null, sortOrder);
+        return cursorLoader;
     }
 
     @Override
     public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
-
+        cardCursorAdapter.swapCursor(data);
     }
 
     @Override
     public void onLoaderReset(Loader<Cursor> loader) {
-
+        cardCursorAdapter.swapCursor(null);
     }
 
 

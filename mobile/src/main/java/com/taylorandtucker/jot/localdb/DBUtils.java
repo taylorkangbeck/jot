@@ -4,12 +4,9 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
-import android.os.AsyncTask;
 
 import com.taylorandtucker.jot.Entry;
 import com.taylorandtucker.jot.localdb.EntriesContract.Contract;
-
-import java.util.Date;
 
 /**
  * Created by Taylor on 9/16/2015.
@@ -21,9 +18,8 @@ public class DBUtils {
     private EntryDBHelper dbHelper = null;
     private String[] projection = {
             Contract._ID,
-            Contract.COLUMN_NAME_ENTRY_ID,
-            Contract.COLUMN_NAME_DATE,
-            Contract.COLUMN_NAME_BODY
+            Contract.COLUMN_DATE,
+            Contract.COLUMN_BODY
     };
 
     protected DBUtils() {}
@@ -41,9 +37,9 @@ public class DBUtils {
         long newRowId;
         // Create a new map of values, where column names are the keys
         ContentValues values = new ContentValues();
-        values.put(Contract.COLUMN_NAME_ENTRY_ID, entry.getId());
-        values.put(Contract.COLUMN_NAME_DATE, entry.getCreatedOn().toString());
-        values.put(Contract.COLUMN_NAME_BODY, entry.getBody());
+        values.put(Contract._ID, entry.getId());
+        values.put(Contract.COLUMN_DATE, entry.getCreatedOn().toString());
+        values.put(Contract.COLUMN_BODY, entry.getBody());
 
         // Insert the new row, returning the primary key value of the new row
         newRowId = dbHelper.getWritableDatabase().insert(Contract.TABLE_NAME ,null, values);
@@ -63,7 +59,7 @@ public class DBUtils {
         };
 
         // How you want the results sorted in the resulting Cursor
-        String sortOrder = Contract.COLUMN_NAME_DATE + " DESC";
+        String sortOrder = Contract.COLUMN_DATE + " DESC";
 
         Cursor c = db.query(
                 Contract.TABLE_NAME,                      // The table to query

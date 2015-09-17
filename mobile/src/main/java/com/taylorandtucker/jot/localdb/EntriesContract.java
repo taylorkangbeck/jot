@@ -11,8 +11,7 @@ public final class EntriesContract {
 
     public static abstract class Contract implements BaseColumns {
         public static final String TABLE_NAME = "entry";
-        public static final String COLUMN_NAME_ENTRY_ID = "entry_id";
-        public static final String COLUMN_NAME_DATE = "date";
-        public static final String COLUMN_NAME_BODY = "body";
+        public static final String COLUMN_DATE = "date";
+        public static final String COLUMN_BODY = "body";
     }
 }

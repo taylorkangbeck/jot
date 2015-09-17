@@ -1,16 +1,9 @@
 package com.taylorandtucker.jot.localdb;
 
-import java.io.FileNotFoundException;
-import java.util.ArrayList;
-import java.util.List;
-
-import android.content.ContentValues;
 import android.content.Context;
-import android.database.Cursor;
-import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
-import android.util.Log;
+
 import com.taylorandtucker.jot.localdb.EntriesContract.Contract;
 
 /**
@@ -26,9 +19,8 @@ public class EntryDBHelper extends SQLiteOpenHelper {
     private static final String SQL_CREATE_ENTRIES =
         "CREATE TABLE " + Contract.TABLE_NAME + " (" +
                 Contract._ID + " INTEGER PRIMARY KEY," +
-                Contract.COLUMN_NAME_ENTRY_ID + TEXT_TYPE + COMMA_SEP +
-                Contract.COLUMN_NAME_DATE + TEXT_TYPE + COMMA_SEP +
-                Contract.COLUMN_NAME_BODY + TEXT_TYPE +
+                Contract.COLUMN_DATE + TEXT_TYPE + COMMA_SEP +
+                Contract.COLUMN_BODY + TEXT_TYPE +
         " )";
 
     private static final String SQL_DELETE_ENTRIES =

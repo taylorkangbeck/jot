@@ -36,11 +36,11 @@ public class CardCursorAdapter extends CursorAdapter {
         TextView entryBodyTextView = (TextView) view.findViewById(R.id.entryBody);
 
         // Extract properties from cursor
+        String date = cursor.getString(cursor.getColumnIndexOrThrow("date"));
         String body = cursor.getString(cursor.getColumnIndexOrThrow("body"));
-        int priority = cursor.getInt(cursor.getColumnIndexOrThrow("priority"));
 
         // Populate fields with extracted properties
-        entryDateTextView.setText(body);
-        entryBodyTextView.setText(String.valueOf(priority));
+        entryDateTextView.setText(date);
+        entryBodyTextView.setText(body);
     }
 }

@@ -19,7 +19,8 @@ public class DBUtils {
     private String[] projection = {
             Contract._ID,
             Contract.COLUMN_DATE,
-            Contract.COLUMN_BODY
+            Contract.COLUMN_BODY,
+            Contract.COLUMN_SENTIMENT
     };
 
     protected DBUtils() {}
@@ -40,6 +41,7 @@ public class DBUtils {
         values.put(Contract._ID, entry.getId());
         values.put(Contract.COLUMN_DATE, entry.getCreatedOn().toString());
         values.put(Contract.COLUMN_BODY, entry.getBody());
+        values.put(Contract.COLUMN_SENTIMENT, entry.getSentiment());
 
         // Insert the new row, returning the primary key value of the new row
         newRowId = dbHelper.getWritableDatabase().insert(Contract.TABLE_NAME ,null, values);

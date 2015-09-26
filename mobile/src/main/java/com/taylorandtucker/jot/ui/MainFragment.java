@@ -179,7 +179,7 @@ public class MainFragment extends Fragment implements LoaderManager.LoaderCallba
         protected Void doInBackground(Void... param) {
             // Create a new HttpClient and Post Header
             HttpClient httpclient = new DefaultHttpClient();
-            HttpPost httppost = new HttpPost("http://10.66.235.118:8000/test");
+            HttpPost httppost = new HttpPost("http://10.66.235.118:8000/entry");
 
             try {
                 // Add your data
@@ -223,7 +223,7 @@ public class MainFragment extends Fragment implements LoaderManager.LoaderCallba
                     ContentValues values = new ContentValues();
                     values.put(Contract.COLUMN_SENTIMENT, sentSum);
 
-                    getActivity().getContentResolver().update(DBContentProvider.CONTENT_URI, values, "id"+"="+entryID, null);
+                    getActivity().getContentResolver().update(DBContentProvider.CONTENT_URI, values, "_id"+"="+entryID, null);
                     System.out.println(sentSum);
                 } catch (ParserConfigurationException e) {
                 } catch (SAXException e) {

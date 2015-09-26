@@ -102,7 +102,21 @@ public class DBContentProvider extends ContentProvider {
 
     @Override
     public int update(Uri uri, ContentValues values, String selection, String[] selectionArgs) {
-        return 0; //TODO
+        int uriType = sUriMatcher.match(uri);
+        SQLiteDatabase sqlDB = dbHelper.getWritableDatabase();
+        int rowsDeleted = 0;
+        int retVal = 0;
+        switch (uriType) {
+            case ENTRIES:
+                retVal = sqlDB.update(Contract.TABLE_NAME, values,selection,selectionArgs);
+                break;
+            default:
+                throw new IllegalArgumentException("Unknown URI: " + uri);
+
+        }
+        getContext().getContentResolver().notifyChange(uri, null);
+        //return Uri.parse(BASE_PATH + "/" + id);
+        return retVal; //TODO
     }
 
     @Override

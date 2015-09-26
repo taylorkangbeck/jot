@@ -34,13 +34,16 @@ public class CardCursorAdapter extends CursorAdapter {
     public void bindView(View view, Context context, Cursor cursor) {
         TextView entryDateTextView = (TextView) view.findViewById(R.id.entryDate);
         TextView entryBodyTextView = (TextView) view.findViewById(R.id.entryBody);
+        TextView entrySentimentTextView = (TextView) view.findViewById(R.id.entrySentiment);
 
         // Extract properties from cursor
         String date = cursor.getString(cursor.getColumnIndexOrThrow("date"));
         String body = cursor.getString(cursor.getColumnIndexOrThrow("body"));
+        String sent = cursor.getString(cursor.getColumnIndexOrThrow("sentiment"));
 
         // Populate fields with extracted properties
         entryDateTextView.setText(date);
         entryBodyTextView.setText(body);
+        entrySentimentTextView.setText(sent);
     }
 }

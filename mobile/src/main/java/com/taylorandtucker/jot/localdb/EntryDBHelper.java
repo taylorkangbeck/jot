@@ -20,7 +20,8 @@ public class EntryDBHelper extends SQLiteOpenHelper {
         "CREATE TABLE " + Contract.TABLE_NAME + " (" +
                 Contract._ID + " INTEGER PRIMARY KEY," +
                 Contract.COLUMN_DATE + TEXT_TYPE + COMMA_SEP +
-                Contract.COLUMN_BODY + TEXT_TYPE +
+                Contract.COLUMN_BODY + TEXT_TYPE + COMMA_SEP +
+                Contract.COLUMN_SENTIMENT + TEXT_TYPE +
         " )";
 
     private static final String SQL_DELETE_ENTRIES =

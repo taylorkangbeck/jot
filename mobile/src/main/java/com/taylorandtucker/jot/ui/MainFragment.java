@@ -7,7 +7,9 @@ import android.database.Cursor;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.LoaderManager;
 import android.support.v4.content.CursorLoader;
+import android.support.v4.content.Loader;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,8 +17,6 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
-import android.support.v4.app.LoaderManager;
-import android.support.v4.content.Loader;
 
 import com.taylorandtucker.jot.Entry;
 import com.taylorandtucker.jot.R;
@@ -31,6 +31,10 @@ import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.entity.ByteArrayEntity;
 import org.apache.http.impl.client.DefaultHttpClient;
+import org.w3c.dom.Document;
+import org.w3c.dom.NodeList;
+import org.xml.sax.InputSource;
+import org.xml.sax.SAXException;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -43,21 +47,18 @@ import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 
-import org.w3c.dom.Document;
-import org.w3c.dom.NodeList;
-import org.xml.sax.InputSource;
-import org.xml.sax.SAXException;
-
 /**
  * Created by Taylor on 9/16/-015.
  */
-public class PlaceholderFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor> {
+public class MainFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor> {
     /**
      * The fragment argument representing the section number for this
      * fragment.
      */
     private static final String ARG_SECTION_NUMBER = "section_number";
 
+    private CardMergeAdapter cardMergeAdapter;
+    private CardFragmentAdapter cardFragmentAdapter;
     private CardCursorAdapter cardCursorAdapter;
     private int LOADER_ID = 1;
 
@@ -65,15 +66,15 @@ public class PlaceholderFragment extends Fragment implements LoaderManager.Loade
      * Returns a new instance of this fragment for the given section
      * number.
      */
-    public static PlaceholderFragment newInstance(int sectionNumber) {
-        PlaceholderFragment fragment = new PlaceholderFragment();
+    public static MainFragment newInstance(int sectionNumber) {
+        MainFragment fragment = new MainFragment();
         Bundle args = new Bundle();
         args.putInt(ARG_SECTION_NUMBER, sectionNumber);
         fragment.setArguments(args);
         return fragment;
     }
 
-    public PlaceholderFragment() {
+    public MainFragment() {
     }
 
     @Override
@@ -88,11 +89,17 @@ public class PlaceholderFragment extends Fragment implements LoaderManager.Loade
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
-        //entries feed adapter
         getLoaderManager().initLoader(LOADER_ID, null, this);
-        final ListView entriesFeed = (ListView) getActivity().findViewById(R.id.listView);
+        final ListView entriesFeed = (ListView) getActivity().findViewById(R.id.entriesFeed);
+
+        //merging adapters for the entries feed
+        cardMergeAdapter = new CardMergeAdapter();
+        cardFragmentAdapter = new CardFragmentAdapter(getContext());
+        cardFragmentAdapter.add(new CalendarReviewFragment());
+        cardMergeAdapter.addAdapter(cardFragmentAdapter);
         cardCursorAdapter = new CardCursorAdapter(getContext(), null);
-        entriesFeed.setAdapter(cardCursorAdapter);
+        cardMergeAdapter.addAdapter(cardCursorAdapter);
+        entriesFeed.setAdapter(cardMergeAdapter);
 
         // submit listener
         Button submitButton = (Button) getActivity().findViewById(R.id.submitButton);
@@ -119,7 +126,6 @@ public class PlaceholderFragment extends Fragment implements LoaderManager.Loade
 
             //putEntry
             ContentValues values = new ContentValues();
-            values.put(Contract._ID, entry.getId());
             values.put(Contract.COLUMN_DATE, entry.getCreatedOn().toString());
             values.put(Contract.COLUMN_BODY, entry.getBody());
             values.put(Contract.COLUMN_SENTIMENT, 0);

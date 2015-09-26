@@ -4,22 +4,15 @@
     android:layout_height="match_parent"
     tools:context=".PlaceholderFragment"
     android:background="@color/mainBackground">
-    <!-- TODO change linear layout to listview, remove includes, dynamically load with adapter -->
-    <LinearLayout
-        android:orientation="vertical"
+
+    <ListView
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/entriesFeed"
+        android:divider="@null"
+        android:dividerHeight="0dp"
         android:layout_above="@+id/textEntryLayout">
-        <include layout="@layout/fragment_calendar_review"></include>
-
-        <ListView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:id="@+id/listView"
-            android:divider="@null"
-            android:dividerHeight="0dp" />
-
-    </LinearLayout>
+    </ListView>
 
     <RelativeLayout
         android:layout_width="match_parent"

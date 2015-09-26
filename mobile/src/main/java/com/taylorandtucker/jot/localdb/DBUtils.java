@@ -6,7 +6,7 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
 import com.taylorandtucker.jot.Entry;
-import com.taylorandtucker.jot.localdb.EntriesContract.Contract;
+import com.taylorandtucker.jot.localdb.EntriesContract2.Contract;
 
 /**
  * Created by Taylor on 9/16/2015.
@@ -15,11 +15,12 @@ import com.taylorandtucker.jot.localdb.EntriesContract.Contract;
  */
 public class DBUtils {
     private static DBUtils instance = null;
-    private EntryDBHelper dbHelper = null;
+    private EntryDBHelper2 dbHelper = null;
     private String[] projection = {
             Contract._ID,
             Contract.COLUMN_DATE,
-            Contract.COLUMN_BODY
+            Contract.COLUMN_BODY,
+            Contract.COLUMN_SENTIMENT
     };
 
     protected DBUtils() {}
@@ -27,7 +28,7 @@ public class DBUtils {
     public static DBUtils getInstance(Context context) {
         if (instance == null) {
             instance = new DBUtils();
-            instance.dbHelper = new EntryDBHelper(context);
+            instance.dbHelper = new EntryDBHelper2(context);
         }
         return instance;
     }
@@ -40,6 +41,7 @@ public class DBUtils {
         values.put(Contract._ID, entry.getId());
         values.put(Contract.COLUMN_DATE, entry.getCreatedOn().toString());
         values.put(Contract.COLUMN_BODY, entry.getBody());
+        values.put(Contract.COLUMN_SENTIMENT, entry.getSentiment());
 
         // Insert the new row, returning the primary key value of the new row
         newRowId = dbHelper.getWritableDatabase().insert(Contract.TABLE_NAME ,null, values);

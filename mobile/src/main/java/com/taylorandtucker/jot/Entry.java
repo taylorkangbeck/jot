@@ -9,6 +9,7 @@ public class Entry {
     private Date createdOn;
     private String body;
     private String id;
+    private String sentiment;
 
     public Entry(String body) {
         this(new Date(), body);
@@ -38,4 +39,8 @@ public class Entry {
     public String getId() {
         return id;
     }
+
+    public String getSentiment() {return sentiment;}
+
+    public void setSentiment(String value) {sentiment = value;}
 }

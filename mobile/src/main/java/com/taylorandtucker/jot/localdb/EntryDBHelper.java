@@ -4,7 +4,7 @@ import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
-import com.taylorandtucker.jot.localdb.EntriesContract.Contract;
+import com.taylorandtucker.jot.localdb.EntriesContract2.Contract;
 
 /**
  * Created by Taylor on 9/16/2015.
@@ -20,7 +20,8 @@ public class EntryDBHelper extends SQLiteOpenHelper {
         "CREATE TABLE " + Contract.TABLE_NAME + " (" +
                 Contract._ID + " INTEGER PRIMARY KEY," +
                 Contract.COLUMN_DATE + TEXT_TYPE + COMMA_SEP +
-                Contract.COLUMN_BODY + TEXT_TYPE +
+                Contract.COLUMN_BODY + TEXT_TYPE + COMMA_SEP +
+                Contract.COLUMN_SENTIMENT + TEXT_TYPE +
         " )";
 
     private static final String SQL_DELETE_ENTRIES =

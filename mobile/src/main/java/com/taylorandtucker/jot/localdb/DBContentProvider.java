@@ -7,13 +7,13 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteQueryBuilder;
 import android.net.Uri;
-import com.taylorandtucker.jot.localdb.EntriesContract.Contract;
+import com.taylorandtucker.jot.localdb.EntriesContract2.Contract;
 
 /**
  * Created by Taylor on 9/17/2015.
  */
 public class DBContentProvider extends ContentProvider {
-    private EntryDBHelper dbHelper;
+    private EntryDBHelper2 dbHelper;
 
     private static final UriMatcher sUriMatcher = new UriMatcher(UriMatcher.NO_MATCH);
     private static final int ENTRIES = 1;
@@ -31,7 +31,7 @@ public class DBContentProvider extends ContentProvider {
 
     @Override
     public boolean onCreate() {
-        dbHelper = new EntryDBHelper(getContext());
+        dbHelper = new EntryDBHelper2(getContext());
         return false;
     }
 

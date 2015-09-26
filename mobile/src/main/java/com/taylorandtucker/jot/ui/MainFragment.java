@@ -226,8 +226,8 @@ public class MainFragment extends Fragment implements LoaderManager.LoaderCallba
 
                     int sentSum = 0;
 
-                    for(int i = 0; i < list.getLength(); i++){
-                        int val = Integer.valueOf(list.item(i).getAttributes().getNamedItem("sentimentValue").getNodeValue());
+                    for(int i = 0; i < list.getLength()/2; i++){
+                        int val = Integer.valueOf(list.item(0).getAttributes().getNamedItem("sentimentValue").getNodeValue());
                         System.out.println(Integer.toString(i) +": " + Integer.toString(val));
                         sentSum +=(val-2);
                     }

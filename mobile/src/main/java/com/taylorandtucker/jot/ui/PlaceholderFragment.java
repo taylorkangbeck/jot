@@ -6,18 +6,17 @@ import android.content.Context;
 import android.database.Cursor;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.os.StrictMode;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.CursorLoader;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.Loader;
-import android.widget.Toast;
 
 import com.taylorandtucker.jot.Entry;
 import com.taylorandtucker.jot.R;
@@ -29,11 +28,9 @@ import org.apache.http.HttpResponse;
 import org.apache.http.NameValuePair;
 import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.HttpClient;
-import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.entity.ByteArrayEntity;
 import org.apache.http.impl.client.DefaultHttpClient;
-import org.apache.http.message.BasicNameValuePair;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -47,13 +44,12 @@ import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 
 import org.w3c.dom.Document;
-import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 
 /**
- * Created by Taylor on 9/16/2015.
+ * Created by Taylor on 9/16/-015.
  */
 public class PlaceholderFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor> {
     /**
@@ -118,18 +114,27 @@ public class PlaceholderFragment extends Fragment implements LoaderManager.Loade
     private void onSubmit()
     {
         EditText entryText = (EditText) getActivity().findViewById(R.id.textEntry);
-        final Entry entry = new Entry(entryText.getText().toString());
+        if (!entryText.equals("")) {
+            final Entry entry = new Entry(entryText.getText().toString());
 
-        //putEntry
-        ContentValues values = new ContentValues();
-        values.put(Contract._ID, entry.getId());
-        values.put(Contract.COLUMN_DATE, entry.getCreatedOn().toString());
-        values.put(Contract.COLUMN_BODY, entry.getBody());
-        values.put(Contract.COLUMN_SENTIMENT, 0);
-        getActivity().getContentResolver().insert(DBContentProvider.CONTENT_URI, values);
+            //putEntry
+            ContentValues values = new ContentValues();
+            values.put(Contract._ID, entry.getId());
+            values.put(Contract.COLUMN_DATE, entry.getCreatedOn().toString());
+            values.put(Contract.COLUMN_BODY, entry.getBody());
+            values.put(Contract.COLUMN_SENTIMENT, 0);
+            getActivity().getContentResolver().insert(DBContentProvider.CONTENT_URI, values);
 
-        RetrieveNLPdata nlp = new RetrieveNLPdata(entry.getId(), entry.getBody());
-        nlp.execute();
+            RetrieveNLPdata nlp = new RetrieveNLPdata(entry.getId(), entry.getBody());
+            nlp.execute();
+
+            View view = getActivity().getCurrentFocus();
+            if (view != null) {
+                InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+                imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
+                entryText.setText("");
+            }
+        }
     }
 
     @Override

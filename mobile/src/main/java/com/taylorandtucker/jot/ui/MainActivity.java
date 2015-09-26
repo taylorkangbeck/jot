@@ -1,6 +1,5 @@
 package com.taylorandtucker.jot.ui;
 
-import android.database.Cursor;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.app.ActionBar;
 import android.support.v4.app.FragmentManager;
@@ -8,14 +7,8 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.support.v4.widget.DrawerLayout;
-import android.view.View;
-import android.widget.EditText;
-import android.widget.ListView;
 
-import com.taylorandtucker.jot.Entry;
 import com.taylorandtucker.jot.R;
-import com.taylorandtucker.jot.localdb.DBUtils;
-import com.taylorandtucker.jot.localdb.EntryDBHelper;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationDrawerFragment.NavigationDrawerCallbacks {

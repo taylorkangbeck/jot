@@ -35,6 +35,7 @@ public class DBContentProvider extends ContentProvider {
         return false;
     }
 
+
     @Override
     public Cursor query(Uri uri, String[] projection, String selection,
                         String[] selectionArgs, String sortOrder) {
@@ -108,7 +109,12 @@ public class DBContentProvider extends ContentProvider {
         int retVal = 0;
         switch (uriType) {
             case ENTRIES:
+                sqlDB.beginTransaction();
+                System.out.println("update called");
                 retVal = sqlDB.update(Contract.TABLE_NAME, values, selection, selectionArgs);
+                System.out.println("update called.  Number of things changed = " + Integer.toString(retVal));
+                sqlDB.setTransactionSuccessful();
+                sqlDB.endTransaction();
                 break;
             default:
                 throw new IllegalArgumentException("Unknown URI: " + uri);
@@ -118,6 +124,7 @@ public class DBContentProvider extends ContentProvider {
         //return Uri.parse(BASE_PATH + "/" + id);
         return retVal; //TODO
     }
+
 
     @Override
     public int delete(Uri uri, String selection, String[] selectionArgs) {

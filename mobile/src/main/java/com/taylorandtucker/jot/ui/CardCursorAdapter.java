@@ -46,4 +46,5 @@ public class CardCursorAdapter extends CursorAdapter {
         entryBodyTextView.setText(body);
         entrySentimentTextView.setText(sent);
     }
+
 }

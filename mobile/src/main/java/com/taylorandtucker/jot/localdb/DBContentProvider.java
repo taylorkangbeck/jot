@@ -108,7 +108,7 @@ public class DBContentProvider extends ContentProvider {
         int retVal = 0;
         switch (uriType) {
             case ENTRIES:
-                retVal = sqlDB.update(Contract.TABLE_NAME, values,selection,selectionArgs);
+                retVal = sqlDB.update(Contract.TABLE_NAME, values, selection, selectionArgs);
                 break;
             default:
                 throw new IllegalArgumentException("Unknown URI: " + uri);

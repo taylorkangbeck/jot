@@ -2,7 +2,6 @@ package com.taylorandtucker.jot.ui;
 
 import android.content.Context;
 import android.database.Cursor;
-import android.os.AsyncTask;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,7 +9,6 @@ import android.widget.CursorAdapter;
 import android.widget.TextView;
 
 import com.taylorandtucker.jot.R;
-import com.taylorandtucker.jot.localdb.DBUtils;
 
 /**
  * Created by Taylor on 9/16/2015.
@@ -18,11 +16,8 @@ import com.taylorandtucker.jot.localdb.DBUtils;
 public class CardCursorAdapter extends CursorAdapter {
     //use .changeCursor for specific queries
 
-    private DBUtils dbUtils;
-
     public CardCursorAdapter(Context context, Cursor cursor) {
         super(context, cursor, 0);
-        dbUtils = DBUtils.getInstance(context);
     }
 
     @Override

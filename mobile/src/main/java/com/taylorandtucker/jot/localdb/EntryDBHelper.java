@@ -4,7 +4,7 @@ import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
-import com.taylorandtucker.jot.localdb.EntriesContract2.Contract;
+import com.taylorandtucker.jot.localdb.EntriesContract.Contract;
 
 /**
  * Created by Taylor on 9/16/2015.

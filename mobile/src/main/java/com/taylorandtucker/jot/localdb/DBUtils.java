@@ -6,7 +6,7 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
 import com.taylorandtucker.jot.Entry;
-import com.taylorandtucker.jot.localdb.EntriesContract2.Contract;
+import com.taylorandtucker.jot.localdb.EntriesContract.Contract;
 
 /**
  * Created by Taylor on 9/16/2015.
@@ -15,7 +15,7 @@ import com.taylorandtucker.jot.localdb.EntriesContract2.Contract;
  */
 public class DBUtils {
     private static DBUtils instance = null;
-    private EntryDBHelper2 dbHelper = null;
+    private EntryDBHelper dbHelper = null;
     private String[] projection = {
             Contract._ID,
             Contract.COLUMN_DATE,
@@ -28,7 +28,7 @@ public class DBUtils {
     public static DBUtils getInstance(Context context) {
         if (instance == null) {
             instance = new DBUtils();
-            instance.dbHelper = new EntryDBHelper2(context);
+            instance.dbHelper = new EntryDBHelper(context);
         }
         return instance;
     }

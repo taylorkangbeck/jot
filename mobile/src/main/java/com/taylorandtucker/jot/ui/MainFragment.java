@@ -195,8 +195,6 @@ public class MainFragment extends Fragment implements LoaderManager.LoaderCallba
                 // Add your data
                 List<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>(2);
 
-                System.out.println("AAAA");
-
                 HttpEntity entity = new ByteArrayEntity(entry.getBytes("UTF-8"));
                 httppost.setEntity(entity);
 
@@ -206,7 +204,7 @@ public class MainFragment extends Fragment implements LoaderManager.LoaderCallba
                 BufferedReader rd = new BufferedReader(new InputStreamReader(response.getEntity().getContent()));
                 String line = "";
                 String xml = "";
-                System.out.println("BBB");
+
 
                 DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
                 DocumentBuilder builder;
@@ -226,8 +224,8 @@ public class MainFragment extends Fragment implements LoaderManager.LoaderCallba
 
                     int sentSum = 0;
 
-                    for(int i = 0; i < list.getLength(); i++){
-                        int val = Integer.valueOf(list.item(i).getAttributes().getNamedItem("sentimentValue").getNodeValue());
+                    for(int i = 0; i < list.getLength()/2; i++){
+                        int val = Integer.valueOf(list.item(0).getAttributes().getNamedItem("sentimentValue").getNodeValue());
                         System.out.println(Integer.toString(i) +": " + Integer.toString(val));
                         sentSum +=(val-2);
                     }
@@ -241,10 +239,6 @@ public class MainFragment extends Fragment implements LoaderManager.LoaderCallba
                     getActivity().getContentResolver().update(DBContentProvider.CONTENT_URI, values, "_id" + "= ?", Values);
                     System.out.println("Sent Sum" + Integer.toString(sentSum));
 
-                    /*
-                    DBUtils utils = DBUtils.getInstance(getContext());
-                    cardCursorAdapter.swapCursor(utils.getAllEntriesQuery());
-*/
                 } catch (ParserConfigurationException e) {
                 } catch (SAXException e) {
                 } catch (IOException e) {

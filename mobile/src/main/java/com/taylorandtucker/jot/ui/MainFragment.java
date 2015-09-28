@@ -20,6 +20,7 @@ import android.widget.EditText;
 import android.widget.ListView;
 
 import com.taylorandtucker.jot.Entry;
+import com.taylorandtucker.jot.NLP.ProcessedEntry;
 import com.taylorandtucker.jot.R;
 import com.taylorandtucker.jot.localdb.DBContentProvider;
 import com.taylorandtucker.jot.localdb.DBUtils;
@@ -214,22 +215,8 @@ public class MainFragment extends Fragment implements LoaderManager.LoaderCallba
                     xml += line;
                 }
 
-                try {
-                    builder = factory.newDocumentBuilder();
-                    is = new InputSource(new StringReader(xml));
-                    Document doc = builder.parse(is);
-
-
-                    NodeList list = doc.getElementsByTagName("sentence");
-
-                    int sentSum = 0;
-
-                    for(int i = 0; i < list.getLength()/2; i++){
-                        int val = Integer.valueOf(list.item(0).getAttributes().getNamedItem("sentimentValue").getNodeValue());
-                        System.out.println(Integer.toString(i) +": " + Integer.toString(val));
-                        sentSum +=(val-2);
-                    }
-
+                ProcessedEntry ent = new ProcessedEntry(xml);
+                Float sentSum = ent.getEntrySentiment();
                     ContentValues values = new ContentValues();
                     values.put(Contract.COLUMN_SENTIMENT, sentSum);
 
@@ -237,12 +224,9 @@ public class MainFragment extends Fragment implements LoaderManager.LoaderCallba
                     Values[0] = entryID;
                     System.out.println(entryID);
                     getActivity().getContentResolver().update(DBContentProvider.CONTENT_URI, values, "_id" + "= ?", Values);
-                    System.out.println("Sent Sum" + Integer.toString(sentSum));
+                    System.out.println("Sent Sum" + Float.toString(sentSum));
 
-                } catch (ParserConfigurationException e) {
-                } catch (SAXException e) {
-                } catch (IOException e) {
-                }
+
                 return null;
             } catch (ClientProtocolException e) {
                 System.out.println(e);

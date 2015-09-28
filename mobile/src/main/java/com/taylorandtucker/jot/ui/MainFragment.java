@@ -224,7 +224,7 @@ public class MainFragment extends Fragment implements LoaderManager.LoaderCallba
                     Values[0] = entryID;
                     System.out.println(entryID);
                     getActivity().getContentResolver().update(DBContentProvider.CONTENT_URI, values, "_id" + "= ?", Values);
-                    System.out.println("Sent Sum" + Float.toString(sentSum));
+                    System.out.println("Sent Sum" + Double.toString(sentSum));
 
 
                 return null;

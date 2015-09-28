@@ -217,17 +217,22 @@ public class MainFragment extends Fragment implements LoaderManager.LoaderCallba
 
                 ProcessedEntry ent = new ProcessedEntry(xml);
                 double sentSum = ent.getEntrySentiment();
-                    ContentValues values = new ContentValues();
-                    values.put(Contract.COLUMN_SENTIMENT, sentSum);
+                ContentValues values = new ContentValues();
 
-                    String[] Values = new String[1];
-                    Values[0] = entryID;
-                    System.out.println(entryID);
-                    getActivity().getContentResolver().update(DBContentProvider.CONTENT_URI, values, "_id" + "= ?", Values);
-                    System.out.println("Sent Sum" + Double.toString(sentSum));
+                values.put(Contract.COLUMN_SENTIMENT, sentSum);
+                String[] Values = new String[1];
+                Values[0] = entryID;
+                System.out.println(entryID);
+                getActivity().getContentResolver().update(DBContentProvider.CONTENT_URI, values, "_id" + "= ?", Values);
+                System.out.println("Sent Sum" + Double.toString(sentSum));
 
 
-                return null;
+                List<String> people = ent.personMentions();
+
+                for (String person: people){
+                    System.out.println(person);
+                }
+
             } catch (ClientProtocolException e) {
                 System.out.println(e);
                 return null;

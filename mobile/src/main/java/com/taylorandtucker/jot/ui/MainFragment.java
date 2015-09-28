@@ -216,7 +216,7 @@ public class MainFragment extends Fragment implements LoaderManager.LoaderCallba
                 }
 
                 ProcessedEntry ent = new ProcessedEntry(xml);
-                Float sentSum = ent.getEntrySentiment();
+                double sentSum = ent.getEntrySentiment();
                     ContentValues values = new ContentValues();
                     values.put(Contract.COLUMN_SENTIMENT, sentSum);
 

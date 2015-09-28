@@ -6,6 +6,7 @@ import org.w3c.dom.NodeList;
 import org.xml.sax.InputSource;
 
 import java.io.StringReader;
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -36,16 +37,16 @@ public class ProcessedEntry {
         xpath = xPathfactory.newXPath();
     }
 
-    //returns a value between -1 and 1 for the overall entry sentiment
-    public float getEntrySentiment(){
+    //returns a value between -2 and 2 for the overall entry sentiment
+    public double getEntrySentiment(){
         int sum =0;
         List<Integer> sents = getSentenceSentiments();
         //todo: bound this
         for (Integer i: sents){
             sum += (i -2);
         }
-
-        return sum/((float)sents.size());
+        DecimalFormat twoDForm = new DecimalFormat("#.##");
+        return Double.valueOf(twoDForm.format(sum/((double)sents.size())));
     }
     //returns a list of integer sentiment values for each sentence
     private List<Integer> getSentenceSentiments(){

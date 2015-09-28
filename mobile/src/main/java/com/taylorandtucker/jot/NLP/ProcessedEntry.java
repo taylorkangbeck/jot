@@ -74,10 +74,9 @@ public class ProcessedEntry {
 
                 Node token = (Node) xpath.evaluate(".//NER", nodes.item(i), XPathConstants.NODE);
 
-                print(token.getTextContent().toString());
                 if (token.getTextContent().toString().contains("PERSON")){
                     String name = xpath.evaluate(".//word", nodes.item(i), XPathConstants.STRING).toString();
-                    print("HERE");
+
                     names.add(name);
                 }
 

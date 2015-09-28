@@ -242,6 +242,7 @@ public class MainFragment extends Fragment implements LoaderManager.LoaderCallba
                 return null;
                 // TODO Auto-generated catch block
             }
+            return null;
         }
     }
 }

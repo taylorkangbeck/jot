@@ -1,15 +1,11 @@
-package com.taylorandtucker.jot.NLP;
-
+import com.sun.org.apache.xpath.internal.NodeSet;
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.xml.sax.InputSource;
 
 import java.io.StringReader;
-import java.text.DecimalFormat;
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
+import java.util.*;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -37,41 +33,49 @@ public class ProcessedEntry {
         xpath = xPathfactory.newXPath();
     }
 
-    //returns a value between -2 and 2 for the overall entry sentiment
-    public double getEntrySentiment(){
+    //returns a value between -1 and 1 for the overall entry sentiment
+    public float getEntrySentiment(){
         int sum =0;
         List<Integer> sents = getSentenceSentiments();
         //todo: bound this
         for (Integer i: sents){
             sum += (i -2);
         }
-        DecimalFormat twoDForm = new DecimalFormat("#.##");
-        return Double.valueOf(twoDForm.format(sum/((double)sents.size())));
+
+        return sum/((float)sents.size());
     }
     //returns a list of integer sentiment values for each sentence
     private List<Integer> getSentenceSentiments(){
      List sentenceSents = new ArrayList<Integer>();
-        try {
-            XPathExpression expr = xpath.compile("/root/document/sentences/sentence[@sentimentValue]");
-            NodeList nodes = (NodeList) expr.evaluate(doc, XPathConstants.NODESET);
-            for (int i = 0; i < nodes.getLength(); i++) {
-                int val = Integer.parseInt(nodes.item(i).getAttributes().getNamedItem("sentimentValue").getNodeValue().toString());
+
+        NodeList sNodes = getSentenceNodes();
+        if(sNodes != null) {
+            for (int i = 0; i < sNodes.getLength(); i++) {
+                int val = sentenceSentiment(sNodes.item(i));
                 sentenceSents.add(val);
             }
-        } catch (XPathExpressionException e) {
-            e.printStackTrace();
         }
         return sentenceSents;
     }
 
-    public List<String> personMentions(){
+    private int sentenceSentiment(Node sentence){
+        return Integer.parseInt(sentence.getAttributes().getNamedItem("sentimentValue").getNodeValue())-2;
+    }
+    private NodeList getSentenceNodes(){
+        try {
+            return (NodeList) xpath.evaluate("/root/document/sentences/sentence", doc, XPathConstants.NODESET);
+        }catch(Exception e){
+            return null;
+        }
+    }
+
+    public List<String> personMentions(Node sentence){
+        //todo: use dependency info to determine if a name is a compound name: john brown
         List names = new ArrayList<Integer>();
         try {
-            XPathExpression expr = xpath.compile("//sentence/tokens/token");
-            NodeList nodes = (NodeList) expr.evaluate(doc, XPathConstants.NODESET);
+
+            NodeList nodes = (NodeList) xpath.evaluate(".//tokens/token", sentence, XPathConstants.NODESET);
             for (int i = 0; i < nodes.getLength(); i++) {
-
-
                 Node token = (Node) xpath.evaluate(".//NER", nodes.item(i), XPathConstants.NODE);
 
                 if (token.getTextContent().toString().contains("PERSON")){
@@ -85,6 +89,29 @@ public class ProcessedEntry {
             e.printStackTrace();
         }
         return names;
+    }
+
+    public Map<String, Integer> personSentiment(){
+        //todo: use coreference to attribute pronouns to a person and assign sentiment properly
+        // i.e. John came over yesterday. he was mean to me.
+        // currently john is not given a negative score
+        Map<String, Integer> psMap = new HashMap<>();
+
+        NodeList sNodes = getSentenceNodes();
+        if(sNodes != null) {
+            for (int i = 0; i < sNodes.getLength(); i++) {
+                int val = sentenceSentiment(sNodes.item(i));
+
+                for (String name : personMentions(sNodes.item(i))) {
+                    print(name);
+                    int newVal = psMap.getOrDefault(name, 0) + val;
+                    psMap.put(name, newVal);
+
+
+                }
+            }
+        }
+        return psMap;
     }
     public void print(String a){
         System.out.println(a);

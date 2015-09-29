@@ -7,6 +7,7 @@ import android.database.Cursor;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.CursorLoader;
@@ -18,6 +19,7 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import com.taylorandtucker.jot.Entry;
 import com.taylorandtucker.jot.NLP.ProcessedEntry;
@@ -46,6 +48,7 @@ import java.io.StringReader;
 import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -65,6 +68,7 @@ public class MainFragment extends Fragment implements LoaderManager.LoaderCallba
     private CardFragmentAdapter cardFragmentAdapter;
     private CardCursorAdapter cardCursorAdapter;
     private int LOADER_ID = 1;
+    private Context context;
 
     /**
      * Returns a new instance of this fragment for the given section
@@ -86,6 +90,7 @@ public class MainFragment extends Fragment implements LoaderManager.LoaderCallba
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_main, container, false);
 
+        context = getContext();
         return rootView;
     }
 
@@ -224,14 +229,40 @@ public class MainFragment extends Fragment implements LoaderManager.LoaderCallba
                 Values[0] = entryID;
                 System.out.println(entryID);
                 getActivity().getContentResolver().update(DBContentProvider.CONTENT_URI, values, "_id" + "= ?", Values);
-                System.out.println("Sent Sum" + Double.toString(sentSum));
+                System.out.println("Sent Sum " + Double.toString(sentSum));
+
+                System.out.println("{ Person: Sentiment }Map --> " + ent.personSentiment().toString());
 
 
-                List<String> people = ent.personMentions();
-
-                for (String person: people){
-                    System.out.println(person);
+                String weHate = "";
+                String weLike = "";
+                Map<String, Integer> psMap = ent.personSentiment();
+                for(Map.Entry<String, Integer> entry: psMap.entrySet()){
+                    if(entry.getValue() >= 1)
+                        weLike = entry.getKey();
+                    if(entry.getValue() <= -1)
+                        weHate = entry.getKey();
                 }
+
+                final String like = weLike;
+                final String hate = weHate;
+                if(weLike != "") {
+                    Handler handler = new Handler(context.getMainLooper());
+                    handler.post(new Runnable() {
+                        public void run() {
+                            Toast.makeText(context, "mmm. We like " + like , Toast.LENGTH_LONG).show();
+                        }
+                    });
+                }
+                if(weHate != "") {
+                    Handler handler = new Handler(context.getMainLooper());
+                    handler.post(new Runnable() {
+                        public void run() {
+                            Toast.makeText(context, "WE HATE " + hate + "!", Toast.LENGTH_LONG).show();
+                        }
+                    });
+                }
+
 
             } catch (ClientProtocolException e) {
                 System.out.println(e);
@@ -240,9 +271,11 @@ public class MainFragment extends Fragment implements LoaderManager.LoaderCallba
             } catch (IOException e) {
                 System.out.println(e);
                 return null;
-                // TODO Auto-generated catch block
+            // TODO Auto-generated catch block
             }
             return null;
         }
+
     }
+
 }

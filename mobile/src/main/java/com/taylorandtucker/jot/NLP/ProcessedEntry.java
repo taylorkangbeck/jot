@@ -1,4 +1,5 @@
-import com.sun.org.apache.xpath.internal.NodeSet;
+package com.taylorandtucker.jot.NLP;
+
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
@@ -39,7 +40,7 @@ public class ProcessedEntry {
         List<Integer> sents = getSentenceSentiments();
         //todo: bound this
         for (Integer i: sents){
-            sum += (i -2);
+            sum += i ;
         }
 
         return sum/((float)sents.size());
@@ -71,23 +72,28 @@ public class ProcessedEntry {
 
     public List<String> personMentions(Node sentence){
         //todo: use dependency info to determine if a name is a compound name: john brown
-        List names = new ArrayList<Integer>();
+        List names = new ArrayList<String>();
         try {
-
+            int LastNameIndex = -2;
             NodeList nodes = (NodeList) xpath.evaluate(".//tokens/token", sentence, XPathConstants.NODESET);
             for (int i = 0; i < nodes.getLength(); i++) {
                 Node token = (Node) xpath.evaluate(".//NER", nodes.item(i), XPathConstants.NODE);
 
                 if (token.getTextContent().toString().contains("PERSON")){
                     String name = xpath.evaluate(".//word", nodes.item(i), XPathConstants.STRING).toString();
-
-                    names.add(name);
+                    if(LastNameIndex == i-1){
+                        names.set(names.size()-1, names.get(names.size()-1).toString() +" "+name.trim());
+                    }else {
+                        names.add(name.trim());
+                    }
+                    LastNameIndex = i;
                 }
 
             }
         } catch (XPathExpressionException e) {
             e.printStackTrace();
         }
+
         return names;
     }
 
@@ -95,25 +101,83 @@ public class ProcessedEntry {
         //todo: use coreference to attribute pronouns to a person and assign sentiment properly
         // i.e. John came over yesterday. he was mean to me.
         // currently john is not given a negative score
-        Map<String, Integer> psMap = new HashMap<>();
+        DefaultHashMap<String, Integer> psMap = new DefaultHashMap<String, Integer>();
 
         NodeList sNodes = getSentenceNodes();
+        List<Integer> sentSents = getSentenceSentiments();
+
         if(sNodes != null) {
+            //for each sentence
             for (int i = 0; i < sNodes.getLength(); i++) {
-                int val = sentenceSentiment(sNodes.item(i));
 
+                //find the sentiment
+                int sentVal = sentenceSentiment(sNodes.item(i));
+
+                //for all people in each sentence
                 for (String name : personMentions(sNodes.item(i))) {
-                    print(name);
-                    int newVal = psMap.getOrDefault(name, 0) + val;
-                    psMap.put(name, newVal);
 
+                    //add the sentiment of the 'primary' sentence
 
+                    int primarySentVal = psMap.getOrDefault(name, 0) + sentVal;
+                    psMap.put(name, primarySentVal);
+
+                    // for all other places this person is referenced
+                    for(int sentence:  corefSentenceApearances(name)) {
+
+                        //add the sentiment of that sentence to their existing score
+                        int corefSentVal = psMap.getOrDefault(name, 0) + sentSents.get(sentence-1);
+                        psMap.put(name, corefSentVal);
+                    }
                 }
             }
         }
+        //todo: consider this. maybe not necessary? maybe even wrong ?
+        combineAliasValues(psMap);
         return psMap;
+    }
+    public Map<String, Integer> combineAliasValues(Map<String, Integer> psMap){
+       Map<String, String> Aliases = new DefaultHashMap<String, String>();
+
+        for(Map.Entry<String, Integer> entry: psMap.entrySet()){
+            for(String name: psMap.keySet()){
+
+                String after = entry.getKey() + " ";
+                if(fullNameContainsSingle(name, entry.getKey())){
+
+                    psMap.put(name, psMap.get(name)+ entry.getValue());
+
+                    Aliases.put(entry.getKey(), name);
+                }
+            }
+        }
+        for(String name: Aliases.keySet()){
+
+            psMap.remove(name);
+        }
+        return psMap;
+    }
+    public Boolean fullNameContainsSingle(String full, String single){
+        return (full!= single && Arrays.asList(full.split(" ")).contains(single));
+    }
+    private List<Integer> corefSentenceApearances(String entity){
+        List<Integer> appearances = new ArrayList<Integer>();
+        try {
+            NodeList list = (NodeList) xpath.evaluate("//coreference/coreference[contains(., 'Mateo')]/*[not(contains(@representative, 'true'))]/mention/sentence/text()", doc, XPathConstants.NODESET);
+            for(int i =0; i<list.getLength(); i++){
+                appearances.add(Integer.parseInt(list.item(i).getTextContent()));
+            }
+        }catch (XPathExpressionException e){
+
+        }
+        return appearances;
     }
     public void print(String a){
         System.out.println(a);
+    }
+
+    public class DefaultHashMap<K,V> extends HashMap<K,V> {
+        public V getOrDefault(K k, V d){
+            return containsKey(k) ? super.get(k) : d;
+        }
     }
 }

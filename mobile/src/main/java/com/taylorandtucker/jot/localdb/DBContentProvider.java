@@ -110,9 +110,9 @@ public class DBContentProvider extends ContentProvider {
         switch (uriType) {
             case ENTRIES:
                 sqlDB.beginTransaction();
-                System.out.println("update called");
+
                 retVal = sqlDB.update(Contract.TABLE_NAME, values, selection, selectionArgs);
-                System.out.println("update called.  Number of things changed = " + Integer.toString(retVal));
+
                 sqlDB.setTransactionSuccessful();
                 sqlDB.endTransaction();
                 break;

@@ -71,6 +71,14 @@ public class ProcessedEntry {
     }
 
     public List<String> personMentions(Node sentence){
+
+        return entityMentions(sentence, "PERSON");
+    }
+    public List<String> locationMentions(Node sentence){
+
+        return entityMentions(sentence, "LOCATION");
+    }
+    public List<String> entityMentions(Node sentence, String entityType){
         //todo: use dependency info to determine if a name is a compound name: john brown
         List names = new ArrayList<String>();
         try {
@@ -79,7 +87,8 @@ public class ProcessedEntry {
             for (int i = 0; i < nodes.getLength(); i++) {
                 Node token = (Node) xpath.evaluate(".//NER", nodes.item(i), XPathConstants.NODE);
 
-                if (token.getTextContent().toString().contains("PERSON")){
+
+                if (token.getTextContent().toString().contains(entityType)){
                     String name = xpath.evaluate(".//word", nodes.item(i), XPathConstants.STRING).toString();
                     if(LastNameIndex == i-1){
                         names.set(names.size()-1, names.get(names.size()-1).toString() +" "+name.trim());
@@ -88,7 +97,6 @@ public class ProcessedEntry {
                     }
                     LastNameIndex = i;
                 }
-
             }
         } catch (XPathExpressionException e) {
             e.printStackTrace();
@@ -96,8 +104,13 @@ public class ProcessedEntry {
 
         return names;
     }
-
     public Map<String, Integer> personSentiment(){
+        return entitySentiment("PERSON");
+    }
+    public Map<String, Integer> locationSentiment(){
+        return entitySentiment("LOCATION");
+    }
+    private Map<String, Integer> entitySentiment(String entityType){
         //todo: use coreference to attribute pronouns to a person and assign sentiment properly
         // i.e. John came over yesterday. he was mean to me.
         // currently john is not given a negative score
@@ -114,7 +127,7 @@ public class ProcessedEntry {
                 int sentVal = sentenceSentiment(sNodes.item(i));
 
                 //for all people in each sentence
-                for (String name : personMentions(sNodes.item(i))) {
+                for (String name : entityMentions(sNodes.item(i), entityType)) {
 
                     //add the sentiment of the 'primary' sentence
 
@@ -162,7 +175,7 @@ public class ProcessedEntry {
     private List<Integer> corefSentenceApearances(String entity){
         List<Integer> appearances = new ArrayList<Integer>();
         try {
-            NodeList list = (NodeList) xpath.evaluate("//coreference/coreference[contains(., 'Mateo')]/*[not(contains(@representative, 'true'))]/mention/sentence/text()", doc, XPathConstants.NODESET);
+            NodeList list = (NodeList) xpath.evaluate("//coreference/coreference[contains(., '" +entity+"')]/*[not(contains(@representative, 'true'))]/sentence/text()", doc, XPathConstants.NODESET);
             for(int i =0; i<list.getLength(); i++){
                 appearances.add(Integer.parseInt(list.item(i).getTextContent()));
             }

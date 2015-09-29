@@ -145,7 +145,7 @@ public class MainFragment extends Fragment implements LoaderManager.LoaderCallba
             String[] segments = uri.getPath().split("/");
             String idStr = segments[segments.length-1];
 
-            System.out.println(idStr);
+
             RetrieveNLPdata nlp = new RetrieveNLPdata(idStr, entry.getBody());
             nlp.execute();
 
@@ -227,12 +227,12 @@ public class MainFragment extends Fragment implements LoaderManager.LoaderCallba
                 values.put(Contract.COLUMN_SENTIMENT, sentSum);
                 String[] Values = new String[1];
                 Values[0] = entryID;
-                System.out.println(entryID);
+
                 getActivity().getContentResolver().update(DBContentProvider.CONTENT_URI, values, "_id" + "= ?", Values);
                 System.out.println("Sent Sum " + Double.toString(sentSum));
 
                 System.out.println("{ Person: Sentiment }Map --> " + ent.personSentiment().toString());
-
+                System.out.println("{ Location: Sentiment }Map --> " + ent.locationSentiment().toString());
 
                 String weHate = "";
                 String weLike = "";

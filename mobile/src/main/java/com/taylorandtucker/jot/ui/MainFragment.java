@@ -4,7 +4,6 @@ import android.app.Activity;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
-import android.graphics.Color;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -25,7 +24,6 @@ import android.widget.Toast;
 import com.jjoe64.graphview.GraphView;
 import com.jjoe64.graphview.series.DataPoint;
 import com.jjoe64.graphview.series.LineGraphSeries;
-import com.jjoe64.graphview.series.PointsGraphSeries;
 import com.taylorandtucker.jot.Entry;
 import com.taylorandtucker.jot.NLP.ProcessedEntry;
 import com.taylorandtucker.jot.R;
@@ -150,16 +148,9 @@ public class MainFragment extends Fragment implements LoaderManager.LoaderCallba
 // you can directly pass Date objects to DataPoint-Constructor
 // this will convert the Date to double via Date#getTime()git
         LineGraphSeries<DataPoint> series = new LineGraphSeries<DataPoint>(l1.toArray(new DataPoint[l1.size()]));
-        series.setDataPointsRadius(10);
-        series.setColor(Color.GREEN);
+
         graph.addSeries(series);
-
-        PointsGraphSeries<DataPoint> series2 = new PointsGraphSeries<DataPoint>(l1.toArray(new DataPoint[l1.size()]));
-        series2.setShape(PointsGraphSeries.Shape.POINT);
-
-        series2.setColor(Color.BLUE);
-
-        graph.addSeries(series2);
+        
 // set manual x bounds to have nice steps
 
 

@@ -13,6 +13,7 @@ import android.support.v4.app.LoaderManager;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
@@ -117,6 +118,46 @@ public class MainFragment extends Fragment implements LoaderManager.LoaderCallba
             }
         });
 
+        final GraphView graph = (GraphView) getActivity().findViewById(R.id.graph);
+        LineGraphSeries<DataPoint> series = new LineGraphSeries<DataPoint>(new DataPoint[] {
+                new DataPoint(0, 1),
+                new DataPoint(1, 5),
+                new DataPoint(2, 3),
+                new DataPoint(3, 2),
+                new DataPoint(4, 6),
+
+                new DataPoint(5, 100)
+        });
+
+        graph.addSeries(series);
+        graph.getViewport().setYAxisBoundsManual(true);
+        graph.getViewport().setMaxY(5);
+        graph.getViewport().setMinY(0);
+        graph.getViewport().setScalable(true);
+        graph.getViewport().setScrollable(true);
+
+        graph.setOnTouchListener(new View.OnTouchListener(){
+            public boolean onTouch(View v, MotionEvent event) {
+                if(event.getAction() == MotionEvent.ACTION_POINTER_UP || event.getAction() == MotionEvent.ACTION_UP ) {
+
+                    float screenX = event.getX();
+                    float screenY = event.getY();
+                    float width_x = v.getWidth();
+                    float viewX = screenX - v.getLeft();
+                    float viewY = screenY - v.getTop();
+                    float percent_x = (viewX/width_x);
+
+
+                    System.out.println("Xmin : " + graph.getViewport().getMinX(false)+" Xmax: " + graph.getViewport().getMaxX(false) + " Percent = " + percent_x);
+
+
+                    return true;
+                }
+                return false;
+            }
+
+        });
+
 
     }
 
@@ -130,17 +171,6 @@ public class MainFragment extends Fragment implements LoaderManager.LoaderCallba
     private void onSubmit()
     {
 
-        GraphView graph = (GraphView) getActivity().findViewById(R.id.graph);
-        LineGraphSeries<DataPoint> series = new LineGraphSeries<DataPoint>(new DataPoint[] {
-                new DataPoint(0, 1),
-                new DataPoint(1, 5),
-                new DataPoint(2, 3),
-                new DataPoint(3, 2),
-                new DataPoint(4, 6)
-        });
-
-        graph.addSeries(series);
-        graph.getViewport().setScalable(true);
         EditText entryText = (EditText) getActivity().findViewById(R.id.textEntry);
         if (!entryText.equals("")) {
             final Entry entry = new Entry(entryText.getText().toString());

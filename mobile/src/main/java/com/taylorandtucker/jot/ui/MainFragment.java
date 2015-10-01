@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
+import android.graphics.Color;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -13,7 +14,6 @@ import android.support.v4.app.LoaderManager;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
@@ -25,6 +25,7 @@ import android.widget.Toast;
 import com.jjoe64.graphview.GraphView;
 import com.jjoe64.graphview.series.DataPoint;
 import com.jjoe64.graphview.series.LineGraphSeries;
+import com.jjoe64.graphview.series.PointsGraphSeries;
 import com.taylorandtucker.jot.Entry;
 import com.taylorandtucker.jot.NLP.ProcessedEntry;
 import com.taylorandtucker.jot.R;
@@ -45,6 +46,9 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.List;
 import java.util.Map;
 
@@ -119,48 +123,50 @@ public class MainFragment extends Fragment implements LoaderManager.LoaderCallba
         });
 
         final GraphView graph = (GraphView) getActivity().findViewById(R.id.graph);
-        LineGraphSeries<DataPoint> series = new LineGraphSeries<DataPoint>(new DataPoint[] {
-                new DataPoint(0, 1),
-                new DataPoint(1, 5),
-                new DataPoint(2, 3),
-                new DataPoint(3, 2),
-                new DataPoint(4, 6),
 
-                new DataPoint(5, 100)
-        });
+        // generate Dates
+        Calendar calendar = Calendar.getInstance();
+        Date d1 = calendar.getTime();
+        System.out.println(d1.getTime());
+        Date date1 = new GregorianCalendar(2014, Calendar.FEBRUARY, 11).getTime();
+        Date date2 = new GregorianCalendar(2014, Calendar.FEBRUARY, 12).getTime();
+        Date date3 = new GregorianCalendar(2014, Calendar.FEBRUARY, 27).getTime();
+        Date date4 = new GregorianCalendar(2014, Calendar.APRIL, 11).getTime();
+        Date date5 = new GregorianCalendar(2015, Calendar.FEBRUARY, 11).getTime();
+        Date date6 = new GregorianCalendar(2017, Calendar.FEBRUARY, 11).getTime();
 
+
+        DataPoint[] entryList = new DataPoint[]{};
+        List<DataPoint> l1 = new ArrayList();
+        List l2 = new ArrayList();
+
+        long now = calendar.getTimeInMillis();
+        for (int i = 0; i < 365; i++){
+            l1.add(new DataPoint(new Date(now), rand(-2, 2)));
+            now += rand(1000*60*60*12, 1000*60*60*48);
+        }
+
+
+// you can directly pass Date objects to DataPoint-Constructor
+// this will convert the Date to double via Date#getTime()git
+        LineGraphSeries<DataPoint> series = new LineGraphSeries<DataPoint>(l1.toArray(new DataPoint[l1.size()]));
+        series.setDataPointsRadius(10);
+        series.setColor(Color.GREEN);
         graph.addSeries(series);
-        graph.getViewport().setYAxisBoundsManual(true);
-        graph.getViewport().setMaxY(5);
-        graph.getViewport().setMinY(0);
-        graph.getViewport().setScalable(true);
-        graph.getViewport().setScrollable(true);
 
-        graph.setOnTouchListener(new View.OnTouchListener(){
-            public boolean onTouch(View v, MotionEvent event) {
-                if(event.getAction() == MotionEvent.ACTION_POINTER_UP || event.getAction() == MotionEvent.ACTION_UP ) {
+        PointsGraphSeries<DataPoint> series2 = new PointsGraphSeries<DataPoint>(l1.toArray(new DataPoint[l1.size()]));
+        series2.setShape(PointsGraphSeries.Shape.POINT);
 
-                    float screenX = event.getX();
-                    float screenY = event.getY();
-                    float width_x = v.getWidth();
-                    float viewX = screenX - v.getLeft();
-                    float viewY = screenY - v.getTop();
-                    float percent_x = (viewX/width_x);
+        series2.setColor(Color.BLUE);
 
-
-                    System.out.println("Xmin : " + graph.getViewport().getMinX(false)+" Xmax: " + graph.getViewport().getMaxX(false) + " Percent = " + percent_x);
-
-
-                    return true;
-                }
-                return false;
-            }
-
-        });
+        graph.addSeries(series2);
+// set manual x bounds to have nice steps
 
 
     }
-
+private int rand(int Min, int Max){
+    return Min + (int)(Math.random() * ((Max - Min) + 1));
+}
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
@@ -172,7 +178,8 @@ public class MainFragment extends Fragment implements LoaderManager.LoaderCallba
     {
 
         EditText entryText = (EditText) getActivity().findViewById(R.id.textEntry);
-        if (!entryText.equals("")) {
+        System.out.println(":"+entryText.getText()+":");
+        if (entryText.getText().length() >=1) {
             final Entry entry = new Entry(entryText.getText().toString());
 
             //putEntry
@@ -189,14 +196,14 @@ public class MainFragment extends Fragment implements LoaderManager.LoaderCallba
             RetrieveNLPdata nlp = new RetrieveNLPdata(idStr, entry.getBody());
             nlp.execute();
 
-
-            View view = getActivity().getCurrentFocus();
-            if (view != null) {
-                InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
-                imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
-                entryText.setText("");
-            }
         }
+        View view = getActivity().getCurrentFocus();
+        if (view != null) {
+            InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+            imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
+            entryText.setText("");
+        }
+
     }
 
     @Override

@@ -21,11 +21,13 @@ import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.Toast;
 
+import com.jjoe64.graphview.GraphView;
+import com.jjoe64.graphview.series.DataPoint;
+import com.jjoe64.graphview.series.LineGraphSeries;
 import com.taylorandtucker.jot.Entry;
 import com.taylorandtucker.jot.NLP.ProcessedEntry;
 import com.taylorandtucker.jot.R;
 import com.taylorandtucker.jot.localdb.DBContentProvider;
-import com.taylorandtucker.jot.localdb.DBUtils;
 import com.taylorandtucker.jot.localdb.EntriesContract.Contract;
 
 import org.apache.http.HttpEntity;
@@ -36,23 +38,17 @@ import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.entity.ByteArrayEntity;
 import org.apache.http.impl.client.DefaultHttpClient;
-import org.w3c.dom.Document;
-import org.w3c.dom.NodeList;
 import org.xml.sax.InputSource;
-import org.xml.sax.SAXException;
 
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.io.StringReader;
-import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
-import javax.xml.parsers.ParserConfigurationException;
 
 /**
  * Created by Taylor on 9/16/-015.
@@ -105,7 +101,7 @@ public class MainFragment extends Fragment implements LoaderManager.LoaderCallba
         //merging adapters for the entries feed
         cardMergeAdapter = new CardMergeAdapter();
         cardFragmentAdapter = new CardFragmentAdapter(getContext());
-        cardFragmentAdapter.add(new CalendarReviewFragment());
+        //cardFragmentAdapter.add(new CalendarReviewFragment());
         cardMergeAdapter.addAdapter(cardFragmentAdapter);
 
         cardCursorAdapter = new CardCursorAdapter(getContext(), null);
@@ -120,6 +116,8 @@ public class MainFragment extends Fragment implements LoaderManager.LoaderCallba
                 onSubmit();
             }
         });
+
+
     }
 
     @Override
@@ -131,6 +129,18 @@ public class MainFragment extends Fragment implements LoaderManager.LoaderCallba
 
     private void onSubmit()
     {
+
+        GraphView graph = (GraphView) getActivity().findViewById(R.id.graph);
+        LineGraphSeries<DataPoint> series = new LineGraphSeries<DataPoint>(new DataPoint[] {
+                new DataPoint(0, 1),
+                new DataPoint(1, 5),
+                new DataPoint(2, 3),
+                new DataPoint(3, 2),
+                new DataPoint(4, 6)
+        });
+
+        graph.addSeries(series);
+        graph.getViewport().setScalable(true);
         EditText entryText = (EditText) getActivity().findViewById(R.id.textEntry);
         if (!entryText.equals("")) {
             final Entry entry = new Entry(entryText.getText().toString());

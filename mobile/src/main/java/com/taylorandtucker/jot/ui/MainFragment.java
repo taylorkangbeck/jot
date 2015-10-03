@@ -21,9 +21,6 @@ import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.Toast;
 
-import com.jjoe64.graphview.GraphView;
-import com.jjoe64.graphview.series.DataPoint;
-import com.jjoe64.graphview.series.LineGraphSeries;
 import com.taylorandtucker.jot.Entry;
 import com.taylorandtucker.jot.NLP.ProcessedEntry;
 import com.taylorandtucker.jot.R;
@@ -44,9 +41,6 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.GregorianCalendar;
 import java.util.List;
 import java.util.Map;
 
@@ -120,6 +114,13 @@ public class MainFragment extends Fragment implements LoaderManager.LoaderCallba
             }
         });
 
+        SentimentGraphFragment mChart = (SentimentGraphFragment) getActivity().findViewById(R.id.sentChart);
+
+
+
+        // // dont forget to refresh the drawing
+        // mChart.invalidate();
+/*
         final GraphView graph = (GraphView) getActivity().findViewById(R.id.graph);
 
         // generate Dates
@@ -150,9 +151,9 @@ public class MainFragment extends Fragment implements LoaderManager.LoaderCallba
         LineGraphSeries<DataPoint> series = new LineGraphSeries<DataPoint>(l1.toArray(new DataPoint[l1.size()]));
 
         graph.addSeries(series);
-        
-// set manual x bounds to have nice steps
 
+// set manual x bounds to have nice steps
+*/
 
     }
 private int rand(int Min, int Max){

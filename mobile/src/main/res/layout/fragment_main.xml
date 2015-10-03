@@ -10,8 +10,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:name="com.taylorandtucker.jot.ui.CalendarReviewFragment"
-        android:id="@+id/fragment"
-        tools:layout="@layout/fragment_calendar_review" />
+        android:id="@+id/sentChart"
+        tools:layout="@layout/fragment_sentiment_graph" />
 
     <ListView
         android:layout_width="match_parent"

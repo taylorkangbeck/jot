@@ -1,1 +1,1 @@
-include ':mobile', ':wear', 'GraphView', ':GraphView'
+include ':mobile', ':wear', ':MPChartLib'

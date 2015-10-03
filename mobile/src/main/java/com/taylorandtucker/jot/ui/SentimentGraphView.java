@@ -1,21 +1,9 @@
 package com.taylorandtucker.jot.ui;
 
-import android.content.Context;
-import android.graphics.Color;
-import android.util.AttributeSet;
-import android.view.MotionEvent;
-import android.view.View;
-
-import com.jjoe64.graphview.GraphView;
-import com.jjoe64.graphview.LabelFormatter;
-import com.jjoe64.graphview.Viewport;
-
-import java.text.SimpleDateFormat;
-import java.util.Calendar;
-
 /**
  * Created by tuckerkirven on 10/1/15.
  */
+/*
 public class SentimentGraphView extends GraphView {
     private Viewport vp;
     private double windowMinX;
@@ -110,3 +98,4 @@ public class SentimentGraphView extends GraphView {
     }
 
 }
+*/

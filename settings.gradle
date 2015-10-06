@@ -1,1 +1,2 @@
 include ':mobile', ':wear', ':MPChartLib'
+project(':MPChartLib').projectDir = new File('MPChartLib1')

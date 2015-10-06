@@ -81,7 +81,7 @@ public class SentimentGraphFragment extends LineChart implements OnChartGestureL
 
         // set an alternative background color
         // this.setBackgroundColor(Color.GRAY);
-        this.setBackgroundColor(Color.LTGRAY);
+        this.setBackgroundColor(Color.DKGRAY);
         // create a custom MarkerView (extend MarkerView) and specify the layout
         // to use for it
 
@@ -98,13 +98,14 @@ public class SentimentGraphFragment extends LineChart implements OnChartGestureL
         LimitLine llYAxis = new LimitLine(0f, "");
         llYAxis.setLineWidth(1f);
         llYAxis.enableDashedLine(10f, 10f, 0f);
-        llYAxis.setLineColor(Color.DKGRAY);
+        llYAxis.setLineColor(Color.LTGRAY);
         llYAxis.setLabelPosition(LimitLine.LimitLabelPosition.RIGHT_BOTTOM);
         llYAxis.setTextSize(10f);
         leftAxis.addLimitLine(llYAxis);
 
         xAxis.setValueFormatter(new MyCustomXAxisValueFormatter());
         xAxis.setSpaceBetweenLabels(-5);
+        xAxis.setTextColor(Color.WHITE);
 
         leftAxis.setAxisMaxValue(2.1f);
         leftAxis.setAxisMinValue(-2.1f);
@@ -193,14 +194,14 @@ public class SentimentGraphFragment extends LineChart implements OnChartGestureL
         //set1.setHighLightColor(Color.rgb(244, 117, 117));
         set1.setDrawCircleHole(false);
         set1.setDrawFilled(true);
-        //set1.setFillFormatter(new MyCustomFillFormatter());
+        set1.setFillFormatter(new MyCustomFillFormatter());
 
         Paint paintRenderer =  this.getRenderer().getPaintRender();
 
 
         float height = mViewPortHandler.getContentCenter().y;
         System.out.println("====================HEIGHT   " + height + "");
-        int[] gradColors = {Color.GREEN, Color.WHITE, Color.RED};
+        int[] gradColors = {Color.GREEN, Color.YELLOW, Color.RED};
         paintRenderer.setShader(new LinearGradient(0, 20, 0, 600, gradColors,null, Shader.TileMode.MIRROR));
         set1.setColor(Color.BLACK);
 
@@ -298,7 +299,8 @@ public class SentimentGraphFragment extends LineChart implements OnChartGestureL
         // return the fill position
         public float getFillLinePosition(LineDataSet dataSet, LineDataProvider lineDataProvider) {
 
-            return 0;
+            //return 0;
+            return dataSet.getYValForXIndex(dataSet.getEntryCount());
         }
     }
 }

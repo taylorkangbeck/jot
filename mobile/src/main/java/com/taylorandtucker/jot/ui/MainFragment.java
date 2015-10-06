@@ -114,9 +114,9 @@ public class MainFragment extends Fragment implements LoaderManager.LoaderCallba
             }
         });
 
-        SentimentGraphFragment mChart = (SentimentGraphFragment) getActivity().findViewById(R.id.sentChart);
+        SentimentGraphFragment mChart = (SentimentGraphFragment) getActivity().findViewById(R.id.graph);
 
-
+        mChart.setData(365, 100);
 
         // // dont forget to refresh the drawing
         // mChart.invalidate();

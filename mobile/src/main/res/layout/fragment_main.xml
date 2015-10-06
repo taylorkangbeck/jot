@@ -10,7 +10,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:name="com.taylorandtucker.jot.ui.CalendarReviewFragment"
-        android:id="@+id/sentChart"
+        android:id="@+id/fragment"
         tools:layout="@layout/fragment_calendar_review" />
 
     <ListView

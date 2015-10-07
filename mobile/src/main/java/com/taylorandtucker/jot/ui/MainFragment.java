@@ -4,7 +4,6 @@ import android.app.Activity;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
-import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -23,7 +22,7 @@ import com.taylorandtucker.jot.Entry;
 import com.taylorandtucker.jot.R;
 import com.taylorandtucker.jot.localdb.DBContentProvider;
 import com.taylorandtucker.jot.localdb.DBUtils;
-import com.taylorandtucker.jot.localdb.EntriesContract.Contract;
+import com.taylorandtucker.jot.localdb.EntriesContract.ContractEntries;
 
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
@@ -42,7 +41,6 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.StringReader;
-import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -131,13 +129,16 @@ public class MainFragment extends Fragment implements LoaderManager.LoaderCallba
 
             //putEntry
             ContentValues values = new ContentValues();
-            values.put(Contract.COLUMN_DATE, entry.getCreatedOn().toString());
-            values.put(Contract.COLUMN_BODY, entry.getBody());
-            values.put(Contract.COLUMN_SENTIMENT, 0);
-            Uri uri  = getActivity().getContentResolver().insert(DBContentProvider.CONTENT_URI, values);
+            values.put(ContractEntries.COLUMN_DATE, entry.getCreatedOn().toString());
+            values.put(ContractEntries.COLUMN_BODY, entry.getBody());
+            values.put(ContractEntries.COLUMN_SENTIMENT, 0);
+            //Uri uri  = getActivity().getContentResolver().insert(DBContentProvider.CONTENT_URI, values);
 
-            String[] segments = uri.getPath().split("/");
-            String idStr = segments[segments.length-1];
+            //String[] segments = uri.getPath().split("/");
+            //String idStr = segments[segments.length-1];
+
+            DBUtils dbUtils = DBUtils.getEntryInstance(getContext());
+            String idStr = Long.toString(dbUtils.putEntry(entry));
 
             System.out.println(idStr);
             RetrieveNLPdata nlp = new RetrieveNLPdata(idStr, entry.getBody());
@@ -156,12 +157,12 @@ public class MainFragment extends Fragment implements LoaderManager.LoaderCallba
     @Override
     public Loader<Cursor> onCreateLoader(int id, Bundle args) {
         String[] projection = {
-                Contract._ID,
-                Contract.COLUMN_DATE,
-                Contract.COLUMN_BODY,
-                Contract.COLUMN_SENTIMENT
+                ContractEntries._ID,
+                ContractEntries.COLUMN_DATE,
+                ContractEntries.COLUMN_BODY,
+                ContractEntries.COLUMN_SENTIMENT
         };
-        String sortOrder = Contract._ID + " DESC"; //ordering by descending id (couldn't get date to work)
+        String sortOrder = ContractEntries._ID + " DESC"; //ordering by descending id (couldn't get date to work)
 
         CursorLoader cursorLoader = new CursorLoader(getContext(),
                 DBContentProvider.CONTENT_URI, projection, null, null, sortOrder);
@@ -189,13 +190,11 @@ public class MainFragment extends Fragment implements LoaderManager.LoaderCallba
         protected Void doInBackground(Void... param) {
             // Create a new HttpClient and Post Header
             HttpClient httpclient = new DefaultHttpClient();
-            HttpPost httppost = new HttpPost("http://10.66.235.118:8000/entry");
+            HttpPost httppost = new HttpPost("http://10.67.219.143:8000/entry");
 
             try {
                 // Add your data
                 List<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>(2);
-
-                System.out.println("AAAA");
 
                 HttpEntity entity = new ByteArrayEntity(entry.getBytes("UTF-8"));
                 httppost.setEntity(entity);
@@ -206,7 +205,6 @@ public class MainFragment extends Fragment implements LoaderManager.LoaderCallba
                 BufferedReader rd = new BufferedReader(new InputStreamReader(response.getEntity().getContent()));
                 String line = "";
                 String xml = "";
-                System.out.println("BBB");
 
                 DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
                 DocumentBuilder builder;
@@ -233,7 +231,7 @@ public class MainFragment extends Fragment implements LoaderManager.LoaderCallba
                     }
 
                     ContentValues values = new ContentValues();
-                    values.put(Contract.COLUMN_SENTIMENT, sentSum);
+                    values.put(ContractEntries.COLUMN_SENTIMENT, sentSum);
 
                     String[] Values = new String[1];
                     Values[0] = entryID;

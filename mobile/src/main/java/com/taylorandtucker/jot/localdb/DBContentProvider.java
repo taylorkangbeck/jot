@@ -7,7 +7,7 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteQueryBuilder;
 import android.net.Uri;
-import com.taylorandtucker.jot.localdb.EntriesContract.Contract;
+import com.taylorandtucker.jot.localdb.EntriesContract.ContractEntries;
 
 /**
  * Created by Taylor on 9/17/2015.
@@ -47,7 +47,7 @@ public class DBContentProvider extends ContentProvider {
         //checkColumns(projection); TODO
 
         // Set the table
-        queryBuilder.setTables(Contract.TABLE_NAME);
+        queryBuilder.setTables(ContractEntries.TABLE_NAME);
 
         int uriType = sUriMatcher.match(uri);
         switch (uriType) {
@@ -55,7 +55,7 @@ public class DBContentProvider extends ContentProvider {
                 break;
             case ENTRY_ID:
                 // adding the ID to the original query
-                queryBuilder.appendWhere(Contract._ID + "="
+                queryBuilder.appendWhere(ContractEntries._ID + "="
                         + uri.getLastPathSegment());
                 break;
             default:
@@ -80,7 +80,7 @@ public class DBContentProvider extends ContentProvider {
         long id = 0;
         switch (uriType) {
             case ENTRIES:
-                id = sqlDB.insert(Contract.TABLE_NAME, null, values);
+                id = sqlDB.insert(ContractEntries.TABLE_NAME, null, values);
                 break;
             default:
                 throw new IllegalArgumentException("Unknown URI: " + uri);
@@ -111,7 +111,7 @@ public class DBContentProvider extends ContentProvider {
             case ENTRIES:
                 sqlDB.beginTransaction();
                 System.out.println("update called");
-                retVal = sqlDB.update(Contract.TABLE_NAME, values, selection, selectionArgs);
+                retVal = sqlDB.update(ContractEntries.TABLE_NAME, values, selection, selectionArgs);
                 System.out.println("update called.  Number of things changed = " + Integer.toString(retVal));
                 sqlDB.setTransactionSuccessful();
                 sqlDB.endTransaction();

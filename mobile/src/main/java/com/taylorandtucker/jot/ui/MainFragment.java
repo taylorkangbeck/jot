@@ -19,6 +19,7 @@ import android.widget.EditText;
 import android.widget.ListView;
 
 import com.taylorandtucker.jot.Entry;
+import com.taylorandtucker.jot.NLP.ProcessedEntry;
 import com.taylorandtucker.jot.R;
 import com.taylorandtucker.jot.localdb.DBContentProvider;
 import com.taylorandtucker.jot.localdb.DBUtils;
@@ -32,21 +33,16 @@ import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.entity.ByteArrayEntity;
 import org.apache.http.impl.client.DefaultHttpClient;
-import org.w3c.dom.Document;
-import org.w3c.dom.NodeList;
 import org.xml.sax.InputSource;
-import org.xml.sax.SAXException;
 
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.io.StringReader;
 import java.util.ArrayList;
 import java.util.List;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
-import javax.xml.parsers.ParserConfigurationException;
 
 /**
  * Created by Taylor on 9/16/-015.
@@ -121,8 +117,7 @@ public class MainFragment extends Fragment implements LoaderManager.LoaderCallba
                 getArguments().getInt(ARG_SECTION_NUMBER));
     }
 
-    private void onSubmit()
-    {
+    private void onSubmit() {
         EditText entryText = (EditText) getActivity().findViewById(R.id.textEntry);
         if (!entryText.equals("")) {
             final Entry entry = new Entry(entryText.getText().toString());
@@ -183,10 +178,12 @@ public class MainFragment extends Fragment implements LoaderManager.LoaderCallba
 
         private String entryID;
         private String entry;
-        public RetrieveNLPdata(String entryID, String entry){
+
+        public RetrieveNLPdata(String entryID, String entry) {
             this.entryID = entryID;
             this.entry = entry;
         }
+
         protected Void doInBackground(Void... param) {
             // Create a new HttpClient and Post Header
             HttpClient httpclient = new DefaultHttpClient();
@@ -214,39 +211,22 @@ public class MainFragment extends Fragment implements LoaderManager.LoaderCallba
                     xml += line;
                 }
 
-                try {
-                    builder = factory.newDocumentBuilder();
-                    is = new InputSource(new StringReader(xml));
-                    Document doc = builder.parse(is);
+                ProcessedEntry ent = new ProcessedEntry(xml);
+                double sentSum = ent.getEntrySentiment();
 
+                ContentValues values = new ContentValues();
+                values.put(ContractEntries.COLUMN_SENTIMENT, sentSum);
 
-                    NodeList list = doc.getElementsByTagName("sentence");
-
-                    int sentSum = 0;
-
-                    for(int i = 0; i < list.getLength()/2; i++){
-                        int val = Integer.valueOf(list.item(0).getAttributes().getNamedItem("sentimentValue").getNodeValue());
-                        System.out.println(Integer.toString(i) +": " + Integer.toString(val));
-                        sentSum +=(val-2);
-                    }
-
-                    ContentValues values = new ContentValues();
-                    values.put(ContractEntries.COLUMN_SENTIMENT, sentSum);
-
-                    String[] Values = new String[1];
-                    Values[0] = entryID;
-                    System.out.println(entryID);
-                    getActivity().getContentResolver().update(DBContentProvider.CONTENT_URI, values, "_id" + "= ?", Values);
-                    System.out.println("Sent Sum" + Integer.toString(sentSum));
+                String[] Values = new String[1];
+                Values[0] = entryID;
+                System.out.println(entryID);
+                getActivity().getContentResolver().update(DBContentProvider.CONTENT_URI, values, "_id" + "= ?", Values);
 
                     /*
                     DBUtils utils = DBUtils.getInstance(getContext());
                     cardCursorAdapter.swapCursor(utils.getAllEntriesQuery());
 */
-                } catch (ParserConfigurationException e) {
-                } catch (SAXException e) {
-                } catch (IOException e) {
-                }
+
                 return null;
             } catch (ClientProtocolException e) {
                 System.out.println(e);

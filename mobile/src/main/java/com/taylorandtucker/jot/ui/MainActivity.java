@@ -1,12 +1,13 @@
 package com.taylorandtucker.jot.ui;
 
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.app.ActionBar;
-import android.support.v4.app.FragmentManager;
 import android.os.Bundle;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.ActionBar;
+import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.support.v4.widget.DrawerLayout;
+import android.widget.ImageButton;
 
 import com.taylorandtucker.jot.R;
 
@@ -22,6 +23,7 @@ public class MainActivity extends AppCompatActivity
      * Used to store the last screen title. For use in {@link #restoreActionBar()}.
      */
     private CharSequence mTitle;
+    private ImageButton fab;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

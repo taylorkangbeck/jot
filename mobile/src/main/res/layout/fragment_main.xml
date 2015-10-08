@@ -11,7 +11,9 @@
         android:id="@+id/entriesFeed"
         android:divider="@null"
         android:dividerHeight="0dp"
-        android:layout_above="@+id/textEntryLayout">
+        android:layout_alignParentBottom="true"
+        android:focusableInTouchMode="true"
+        android:focusable="true">
     </ListView>
 
     <RelativeLayout
@@ -22,7 +24,8 @@
         android:layout_alignParentRight="true"
         android:gravity="bottom"
         android:id="@+id/textEntryLayout"
-        android:background="@color/textEntryBackground">
+        android:background="@color/textEntryBackground"
+        android:visibility="invisible">
 
         <EditText
             android:layout_width="wrap_content"
@@ -43,4 +46,17 @@
             android:onClick="onSubmit"
             android:layout_alignBottom="@+id/textEntry" />
     </RelativeLayout>
+
+    <ImageButton
+        android:layout_width="70dp"
+        android:layout_height="70dp"
+        android:src="@drawable/ic_new_entry"
+        android:background="@drawable/circle"
+        android:id="@+id/fab"
+        android:layout_gravity="right|bottom"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
+        android:layout_margin="@dimen/fabMargin" />
+
 </RelativeLayout>

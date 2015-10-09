@@ -5,11 +5,11 @@ package com.taylorandtucker.jot;
  */
 public class Entity {
     private String name;
-    private double importance;
-    private String id;
+    private int importance;
+    private long id;
     private double sentiment;
 
-    public Entity(String name, double importance, double sentiment) {
+    public Entity(String name, int importance, double sentiment) {
         this.name = name;
         this.importance = importance;
         this.sentiment = sentiment;
@@ -21,15 +21,17 @@ public class Entity {
 
     public void setNameOn(String name) { this.name = name;}
 
-    public double getImportance() {
+    public int getImportance() {
         return importance;
     }
 
-    public void setImportance(double importance) {
+    public void setImportance(int importance) {
         this.importance = importance;
     }
 
-    public String getId() {
+    public void setId(long id ) { this.id = id; }
+
+    public long getId() {
         return id;
     }
 

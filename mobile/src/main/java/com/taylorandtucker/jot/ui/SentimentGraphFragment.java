@@ -41,6 +41,8 @@ public class SentimentGraphFragment extends LineChart implements OnChartGestureL
     private int MONTHS = DAYS*30;
     private int YEARS = MONTHS*12;
 
+    private List<com.taylorandtucker.jot.Entry> entryList;
+
     private final int layoutId = R.layout.fragment_sentiment_graph;
 
     //private Cursor dataCursor;
@@ -50,9 +52,9 @@ public class SentimentGraphFragment extends LineChart implements OnChartGestureL
         return layoutId;
     }
 
-    public SentimentGraphFragment(Context context) {
+    public SentimentGraphFragment(Context context, List<com.taylorandtucker.jot.Entry> entryList) {
         super(context);
-        //this.dataCursor = dataCursor;
+        this.entryList = entryList;
         onCreate();
     }
 
@@ -62,7 +64,6 @@ public class SentimentGraphFragment extends LineChart implements OnChartGestureL
     }
 
     protected void onCreate() {
-/*
         this.setOnChartGestureListener(this);
         this.setOnChartValueSelectedListener(this);
         this.setDrawGridBackground(false);
@@ -128,6 +129,9 @@ public class SentimentGraphFragment extends LineChart implements OnChartGestureL
         //this.getViewPortHandler().setMaximumScaleY(2f);
         //this.getViewPortHandler().setMaximumScaleX(2f);
 
+
+        setData(45, 100);
+
 //        this.setVisibleXRange(20);
 //        this.setVisibleYRange(20f, AxisDependency.LEFT);
 //        this.centerViewTo(20, 50, AxisDependency.LEFT);
@@ -144,7 +148,7 @@ public class SentimentGraphFragment extends LineChart implements OnChartGestureL
 
         // // dont forget to refresh the drawing
          this.invalidate();
-         */
+
     }
 
     private int rand(int Min, int Max){

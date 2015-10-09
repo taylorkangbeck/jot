@@ -152,30 +152,23 @@ public class DBContentProvider extends ContentProvider {
         SQLiteDatabase sqlDB = dbHelper.getWritableDatabase();
         int rowsDeleted = 0;
         int retVal = 0;
+        sqlDB.beginTransaction();
         switch (uriType) {
             case ENTRIES:
-                sqlDB.beginTransaction();
-
                 retVal = sqlDB.update(EntryContract.TABLE_NAME, values, selection, selectionArgs);
-                sqlDB.setTransactionSuccessful();
-                sqlDB.endTransaction();
                 break;
             case ENTITIES:
-                sqlDB.beginTransaction();
                 retVal = sqlDB.update(EntityContract.TABLE_NAME, values, selection, selectionArgs);
-                sqlDB.setTransactionSuccessful();
-                sqlDB.endTransaction();
                 break;
             case EtoE:
-                sqlDB.beginTransaction();
                 retVal = sqlDB.update(EtoEContract.TABLE_NAME, values, selection, selectionArgs);
-                sqlDB.setTransactionSuccessful();
-                sqlDB.endTransaction();
                 break;
             default:
                 throw new IllegalArgumentException("Unknown URI: " + uri);
 
         }
+        sqlDB.setTransactionSuccessful();
+        sqlDB.endTransaction();
         getContext().getContentResolver().notifyChange(uri, null);
         //return Uri.parse(ENTRY_PATH + "/" + id);
         return retVal; //TODO

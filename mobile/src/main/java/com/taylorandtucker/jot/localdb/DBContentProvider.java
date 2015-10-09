@@ -113,21 +113,28 @@ public class DBContentProvider extends ContentProvider {
         SQLiteDatabase sqlDB = dbHelper.getWritableDatabase();
         int rowsDeleted = 0;
         long id = 0;
+        String path;
         switch (uriType) {
             case ENTRIES:
+                System.out.println("ENTRY");
                 id = sqlDB.insert(EntryContract.TABLE_NAME, null, values);
+                path = ENTRY_PATH;
                 break;
             case ENTITIES:
+                System.out.println("ENTITYYYYYY");
                 id = sqlDB.insert(EntityContract.TABLE_NAME, null, values);
+                path = ENTITY_PATH;
                 break;
             case EtoE:
+                System.out.println("EEEETOEE");
                 id = sqlDB.insert(EtoEContract.TABLE_NAME, null, values);
+                path = EtoE_PATH;
                 break;
             default:
                 throw new IllegalArgumentException("Unknown URI: " + uri);
         }
         getContext().getContentResolver().notifyChange(uri, null);
-        return Uri.parse(ENTRY_PATH + "/" + id);
+        return Uri.parse( path + "/" + id);
     }
 
     @Override

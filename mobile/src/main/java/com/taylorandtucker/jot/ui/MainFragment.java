@@ -42,7 +42,6 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -270,23 +269,7 @@ private int rand(int Min, int Max){
 
                 System.out.print("AAAAAAa");
                 InfoExtractor ie = new InfoExtractor(getActivity());
-
-                ie.updateSentimentForEntry(entryID, sentSum);
-                System.out.print("BBBBBBB");
-                Map<String, Integer> pMap = ent.personSentiment();
-
-                String name = "";
-                System.out.print("There are :");
-                    for (Map.Entry<String, Integer> entry : pMap.entrySet()) {
-                        System.out.print("a");
-                        ie.insertEntity(entry.getKey(), entry.getValue());
-                        name = entry.getKey();
-                        ie.getEntityByName(name);
-
-                    }
-
-
-
+                ie.processNewEntryData(entryID, ent);
                 /*
                     DBUtils utils = DBUtils.getInstance(getContext());
                     cardCursorAdapter.swapCursor(utils.getAllEntriesQuery());

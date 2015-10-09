@@ -65,7 +65,7 @@ public class InfoExtractor {
         // Create a new map of values, where column names are the keys
         ContentValues values = new ContentValues();
         values.put(DBContract.EntryContract._ID, entry.getId());
-        values.put(DBContract.EntryContract.COLUMN_DATE, entry.getCreatedOn().getTime());
+        values.put(DBContract.EntryContract.COLUMN_DATE, entry.getCreatedOn().getTime()/1000);
         values.put(DBContract.EntryContract.COLUMN_BODY, entry.getBody());
         values.put(DBContract.EntryContract.COLUMN_SENTIMENT, entry.getSentiment());
 

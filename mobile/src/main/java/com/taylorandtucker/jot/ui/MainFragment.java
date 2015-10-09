@@ -95,12 +95,12 @@ public class MainFragment extends Fragment implements LoaderManager.LoaderCallba
         cardMergeAdapter = new CardMergeAdapter();
         cardFragmentAdapter = new CardFragmentAdapter(getContext());
 
-        InfoExtractor ie = new InfoExtractor(getActivity());
+        //InfoExtractor ie = new InfoExtractor(getActivity());
         SentimentGraphFragment mChart = new SentimentGraphFragment(getContext());
-        mChart.addData(ie.getAllEntries());
 
         cardFragmentAdapter.add(mChart);
         cardMergeAdapter.addAdapter(cardFragmentAdapter);
+
 
         cardCursorAdapter = new CardCursorAdapter(getContext(), null);
         cardMergeAdapter.addAdapter(cardCursorAdapter);

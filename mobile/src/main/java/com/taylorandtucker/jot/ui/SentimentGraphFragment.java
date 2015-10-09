@@ -11,10 +11,6 @@ import android.util.Log;
 import android.view.MotionEvent;
 
 import com.github.mikephil.charting.charts.LineChart;
-import com.github.mikephil.charting.components.Legend;
-import com.github.mikephil.charting.components.LimitLine;
-import com.github.mikephil.charting.components.XAxis;
-import com.github.mikephil.charting.components.YAxis;
 import com.github.mikephil.charting.data.Entry;
 import com.github.mikephil.charting.data.LineData;
 import com.github.mikephil.charting.data.LineDataSet;
@@ -47,6 +43,7 @@ public class SentimentGraphFragment extends LineChart implements OnChartGestureL
 
     private final int layoutId = R.layout.fragment_sentiment_graph;
 
+    //private Cursor dataCursor;
     @Override
     public int getLayoutResourceId()
     {
@@ -55,24 +52,24 @@ public class SentimentGraphFragment extends LineChart implements OnChartGestureL
 
     public SentimentGraphFragment(Context context) {
         super(context);
+        //this.dataCursor = dataCursor;
         onCreate();
     }
 
-    public SentimentGraphFragment(Context context, AttributeSet attrs) {
+    public SentimentGraphFragment(Context context, AttributeSet attrs, Cursor dataCursor) {
         super(context, attrs);
         onCreate();
     }
 
     protected void onCreate() {
-
-
+/*
         this.setOnChartGestureListener(this);
         this.setOnChartValueSelectedListener(this);
         this.setDrawGridBackground(false);
 
         // no description text
         this.setDescription("");
-        this.setNoDataTextDescription("You need to provide data for the chart.");
+        this.setNoDataTextDescription("After entering entries they will appear here");
 
         // enable value highlighting
         this.setHighlightEnabled(true);
@@ -136,45 +133,78 @@ public class SentimentGraphFragment extends LineChart implements OnChartGestureL
 //        this.centerViewTo(20, 50, AxisDependency.LEFT);
 
         //this.animateX(2500, Easing.EasingOption.EaseInOutQuart);
-        this.invalidate();
 
+        //this.addData(dataCursor);
         // get the legend (only possible after setting data)
-        Legend l = this.getLegend();
+        //Legend l = this.getLegend();
 
 
         // modify the legend ...
         // l.setPosition(LegendPosition.LEFT_OF_CHART);
 
         // // dont forget to refresh the drawing
-        // this.invalidate();
+         this.invalidate();
+         */
     }
 
     private int rand(int Min, int Max){
         return Min + (int)(Math.random() * ((Max - Min) + 1));
     }
 
-    public void addData(Cursor dbCursor){
+    public void addData(Cursor dbCursor) {
+
 
         ArrayList<Entry> yVals = new ArrayList<Entry>();
-        while(dbCursor.moveToNext()){
 
-            double sent = dbCursor.getDouble(dbCursor.getColumnIndex(EntryContract.COLUMN_SENTIMENT));
-            long seconds = dbCursor.getLong(dbCursor.getColumnIndex(EntryContract.COLUMN_DATE));
+        try {
 
-            yVals.add(new Entry((float)sent, (int)seconds));
+            while (dbCursor.moveToNext()) {
+
+                double sent = dbCursor.getDouble(dbCursor.getColumnIndex(EntryContract.COLUMN_SENTIMENT));
+                long seconds = dbCursor.getLong(dbCursor.getColumnIndex(EntryContract.COLUMN_DATE));
+
+                yVals.add(new Entry((float) sent, (int) seconds));
+            }
+        } catch (Exception e) {
+            System.out.println("Failed to get curso data: " + e);
         }
-        int startX = yVals.get(0).getXIndex();
-        int endX = yVals.get(yVals.size()-1).getXIndex();
 
-        ArrayList<String> xVals = new ArrayList<String>();
-        for (int i = startX; i <= endX; i++) {
-            xVals.add(i + "");
+        try {
+            if (!yVals.isEmpty()) {
+                int startX = yVals.get(0).getXIndex();
+                int endX = yVals.get(yVals.size() - 1).getXIndex();
+
+                System.out.println(yVals.size());
+                System.out.println(startX + " " + endX);
+                ArrayList<String> xVals = new ArrayList<String>();
+                for (int i = startX - 1; i <= endX + 1; i++) {
+                    xVals.add(i + "");
+                }
+
+                formatData(xVals, yVals);
+            }
+        } catch (Exception e) {
+            System.out.println("Failed to do x or format data: " + e);
         }
-
-        formatData(xVals, yVals);
     }
     public void formatData(List xVals, List yVals) {
 
+        int now = 0;
+        xVals = new ArrayList<String>();
+               for (int i = 0; i < 20; i++) {
+                   xVals.add((now) + "");
+                   now += 24*60*60*1000;
+               }
+
+        yVals = new ArrayList<Entry>();
+        for (int i = 0; i < 20; i++) {
+            float val = (float) (Math.random() * 4) - 2;// + (float)
+            // ((mult *
+            // 0.1) / 10);
+            if (Math.random() < .233) {
+                yVals.add(new Entry(val, i));
+            }
+        }
         // create a dataset and give it a type
         LineDataSet set1 = new LineDataSet(yVals, "");
         //set1.setFillAlpha(410);
@@ -198,9 +228,7 @@ public class SentimentGraphFragment extends LineChart implements OnChartGestureL
 
         Paint paintRenderer =  this.getRenderer().getPaintRender();
 
-
         float height = mViewPortHandler.getContentCenter().y;
-        System.out.println("====================HEIGHT   " + height + "");
         int[] gradColors = {Color.GREEN, Color.YELLOW, Color.RED};
         paintRenderer.setShader(new LinearGradient(0, 20, 0, 600, gradColors,null, Shader.TileMode.MIRROR));
         set1.setColor(Color.BLACK);
@@ -208,12 +236,14 @@ public class SentimentGraphFragment extends LineChart implements OnChartGestureL
         ArrayList<LineDataSet> dataSets = new ArrayList<LineDataSet>();
         dataSets.add(set1); // add the datasets
 
+
         // create a data object with the datasets
         LineData data = new LineData(xVals, dataSets);
 
-        System.out.println("AAAAAAAAA");
         // set data
         this.setData(data);
+
+        System.out.println("HEEEEEEEEEEEEEERRRRRRRRRRRREEEEEEEEeE");
     }
 
     @Override

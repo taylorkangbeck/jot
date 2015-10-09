@@ -308,8 +308,8 @@ public class SentimentGraphFragment extends LineChart implements OnChartGestureL
         // return the fill position
         public float getFillLinePosition(LineDataSet dataSet, LineDataProvider lineDataProvider) {
 
-            //return 0;
-            return dataSet.getYValForXIndex(dataSet.getEntryCount());
+            return 0;
+            //return dataSet.getYValForXIndex(dataSet.getEntryCount());
         }
     }
 }

@@ -23,6 +23,7 @@ import com.taylorandtucker.jot.NLP.InfoExtractor;
 import com.taylorandtucker.jot.NLP.ProcessedEntry;
 import com.taylorandtucker.jot.R;
 import com.taylorandtucker.jot.localdb.DBContentProvider;
+import com.taylorandtucker.jot.localdb.DBContract;
 import com.taylorandtucker.jot.localdb.DBContract.EntryContract;
 import com.taylorandtucker.jot.localdb.DBUtils;
 
@@ -215,10 +216,19 @@ public class MainFragment extends Fragment implements LoaderManager.LoaderCallba
 
                 InfoExtractor ie = new InfoExtractor(getActivity());
                 ie.processNewEntryData(entryID, ent);
+
+                Cursor c = ie.getAllEntitiesByImportance();
+
+                System.out.println(c.getCount());
+                while(c.moveToNext()){
+                    System.out.println(c.getString(c.getColumnIndex(DBContract.EntityContract.COLUMN_NAME)));
+                    System.out.println(c.getInt(c.getColumnIndex(DBContract.EntityContract.COLUMN_IMPORTANCE)));
+                    System.out.println(c.getDouble(c.getColumnIndex(DBContract.EntityContract.COLUMN_SENTIMENT)));
+                }
                 /*
                     DBUtils utils = DBUtils.getInstance(getContext());
                     cardCursorAdapter.swapCursor(utils.getAllEntriesQuery());
-*/
+                */
 
                 return null;
 

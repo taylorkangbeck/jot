@@ -121,6 +121,16 @@ public class InfoExtractor {
             context.getContentResolver().insert(DBContentProvider.EtoE_URI, values);
         }
     }
+
+    public Cursor getAllEntitiesByImportance(){
+        Cursor c = context.getContentResolver().query(DBContentProvider.ENTITY_URI,
+                DBUtils.entityProjection,
+                null,
+                null,
+                EntityContract.COLUMN_IMPORTANCE + " DESC");
+
+        return c;
+    }
     private double calcSentForEntity(int newSent, double oldSent, int importance){
         double sum = oldSent*importance;
         return (sum+newSent)/(importance+1);

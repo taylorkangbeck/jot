@@ -64,7 +64,7 @@ public class DBContentProvider extends ContentProvider {
         //checkColumns(projection); TODO
 
         int uriType = sUriMatcher.match(uri);
-        System.out.println("URI TYPE + " + uriType + " " + uri.toString());
+
         switch (uriType) {
             case ENTRIES:
                 queryBuilder.setTables(EntryContract.TABLE_NAME);
@@ -116,17 +116,14 @@ public class DBContentProvider extends ContentProvider {
         String path;
         switch (uriType) {
             case ENTRIES:
-                System.out.println("ENTRY");
                 id = sqlDB.insert(EntryContract.TABLE_NAME, null, values);
                 path = ENTRY_PATH;
                 break;
             case ENTITIES:
-                System.out.println("ENTITYYYYYY");
                 id = sqlDB.insert(EntityContract.TABLE_NAME, null, values);
                 path = ENTITY_PATH;
                 break;
             case EtoE:
-                System.out.println("EEEETOEE");
                 id = sqlDB.insert(EtoEContract.TABLE_NAME, null, values);
                 path = EtoE_PATH;
                 break;

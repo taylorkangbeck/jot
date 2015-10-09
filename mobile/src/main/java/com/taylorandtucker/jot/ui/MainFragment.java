@@ -7,6 +7,7 @@ import android.database.Cursor;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.CursorLoader;
@@ -18,8 +19,10 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import com.taylorandtucker.jot.Entry;
+
 import com.taylorandtucker.jot.NLP.InfoExtractor;
 import com.taylorandtucker.jot.NLP.ProcessedEntry;
 import com.taylorandtucker.jot.R;
@@ -61,6 +64,7 @@ public class MainFragment extends Fragment implements LoaderManager.LoaderCallba
     private CardFragmentAdapter cardFragmentAdapter;
     private CardCursorAdapter cardCursorAdapter;
     private int LOADER_ID = 1;
+    private Context context;
 
     /**
      * Returns a new instance of this fragment for the given section
@@ -82,6 +86,7 @@ public class MainFragment extends Fragment implements LoaderManager.LoaderCallba
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_main, container, false);
 
+        context = getContext();
         return rootView;
     }
 
@@ -96,7 +101,10 @@ public class MainFragment extends Fragment implements LoaderManager.LoaderCallba
         //merging adapters for the entries feed
         cardMergeAdapter = new CardMergeAdapter();
         cardFragmentAdapter = new CardFragmentAdapter(getContext());
-        cardFragmentAdapter.add(new CalendarReviewFragment());
+
+        SentimentGraphFragment mChart = new SentimentGraphFragment(getContext());
+        mChart.setData(365, 100);
+        cardFragmentAdapter.add(mChart);
         cardMergeAdapter.addAdapter(cardFragmentAdapter);
 
         cardCursorAdapter = new CardCursorAdapter(getContext(), null);
@@ -111,8 +119,48 @@ public class MainFragment extends Fragment implements LoaderManager.LoaderCallba
                 onSubmit();
             }
         });
-    }
 
+        // // dont forget to refresh the drawing
+        // mChart.invalidate();
+/*
+        final GraphView graph = (GraphView) getActivity().findViewById(R.id.graph);
+
+        // generate Dates
+        Calendar calendar = Calendar.getInstance();
+        Date d1 = calendar.getTime();
+        System.out.println(d1.getTime());
+        Date date1 = new GregorianCalendar(2014, Calendar.FEBRUARY, 11).getTime();
+        Date date2 = new GregorianCalendar(2014, Calendar.FEBRUARY, 12).getTime();
+        Date date3 = new GregorianCalendar(2014, Calendar.FEBRUARY, 27).getTime();
+        Date date4 = new GregorianCalendar(2014, Calendar.APRIL, 11).getTime();
+        Date date5 = new GregorianCalendar(2015, Calendar.FEBRUARY, 11).getTime();
+        Date date6 = new GregorianCalendar(2017, Calendar.FEBRUARY, 11).getTime();
+
+
+        DataPoint[] entryList = new DataPoint[]{};
+        List<DataPoint> l1 = new ArrayList();
+        List l2 = new ArrayList();
+
+        long now = calendar.getTimeInMillis();
+        for (int i = 0; i < 365; i++){
+            l1.add(new DataPoint(new Date(now), rand(-2, 2)));
+            now += rand(1000*60*60*12, 1000*60*60*48);
+        }
+
+
+// you can directly pass Date objects to DataPoint-Constructor
+// this will convert the Date to double via Date#getTime()git
+        LineGraphSeries<DataPoint> series = new LineGraphSeries<DataPoint>(l1.toArray(new DataPoint[l1.size()]));
+
+        graph.addSeries(series);
+
+// set manual x bounds to have nice steps
+*/
+
+    }
+private int rand(int Min, int Max){
+    return Min + (int)(Math.random() * ((Max - Min) + 1));
+}
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
@@ -123,6 +171,7 @@ public class MainFragment extends Fragment implements LoaderManager.LoaderCallba
     private void onSubmit() {
         EditText entryText = (EditText) getActivity().findViewById(R.id.textEntry);
         if (!entryText.toString().equals("")) {
+
             final Entry entry = new Entry(entryText.getText().toString());
 
             InfoExtractor ie = new InfoExtractor(getActivity());
@@ -137,7 +186,7 @@ public class MainFragment extends Fragment implements LoaderManager.LoaderCallba
             String idStr = segments[segments.length-1];
             //String idStr = Long.toString(ie.putEntry(entry));
 
-            System.out.println(idStr);
+
             RetrieveNLPdata nlp = new RetrieveNLPdata(idStr, entry.getBody());
             nlp.execute();
 
@@ -148,6 +197,13 @@ public class MainFragment extends Fragment implements LoaderManager.LoaderCallba
                 entryText.setText("");
             }
         }
+        View view = getActivity().getCurrentFocus();
+        if (view != null) {
+            InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+            imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
+            entryText.setText("");
+        }
+
     }
 
     @Override
@@ -240,6 +296,7 @@ public class MainFragment extends Fragment implements LoaderManager.LoaderCallba
 */
 
                 return null;
+
             } catch (ClientProtocolException e) {
                 System.out.println(e);
                 return null;
@@ -247,8 +304,11 @@ public class MainFragment extends Fragment implements LoaderManager.LoaderCallba
             } catch (IOException e) {
                 System.out.println(e);
                 return null;
-                // TODO Auto-generated catch block
+            // TODO Auto-generated catch block
             }
+            return null;
         }
+
     }
+
 }

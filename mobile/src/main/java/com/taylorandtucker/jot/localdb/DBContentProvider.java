@@ -151,6 +151,7 @@ public class DBContentProvider extends ContentProvider {
         switch (uriType) {
             case ENTRIES:
                 sqlDB.beginTransaction();
+
                 retVal = sqlDB.update(EntryContract.TABLE_NAME, values, selection, selectionArgs);
                 sqlDB.setTransactionSuccessful();
                 sqlDB.endTransaction();

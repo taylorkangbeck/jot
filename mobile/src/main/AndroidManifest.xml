@@ -21,6 +21,7 @@
         <provider
             android:authorities="com.taylorandtucker.jot.provider"
             android:name=".localdb.DBContentProvider" >
+
         </provider>
     </application>
 

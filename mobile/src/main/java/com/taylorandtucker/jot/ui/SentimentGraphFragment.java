@@ -58,15 +58,18 @@ public class SentimentGraphFragment extends LineChart implements OnChartGestureL
         super(context);
         InfoExtractor ie = new InfoExtractor(context);
         this.entryList = ie.getAllEntries();
-        onCreate();
+
+        setupChart(ie.getAllEntries());
+
     }
 
     public SentimentGraphFragment(Context context, AttributeSet attrs) {
         super(context, attrs);
-        onCreate();
+        //setupChart();
+
     }
 
-    protected void onCreate() {
+    public void setupChart(List<com.taylorandtucker.jot.Entry> entries) {
         this.setOnChartGestureListener(this);
         this.setOnChartValueSelectedListener(this);
         this.setDrawGridBackground(false);
@@ -132,7 +135,7 @@ public class SentimentGraphFragment extends LineChart implements OnChartGestureL
         //this.getViewPortHandler().setMaximumScaleY(2f);
         //this.getViewPortHandler().setMaximumScaleX(2f);
 
-        addData();
+        //addDatat(entries);
         //formatData(new ArrayList(), new ArrayList());
 
 
@@ -159,14 +162,16 @@ public class SentimentGraphFragment extends LineChart implements OnChartGestureL
         return Min + (int)(Math.random() * ((Max - Min) + 1));
     }
 
-    public void addData() {
+    public void addDatat(List<com.taylorandtucker.jot.Entry> entries) {
 
 
         ArrayList<Entry> yVals = new ArrayList<Entry>();
 
-
+        if (this.entryList == entries){
+            System.out.println("ENTRY LIST IS NULL> OK");
+        }
         try {
-            for (com.taylorandtucker.jot.Entry diaryEntry : entryList) {
+            for (com.taylorandtucker.jot.Entry diaryEntry : entries) {
 
                 double sent = diaryEntry.getSentiment();
                 long seconds = diaryEntry.getCreatedOn().getTime() / 1000;
@@ -196,7 +201,6 @@ public class SentimentGraphFragment extends LineChart implements OnChartGestureL
 
     }
     public void formatData(List xVals, List yVals) {
-
 
         int now = 0;
         xVals = new ArrayList<String>();

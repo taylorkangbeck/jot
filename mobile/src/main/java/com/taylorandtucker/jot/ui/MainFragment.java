@@ -1,7 +1,6 @@
 package com.taylorandtucker.jot.ui;
 
 import android.app.Activity;
-import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.net.Uri;
@@ -115,48 +114,8 @@ public class MainFragment extends Fragment implements LoaderManager.LoaderCallba
                 onSubmit();
             }
         });
-
-        // // dont forget to refresh the drawing
-        // mChart.invalidate();
-/*
-        final GraphView graph = (GraphView) getActivity().findViewById(R.id.graph);
-
-        // generate Dates
-        Calendar calendar = Calendar.getInstance();
-        Date d1 = calendar.getTime();
-        System.out.println(d1.getTime());
-        Date date1 = new GregorianCalendar(2014, Calendar.FEBRUARY, 11).getTime();
-        Date date2 = new GregorianCalendar(2014, Calendar.FEBRUARY, 12).getTime();
-        Date date3 = new GregorianCalendar(2014, Calendar.FEBRUARY, 27).getTime();
-        Date date4 = new GregorianCalendar(2014, Calendar.APRIL, 11).getTime();
-        Date date5 = new GregorianCalendar(2015, Calendar.FEBRUARY, 11).getTime();
-        Date date6 = new GregorianCalendar(2017, Calendar.FEBRUARY, 11).getTime();
-
-
-        DataPoint[] entryList = new DataPoint[]{};
-        List<DataPoint> l1 = new ArrayList();
-        List l2 = new ArrayList();
-
-        long now = calendar.getTimeInMillis();
-        for (int i = 0; i < 365; i++){
-            l1.add(new DataPoint(new Date(now), rand(-2, 2)));
-            now += rand(1000*60*60*12, 1000*60*60*48);
-        }
-
-
-// you can directly pass Date objects to DataPoint-Constructor
-// this will convert the Date to double via Date#getTime()git
-        LineGraphSeries<DataPoint> series = new LineGraphSeries<DataPoint>(l1.toArray(new DataPoint[l1.size()]));
-
-        graph.addSeries(series);
-
-// set manual x bounds to have nice steps
-*/
-
     }
-private int rand(int Min, int Max){
-    return Min + (int)(Math.random() * ((Max - Min) + 1));
-}
+
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
@@ -171,17 +130,10 @@ private int rand(int Min, int Max){
             final Entry entry = new Entry(entryText.getText().toString());
 
             InfoExtractor ie = new InfoExtractor(getActivity());
-            ContentValues values = new ContentValues();
-            values.put(EntryContract.COLUMN_DATE, entry.getCreatedOn().toString());
-            values.put(EntryContract.COLUMN_BODY, entry.getBody());
-            values.put(EntryContract.COLUMN_SENTIMENT, 0);
-            //Uri uri  = getActivity().getContentResolver().insert(DBContentProvider.ENTRY_URI, values);
             DBUtils dbUtils = DBUtils.getInstance(getActivity());
             Uri uri = ie.putEntry(entry);
             String[] segments = uri.getPath().split("/");
             String idStr = segments[segments.length-1];
-            //String idStr = Long.toString(ie.putEntry(entry));
-
 
             RetrieveNLPdata nlp = new RetrieveNLPdata(idStr, entry.getBody());
             nlp.execute();

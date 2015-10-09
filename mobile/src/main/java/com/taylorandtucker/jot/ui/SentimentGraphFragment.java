@@ -134,7 +134,7 @@ public class SentimentGraphFragment extends LineChart implements OnChartGestureL
 
 
         formatData(new ArrayList(), new ArrayList());
-        //addData();
+
 
 //        this.setVisibleXRange(20);
 //        this.setVisibleYRange(20f, AxisDependency.LEFT);
@@ -165,31 +165,38 @@ public class SentimentGraphFragment extends LineChart implements OnChartGestureL
         ArrayList<Entry> yVals = new ArrayList<Entry>();
 
 
-        for (com.taylorandtucker.jot.Entry diaryEntry : entryList) {
+        try {
+            for (com.taylorandtucker.jot.Entry diaryEntry : entryList) {
 
-            double sent = diaryEntry.getSentiment();
-            long seconds = diaryEntry.getCreatedOn().getTime() / 1000;
+                double sent = diaryEntry.getSentiment();
+                long seconds = diaryEntry.getCreatedOn().getTime() / 1000;
 
-            yVals.add(new Entry((float) sent, (int) seconds));
-        }
-
-
-        if (!yVals.isEmpty()) {
-            int startX = yVals.get(0).getXIndex();
-            int endX = yVals.get(yVals.size() - 1).getXIndex();
-
-            System.out.println(yVals.size());
-            System.out.println(startX + " " + endX);
-            ArrayList<String> xVals = new ArrayList<String>();
-            for (int i = startX - 1; i <= endX + 1; i++) {
-                xVals.add(i + "");
+                yVals.add(new Entry((float) sent, (int) seconds));
             }
 
-            formatData(xVals, yVals);
+
+            if (!yVals.isEmpty()) {
+                int startX = yVals.get(0).getXIndex();
+                int endX = yVals.get(yVals.size() - 1).getXIndex();
+
+                System.out.println(yVals.size());
+                System.out.println(startX + " " + endX);
+                ArrayList<String> xVals = new ArrayList<String>();
+                for (int i = startX - 1; i <= endX + 1; i++) {
+                    xVals.add(i + "");
+                }
+
+                System.out.println("YSIZE: " + yVals.size() + " xVals: " + xVals.size());
+                formatData(xVals, yVals);
+                this.invalidate();
+            }
+        }catch(Exception e ){
+            System.out.println("CAUGHT ERROR IN ADDDATA: " + e);
         }
 
     }
     public void formatData(List xVals, List yVals) {
+
 
         int now = 0;
         xVals = new ArrayList<String>();
@@ -207,6 +214,7 @@ public class SentimentGraphFragment extends LineChart implements OnChartGestureL
                 yVals.add(new Entry(val, i));
             }
         }
+
         // create a dataset and give it a type
         LineDataSet set1 = new LineDataSet(yVals, "");
         //set1.setFillAlpha(410);

@@ -153,11 +153,9 @@ public class SentimentGraphFragment extends LineChart implements OnChartGestureL
 
     public void addData(Cursor dbCursor) {
 
-
         ArrayList<Entry> yVals = new ArrayList<Entry>();
 
         try {
-
             while (dbCursor.moveToNext()) {
 
                 double sent = dbCursor.getDouble(dbCursor.getColumnIndex(EntryContract.COLUMN_SENTIMENT));

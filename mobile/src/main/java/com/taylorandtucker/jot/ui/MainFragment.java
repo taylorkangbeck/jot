@@ -219,11 +219,19 @@ public class MainFragment extends Fragment implements LoaderManager.LoaderCallba
 
                 Cursor c = ie.getAllEntitiesByImportance();
 
-                System.out.println(c.getCount());
+                System.out.println("===================== ENTITIES =======================");
                 while(c.moveToNext()){
-                    System.out.println(c.getString(c.getColumnIndex(DBContract.EntityContract.COLUMN_NAME)));
-                    System.out.println(c.getInt(c.getColumnIndex(DBContract.EntityContract.COLUMN_IMPORTANCE)));
+                    System.out.print(c.getString(c.getColumnIndex(DBContract.EntityContract.COLUMN_NAME)) + " ");
+                    System.out.print(c.getInt(c.getColumnIndex(DBContract.EntityContract.COLUMN_IMPORTANCE)) + " ");
                     System.out.println(c.getDouble(c.getColumnIndex(DBContract.EntityContract.COLUMN_SENTIMENT)));
+                }
+
+
+                System.out.println("===================== ENTRIES =======================");
+                c = ie.getAllEntries();
+                while(c.moveToNext()){
+                    System.out.print(c.getLong(c.getColumnIndex(EntryContract.COLUMN_DATE)) + " ");
+                    System.out.println(c.getInt(c.getColumnIndex(EntryContract.COLUMN_SENTIMENT)) + " ");
                 }
                 /*
                     DBUtils utils = DBUtils.getInstance(getContext());

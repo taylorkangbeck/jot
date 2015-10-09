@@ -25,6 +25,27 @@ public class InfoExtractor {
         this.context = context;
     }
 
+
+    public Cursor getAllEntitiesByImportance(){
+        Cursor c = context.getContentResolver().query(DBContentProvider.ENTITY_URI,
+                DBUtils.entityProjection,
+                null,
+                null,
+                EntityContract.COLUMN_IMPORTANCE + " DESC");
+
+        return c;
+    }
+
+    public  Cursor getAllEntries(){
+        Cursor c = context.getContentResolver().query(DBContentProvider.ENTRY_URI,
+                DBUtils.entryProjection,
+                null,
+                null,
+                DBContract.EntryContract.COLUMN_DATE + " ASC");
+
+        return c;
+    }
+
     //does everything that needs to be done with an entry and a processed entry
     public void processNewEntryData(String entryID, ProcessedEntry processedEntry){
 
@@ -39,11 +60,12 @@ public class InfoExtractor {
 
     public Uri putEntry(Entry entry)
     {
+
         Uri newRowId;
         // Create a new map of values, where column names are the keys
         ContentValues values = new ContentValues();
         values.put(DBContract.EntryContract._ID, entry.getId());
-        values.put(DBContract.EntryContract.COLUMN_DATE, entry.getCreatedOn().toString());
+        values.put(DBContract.EntryContract.COLUMN_DATE, entry.getCreatedOn().getTime());
         values.put(DBContract.EntryContract.COLUMN_BODY, entry.getBody());
         values.put(DBContract.EntryContract.COLUMN_SENTIMENT, entry.getSentiment());
 
@@ -121,16 +143,6 @@ public class InfoExtractor {
             context.getContentResolver().insert(DBContentProvider.EtoE_URI, values);
         }
     }
-
-    public Cursor getAllEntitiesByImportance(){
-        Cursor c = context.getContentResolver().query(DBContentProvider.ENTITY_URI,
-                DBUtils.entityProjection,
-                null,
-                null,
-                EntityContract.COLUMN_IMPORTANCE + " DESC");
-
-        return c;
-    }
     private double calcSentForEntity(int newSent, double oldSent, int importance){
         double sum = oldSent*importance;
         return (sum+newSent)/(importance+1);
@@ -140,5 +152,11 @@ public class InfoExtractor {
     }
     private int getInitialImportance(){
         return 1;
+    }
+    public long secondsToDays(long sec){
+        Long minutes = sec / 60;
+        Long hours = minutes / 60;
+        long days = hours / 24;
+        return days;
     }
 }

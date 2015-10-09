@@ -28,7 +28,6 @@ import com.taylorandtucker.jot.localdb.DBUtils;
 
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
-import org.apache.http.NameValuePair;
 import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpPost;
@@ -39,8 +38,6 @@ import org.xml.sax.InputSource;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.util.ArrayList;
-import java.util.List;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -195,9 +192,6 @@ public class MainFragment extends Fragment implements LoaderManager.LoaderCallba
             HttpPost httppost = new HttpPost("http://54.173.123.6:8000/entry");
 
             try {
-                // Add your data
-                List<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>(2);
-
                 HttpEntity entity = new ByteArrayEntity(entry.getBytes("UTF-8"));
                 httppost.setEntity(entity);
 
@@ -217,9 +211,8 @@ public class MainFragment extends Fragment implements LoaderManager.LoaderCallba
                 }
 
                 ProcessedEntry ent = new ProcessedEntry(xml);
-                double sentSum = ent.getEntrySentiment();
 
-                System.out.print("AAAAAAa");
+
                 InfoExtractor ie = new InfoExtractor(getActivity());
                 ie.processNewEntryData(entryID, ent);
                 /*

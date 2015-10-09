@@ -9,7 +9,7 @@ public class Entry {
     private Date createdOn;
     private String body;
     private String id;
-    private String sentiment;
+    private double sentiment;
 
     public Entry(String body) {
         this(new Date(), body);
@@ -40,7 +40,7 @@ public class Entry {
         return id;
     }
 
-    public String getSentiment() {return sentiment;}
+    public double getSentiment() {return sentiment;}
 
-    public void setSentiment(String value) {sentiment = value;}
+    public void setSentiment(double value) {sentiment = value;}
 }

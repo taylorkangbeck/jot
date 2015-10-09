@@ -96,7 +96,7 @@ public class MainFragment extends Fragment implements LoaderManager.LoaderCallba
 
 
         InfoExtractor ie = new InfoExtractor(getActivity());
-        SentimentGraphFragment mChart = new SentimentGraphFragment(getContext(), ie.getAllEntries());
+        SentimentGraphFragment mChart = new SentimentGraphFragment(getContext());
 
         cardFragmentAdapter.add(mChart);
         cardMergeAdapter.addAdapter(cardFragmentAdapter);

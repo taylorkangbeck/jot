@@ -1,7 +1,6 @@
 package com.taylorandtucker.jot.ui;
 
 import android.content.Context;
-import android.database.Cursor;
 import android.graphics.Color;
 import android.graphics.LinearGradient;
 import android.graphics.Paint;
@@ -24,6 +23,7 @@ import com.github.mikephil.charting.interfaces.LineDataProvider;
 import com.github.mikephil.charting.listener.OnChartGestureListener;
 import com.github.mikephil.charting.listener.OnChartValueSelectedListener;
 import com.github.mikephil.charting.utils.ViewPortHandler;
+import com.taylorandtucker.jot.NLP.InfoExtractor;
 import com.taylorandtucker.jot.R;
 
 import java.text.SimpleDateFormat;
@@ -54,13 +54,14 @@ public class SentimentGraphFragment extends LineChart implements OnChartGestureL
         return layoutId;
     }
 
-    public SentimentGraphFragment(Context context, List<com.taylorandtucker.jot.Entry> entryList) {
+    public SentimentGraphFragment(Context context) {
         super(context);
-        this.entryList = entryList;
+        InfoExtractor ie = new InfoExtractor(context);
+        this.entryList = ie.getAllEntries();
         onCreate();
     }
 
-    public SentimentGraphFragment(Context context, AttributeSet attrs, Cursor dataCursor) {
+    public SentimentGraphFragment(Context context, AttributeSet attrs) {
         super(context, attrs);
         onCreate();
     }

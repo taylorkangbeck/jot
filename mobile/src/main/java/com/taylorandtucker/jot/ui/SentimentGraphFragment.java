@@ -25,6 +25,7 @@ import com.github.mikephil.charting.listener.OnChartGestureListener;
 import com.github.mikephil.charting.listener.OnChartValueSelectedListener;
 import com.github.mikephil.charting.utils.ViewPortHandler;
 import com.google.android.gms.fitness.data.DataPoint;
+import com.taylorandtucker.jot.R;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -34,7 +35,7 @@ import java.util.List;
 /**
  * Created by tuckerkirven on 10/1/15.
  */
-public class SentimentGraphFragment extends LineChart implements OnChartGestureListener, OnChartValueSelectedListener {
+public class SentimentGraphFragment extends LineChart implements OnChartGestureListener, OnChartValueSelectedListener, IFragmentCard {
 
     private int SECONDS = 1000;
     private int MINUTES = SECONDS*60;
@@ -42,6 +43,14 @@ public class SentimentGraphFragment extends LineChart implements OnChartGestureL
     private int DAYS = HOURS*24;
     private int MONTHS = DAYS*30;
     private int YEARS = MONTHS*12;
+
+    private final int layoutId = R.layout.fragment_sentiment_graph;
+
+    @Override
+    public int getLayoutResourceId()
+    {
+        return layoutId;
+    }
 
     public SentimentGraphFragment(Context context) {
         super(context);

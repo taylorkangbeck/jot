@@ -98,7 +98,10 @@ public class MainFragment extends Fragment implements LoaderManager.LoaderCallba
         //merging adapters for the entries feed
         cardMergeAdapter = new CardMergeAdapter();
         cardFragmentAdapter = new CardFragmentAdapter(getContext());
-        //cardFragmentAdapter.add(new CalendarReviewFragment());
+
+        SentimentGraphFragment mChart = new SentimentGraphFragment(getContext());
+        mChart.setData(365, 100);
+        cardFragmentAdapter.add(mChart);
         cardMergeAdapter.addAdapter(cardFragmentAdapter);
 
         cardCursorAdapter = new CardCursorAdapter(getContext(), null);
@@ -113,10 +116,6 @@ public class MainFragment extends Fragment implements LoaderManager.LoaderCallba
                 onSubmit();
             }
         });
-
-        SentimentGraphFragment mChart = (SentimentGraphFragment) getActivity().findViewById(R.id.graph);
-
-        mChart.setData(365, 100);
 
         // // dont forget to refresh the drawing
         // mChart.invalidate();

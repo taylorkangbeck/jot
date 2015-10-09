@@ -60,9 +60,10 @@ public class InfoExtractor {
 
     }
     public Cursor getEntityByName(String name){
-        Cursor c = context.getContentResolver().query(DBContentProvider.ENTITY_URI, DBUtils.entityProjection, "name = ?"  , null, null);
+        Cursor c = context.getContentResolver().query(DBContentProvider.ENTITY_URI, DBUtils.entityProjection, "name = ?", null, null);
 
-        System.out.println(c.getString(c.getColumnIndex(EntityContract.COLUMN_NAME)));
+        System.out.println(c.getColumnName(1));
+        System.out.println(c.getColumnIndex(EntityContract.COLUMN_NAME));
         System.out.println(c.getColumnIndex(EntityContract.COLUMN_IMPORTANCE));
         System.out.println(c.getColumnIndex(EntityContract.COLUMN_SENTIMENT));
         return c;

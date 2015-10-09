@@ -1,6 +1,7 @@
 package com.taylorandtucker.jot.ui;
 
 import android.content.Context;
+import android.database.Cursor;
 import android.graphics.Color;
 import android.graphics.LinearGradient;
 import android.graphics.Paint;
@@ -24,8 +25,8 @@ import com.github.mikephil.charting.interfaces.LineDataProvider;
 import com.github.mikephil.charting.listener.OnChartGestureListener;
 import com.github.mikephil.charting.listener.OnChartValueSelectedListener;
 import com.github.mikephil.charting.utils.ViewPortHandler;
-import com.google.android.gms.fitness.data.DataPoint;
 import com.taylorandtucker.jot.R;
+import com.taylorandtucker.jot.localdb.DBContract.EntryContract;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -130,11 +131,6 @@ public class SentimentGraphFragment extends LineChart implements OnChartGestureL
         //this.getViewPortHandler().setMaximumScaleY(2f);
         //this.getViewPortHandler().setMaximumScaleX(2f);
 
-
-        // add data
-        setData(45, 100);
-
-
 //        this.setVisibleXRange(20);
 //        this.setVisibleYRange(20f, AxisDependency.LEFT);
 //        this.centerViewTo(20, 50, AxisDependency.LEFT);
@@ -157,32 +153,27 @@ public class SentimentGraphFragment extends LineChart implements OnChartGestureL
         return Min + (int)(Math.random() * ((Max - Min) + 1));
     }
 
-    public void setData(int count, float range) {
-
-        DataPoint[] entryList = new DataPoint[]{};
-        List<DataPoint> l1 = new ArrayList();
-        List l2 = new ArrayList();
-        Calendar calendar = Calendar.getInstance();
-        long now = calendar.getTimeInMillis();
-
-        ArrayList<String> xVals = new ArrayList<String>();
-        for (int i = 0; i < count; i++) {
-            xVals.add((now) + "");
-            now += 24*60*60*1000;
-        }
+    public void addData(Cursor dbCursor){
 
         ArrayList<Entry> yVals = new ArrayList<Entry>();
+        while(dbCursor.moveToNext()){
 
-        for (int i = 0; i < count; i++) {
+            double sent = dbCursor.getDouble(dbCursor.getColumnIndex(EntryContract.COLUMN_SENTIMENT));
+            long seconds = dbCursor.getLong(dbCursor.getColumnIndex(EntryContract.COLUMN_DATE));
 
-
-            float val = (float) (Math.random() * 4) - 2;// + (float)
-            // ((mult *
-            // 0.1) / 10);
-            if(Math.random() < .233) {
-                yVals.add(new Entry(val, i));
-            }
+            yVals.add(new Entry((float)sent, (int)seconds));
         }
+        int startX = yVals.get(0).getXIndex();
+        int endX = yVals.get(yVals.size()-1).getXIndex();
+
+        ArrayList<String> xVals = new ArrayList<String>();
+        for (int i = startX; i <= endX; i++) {
+            xVals.add(i + "");
+        }
+
+        formatData(xVals, yVals);
+    }
+    public void formatData(List xVals, List yVals) {
 
         // create a dataset and give it a type
         LineDataSet set1 = new LineDataSet(yVals, "");

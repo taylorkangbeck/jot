@@ -11,6 +11,9 @@ import android.util.Log;
 import android.view.MotionEvent;
 
 import com.github.mikephil.charting.charts.LineChart;
+import com.github.mikephil.charting.components.LimitLine;
+import com.github.mikephil.charting.components.XAxis;
+import com.github.mikephil.charting.components.YAxis;
 import com.github.mikephil.charting.data.Entry;
 import com.github.mikephil.charting.data.LineData;
 import com.github.mikephil.charting.data.LineDataSet;
@@ -22,7 +25,6 @@ import com.github.mikephil.charting.listener.OnChartGestureListener;
 import com.github.mikephil.charting.listener.OnChartValueSelectedListener;
 import com.github.mikephil.charting.utils.ViewPortHandler;
 import com.taylorandtucker.jot.R;
-import com.taylorandtucker.jot.localdb.DBContract.EntryContract;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -130,7 +132,8 @@ public class SentimentGraphFragment extends LineChart implements OnChartGestureL
         //this.getViewPortHandler().setMaximumScaleX(2f);
 
 
-        setData(45, 100);
+        formatData(new ArrayList(), new ArrayList());
+        //addData();
 
 //        this.setVisibleXRange(20);
 //        this.setVisibleYRange(20f, AxisDependency.LEFT);
@@ -155,39 +158,35 @@ public class SentimentGraphFragment extends LineChart implements OnChartGestureL
         return Min + (int)(Math.random() * ((Max - Min) + 1));
     }
 
-    public void addData(Cursor dbCursor) {
+    public void addData() {
+
 
         ArrayList<Entry> yVals = new ArrayList<Entry>();
 
-        try {
-            while (dbCursor.moveToNext()) {
 
-                double sent = dbCursor.getDouble(dbCursor.getColumnIndex(EntryContract.COLUMN_SENTIMENT));
-                long seconds = dbCursor.getLong(dbCursor.getColumnIndex(EntryContract.COLUMN_DATE));
+        for (com.taylorandtucker.jot.Entry diaryEntry : entryList) {
 
-                yVals.add(new Entry((float) sent, (int) seconds));
-            }
-        } catch (Exception e) {
-            System.out.println("Failed to get curso data: " + e);
+            double sent = diaryEntry.getSentiment();
+            long seconds = diaryEntry.getCreatedOn().getTime() / 1000;
+
+            yVals.add(new Entry((float) sent, (int) seconds));
         }
 
-        try {
-            if (!yVals.isEmpty()) {
-                int startX = yVals.get(0).getXIndex();
-                int endX = yVals.get(yVals.size() - 1).getXIndex();
 
-                System.out.println(yVals.size());
-                System.out.println(startX + " " + endX);
-                ArrayList<String> xVals = new ArrayList<String>();
-                for (int i = startX - 1; i <= endX + 1; i++) {
-                    xVals.add(i + "");
-                }
+        if (!yVals.isEmpty()) {
+            int startX = yVals.get(0).getXIndex();
+            int endX = yVals.get(yVals.size() - 1).getXIndex();
 
-                formatData(xVals, yVals);
+            System.out.println(yVals.size());
+            System.out.println(startX + " " + endX);
+            ArrayList<String> xVals = new ArrayList<String>();
+            for (int i = startX - 1; i <= endX + 1; i++) {
+                xVals.add(i + "");
             }
-        } catch (Exception e) {
-            System.out.println("Failed to do x or format data: " + e);
+
+            formatData(xVals, yVals);
         }
+
     }
     public void formatData(List xVals, List yVals) {
 

@@ -9,7 +9,9 @@ import android.util.AttributeSet;
 import android.util.Log;
 import android.view.MotionEvent;
 
+import com.github.mikephil.charting.animation.Easing;
 import com.github.mikephil.charting.charts.LineChart;
+import com.github.mikephil.charting.components.Legend;
 import com.github.mikephil.charting.components.LimitLine;
 import com.github.mikephil.charting.components.XAxis;
 import com.github.mikephil.charting.components.YAxis;
@@ -43,6 +45,8 @@ public class SentimentGraphFragment extends LineChart implements OnChartGestureL
     private int MONTHS = DAYS*30;
     private int YEARS = MONTHS*12;
 
+    private long startTime;
+    private long range;
     private List<com.taylorandtucker.jot.Entry> entryList;
 
     private final int layoutId = R.layout.fragment_sentiment_graph;
@@ -129,9 +133,7 @@ public class SentimentGraphFragment extends LineChart implements OnChartGestureL
         //leftAxis.setYOffset(20f);
         leftAxis.enableGridDashedLine(10f, 10f, 0f);
 
-        // limit lines are drawn behind data (and not on top)
-        leftAxis.setDrawLimitLinesBehindData(true);
-
+        this.getAxisLeft().setEnabled(false);
         this.getAxisRight().setEnabled(false);
         this.getViewPortHandler().setMaximumScaleY(1);
         //this.getViewPortHandler().setMaximumScaleY(2f);
@@ -142,19 +144,20 @@ public class SentimentGraphFragment extends LineChart implements OnChartGestureL
         //formatData(new ArrayList(), new ArrayList());
 
 
-//        this.setVisibleXRange(20);
+
+       
 //        this.setVisibleYRange(20f, AxisDependency.LEFT);
 //        this.centerViewTo(20, 50, AxisDependency.LEFT);
 
-        //this.animateX(2500, Easing.EasingOption.EaseInOutQuart);
+        this.animateX(2500, Easing.EasingOption.EaseInOutQuart);
 
         //this.addDatat(entries);
         // get the legend (only possible after setting data)
-        //Legend l = this.getLegend();
+        Legend l = this.getLegend();
 
 
         // modify the legend ...
-        // l.setPosition(LegendPosition.LEFT_OF_CHART);
+         l.setEnabled(false);
 
         // // dont forget to refresh the drawing
          this.invalidate();
@@ -173,22 +176,24 @@ public class SentimentGraphFragment extends LineChart implements OnChartGestureL
 
         if (!entries.isEmpty()) {
 
-            long startTime = entries.get(0).getCreatedOn().getTime() / 1000;
+            startTime = entries.get(0).getCreatedOn().getTime()/1000;
             for (com.taylorandtucker.jot.Entry diaryEntry : entries) {
 
                 double sent = diaryEntry.getSentiment() + .01;
                 long seconds = diaryEntry.getCreatedOn().getTime()/1000;
 
-                yVals.add(new Entry((float) sent, (int) (seconds)));
+                yVals.add(new Entry((float) sent, (int) (seconds- startTime)));
+                System.out.println(seconds);
             }
 
             int startX = yVals.get(0).getXIndex();
             int endX = yVals.get(yVals.size() - 1).getXIndex();
 
             System.out.println(yVals.size());
-            System.out.println(startX + " " + endX);
+            range = endX - startX;
+
             ArrayList<String> xVals = new ArrayList<String>();
-            for (int i = 0; i <= endX-startX; i++) {
+            for (int i = startX ; i <= endX; i++) {
                 //System.out.println("XVAL: " + i);
                 xVals.add(i + "");
             }
@@ -298,7 +303,7 @@ public class SentimentGraphFragment extends LineChart implements OnChartGestureL
 
             Calendar calendar = Calendar.getInstance();
 
-            calendar.setTimeInMillis(Long.parseLong(original)*1000);
+            calendar.setTimeInMillis((Long.parseLong(original)+startTime)*1000);
 
 
             int mYear = calendar.get(Calendar.YEAR);

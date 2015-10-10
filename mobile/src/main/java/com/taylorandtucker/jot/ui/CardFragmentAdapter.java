@@ -25,6 +25,10 @@ public class CardFragmentAdapter extends BaseAdapter {
         fragmentCards.add(fragmentCard);
     }
 
+    public void remove(int index){
+        fragmentCards.remove(index);
+    }
+
     public IFragmentCard getItem(int position) {
         return fragmentCards.get(position);
     }

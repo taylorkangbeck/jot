@@ -51,9 +51,20 @@ public class InfoExtractor {
         List<Entry> l = getListEntries(c);
         return l;
     }
+    public Entry getEntryById(long entryID){
+        String[] Values = new String[1];
+        Values[0] = entryID+"";
+        Cursor c = context.getContentResolver().query(DBContentProvider.ENTITY_URI, DBUtils.entityProjection, "_id = ?", Values, null);
+
+        List<Entry> l = getListEntries(c);
+        if (!l.isEmpty())
+            return l.get(0);
+        else
+            return null;
+    }
 
     //does everything that needs to be done with an entry and a processed entry
-    public void processNewEntryData(String entryID, ProcessedEntry processedEntry){
+    public void processNewEntryData(long entryID, ProcessedEntry processedEntry){
 
         updateSentimentForEntry(entryID, processedEntry.getEntrySentiment());
 
@@ -79,11 +90,11 @@ public class InfoExtractor {
         newRowId = context.getContentResolver().insert(DBContentProvider.ENTRY_URI, values);
         return newRowId;
     }
-    public void updateSentimentForEntry(String entryID, double sentSum){
+    public void updateSentimentForEntry(long entryID, double sentSum){
         ContentValues values = new ContentValues();
         values.put(DBContract.EntryContract.COLUMN_SENTIMENT, sentSum);
         String[] Values = new String[1];
-        Values[0] = entryID;
+        Values[0] = ""+entryID;
         context.getContentResolver().update(DBContentProvider.ENTRY_URI, values, "_id" + "= ?", Values);
 
     }
@@ -123,7 +134,7 @@ public class InfoExtractor {
         context.getContentResolver().update(DBContentProvider.ENTITY_URI, values, "name = ?", Values);
 
     }
-    private void updateEntityWithNewSent(String entryID, String name, int newSentiment){
+    private void updateEntityWithNewSent(long entryID, String name, int newSentiment){
         Entity ent = getEntityByName(name);
 
         if (ent != null) {
@@ -140,7 +151,7 @@ public class InfoExtractor {
         addEtoEdata(entryID, name, newSentiment);
     }
 
-    private void addEtoEdata(String entryID, String name, int newSentiment){
+    private void addEtoEdata(long entryID, String name, int newSentiment){
         
         Entity ent = getEntityByName(name);
         //some reason doesnt start on the first item - this will be false if no items are in the cursor

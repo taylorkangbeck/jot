@@ -9,7 +9,6 @@ import android.util.AttributeSet;
 import android.util.Log;
 import android.view.MotionEvent;
 
-import com.github.mikephil.charting.animation.Easing;
 import com.github.mikephil.charting.charts.LineChart;
 import com.github.mikephil.charting.components.Legend;
 import com.github.mikephil.charting.components.LimitLine;
@@ -140,24 +139,18 @@ public class SentimentGraphFragment extends LineChart implements OnChartGestureL
         //this.getViewPortHandler().setMaximumScaleX(2f);
 
         xAxis.setLabelsToSkip(60*60);
-        addDatat(entryList);
-        //formatData(new ArrayList(), new ArrayList());
+        updateData(entryList);
 
-
-
-       
-//        this.setVisibleYRange(20f, AxisDependency.LEFT);
-//        this.centerViewTo(20, 50, AxisDependency.LEFT);
-
-        this.animateX(2500, Easing.EasingOption.EaseInOutQuart);
+        //this.animateX(2500, Easing.EasingOption.EaseInOutQuart);
 
         //this.addDatat(entries);
         // get the legend (only possible after setting data)
         Legend l = this.getLegend();
-
-
+        l.setTextColor(Color.WHITE);
+        l.setTextSize(20);
         // modify the legend ...
-         l.setEnabled(false);
+         l.setPosition(Legend.LegendPosition.ABOVE_CHART_LEFT);
+
 
         // // dont forget to refresh the drawing
          this.invalidate();
@@ -168,7 +161,7 @@ public class SentimentGraphFragment extends LineChart implements OnChartGestureL
         return Min + (int)(Math.random() * ((Max - Min) + 1));
     }
 
-    public void addDatat(List<com.taylorandtucker.jot.Entry> entries) {
+    public void updateData(List<com.taylorandtucker.jot.Entry> entries) {
 
         //formatData(new ArrayList(), new ArrayList());
 
@@ -203,12 +196,31 @@ public class SentimentGraphFragment extends LineChart implements OnChartGestureL
 
         }
 
+
     }
     public void formatData(List xVals, List yVals) {
 
         // create a dataset and give it a type
-        LineDataSet set1 = new LineDataSet(yVals, "");
+        LineDataSet set1 = createSet(yVals);
         //set1.setFillAlpha(410);
+
+
+        ArrayList<LineDataSet> dataSets = new ArrayList<LineDataSet>();
+        dataSets.add(set1); // add the datasets
+
+
+        // create a data object with the datasets
+        LineData data = new LineData(xVals, dataSets);
+
+        // set data
+        System.out.println("HHHEEEEEERE");
+        this.setData(data);
+        this.notifyDataSetChanged();
+        this.invalidate();
+    }
+    private LineDataSet createSet(List<Entry> data) {
+
+        LineDataSet set1 = new LineDataSet(data, "Dynamic Data");
         set1.setFillColor(Color.BLUE);
         //set1.setDrawCubic(true);
         set1.setDrawValues(false);
@@ -220,7 +232,6 @@ public class SentimentGraphFragment extends LineChart implements OnChartGestureL
         set1.setCircleSize(3f);
         set1.setCircleSize(3f);
         //set1.setFillAlpha(200);
-
         //set1.setFillColor(ColorTemplate.getHoloBlue());
         //set1.setHighLightColor(Color.rgb(244, 117, 117));
         set1.setDrawCircleHole(false);
@@ -231,20 +242,9 @@ public class SentimentGraphFragment extends LineChart implements OnChartGestureL
 
         float height = mViewPortHandler.getContentCenter().y;
         int[] gradColors = {Color.GREEN, Color.YELLOW, Color.RED};
-        paintRenderer.setShader(new LinearGradient(0, 20, 0, 600, gradColors,null, Shader.TileMode.MIRROR));
-        set1.setColor(Color.BLACK);
-
-        ArrayList<LineDataSet> dataSets = new ArrayList<LineDataSet>();
-        dataSets.add(set1); // add the datasets
-
-
-        // create a data object with the datasets
-        LineData data = new LineData(xVals, dataSets);
-
-        // set data
-        this.setData(data);
-
-        System.out.println("HEEEEEEEEEEEEEERRRRRRRRRRRREEEEEEEEeE");
+        paintRenderer.setShader(new LinearGradient(0, 20, 0, 600, gradColors, null, Shader.TileMode.MIRROR));
+        set1.setColor(Color.DKGRAY);
+        return set1;
     }
 
     @Override
@@ -269,8 +269,11 @@ public class SentimentGraphFragment extends LineChart implements OnChartGestureL
 
     @Override
     public void onChartScale(MotionEvent me, float scaleX, float scaleY) {
-        Log.i("Scale / Zoom", "ScaleX: " + scaleX + ", ScaleY: " + scaleY);
-        System.out.println("SCALEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE");
+        Log.i("", "" + this.getViewPortHandler().getScaleX());
+
+        List<String> label = new ArrayList<>();
+        label.add(this.getViewPortHandler().getScaleX()+"");
+        this.getLegend().setComputedLabels(label);
         Log.i("", "low: " + this.getLowestVisibleXIndex() + ", high: " + this.getHighestVisibleXIndex());
     }
 
@@ -312,6 +315,7 @@ public class SentimentGraphFragment extends LineChart implements OnChartGestureL
             String mMonth = new SimpleDateFormat("MMM").format(calendar.getTime());
             String mMonthDay = new SimpleDateFormat("MM/dd").format(calendar.getTime());
             int mDay = calendar.get(Calendar.DAY_OF_MONTH);
+
 
             // e.g. adjust the x-axis values depending on scale / zoom level
             if (viewPortHandler.getScaleX() > YEARS/DAYS)

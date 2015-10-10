@@ -38,6 +38,7 @@ import org.xml.sax.InputSource;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.util.List;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -57,6 +58,7 @@ public class MainFragment extends Fragment implements LoaderManager.LoaderCallba
     private CardCursorAdapter cardCursorAdapter;
     private int LOADER_ID = 1;
     private Context context;
+    private SentimentGraphFragment mChart;
 
     /**
      * Returns a new instance of this fragment for the given section
@@ -78,6 +80,7 @@ public class MainFragment extends Fragment implements LoaderManager.LoaderCallba
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_main, container, false);
 
+
         context = getContext();
         return rootView;
     }
@@ -96,7 +99,7 @@ public class MainFragment extends Fragment implements LoaderManager.LoaderCallba
 
 
         //InfoExtractor ie = new InfoExtractor(getActivity());
-        SentimentGraphFragment mChart = new SentimentGraphFragment(getContext());
+        mChart = new SentimentGraphFragment(getContext());
 
         cardFragmentAdapter.add(mChart);
         cardMergeAdapter.addAdapter(cardFragmentAdapter);
@@ -137,13 +140,6 @@ public class MainFragment extends Fragment implements LoaderManager.LoaderCallba
 
             RetrieveNLPdata nlp = new RetrieveNLPdata(idStr, entry.getBody());
             nlp.execute();
-
-            View view = getActivity().getCurrentFocus();
-            if (view != null) {
-                InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
-                imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
-                entryText.setText("");
-            }
         }
         View view = getActivity().getCurrentFocus();
         if (view != null) {
@@ -151,6 +147,7 @@ public class MainFragment extends Fragment implements LoaderManager.LoaderCallba
             imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
             entryText.setText("");
         }
+
 
     }
 
@@ -213,12 +210,42 @@ public class MainFragment extends Fragment implements LoaderManager.LoaderCallba
                     xml += line;
                 }
 
-                ProcessedEntry ent = new ProcessedEntry(xml);
+                final ProcessedEntry ent = new ProcessedEntry(xml);
 
 
-                InfoExtractor ie = new InfoExtractor(getActivity());
-                ie.processNewEntryData(entryID, ent);
+                 InfoExtractor ie = new InfoExtractor(getActivity());
+                ie.processNewEntryData(Long.parseLong(entryID), ent);
+                try {
+                    wait(1000);
+                }catch (Exception e){
 
+                }
+
+                final List entries = ie.getAllEntries();
+                new Thread(new Runnable() {
+                    @Override
+                    public void run() {
+                        getActivity().runOnUiThread(new Runnable() {
+
+                            @Override
+                            public void run() {
+
+                                cardFragmentAdapter.remove(0);
+                                mChart = null;
+                                mChart = new SentimentGraphFragment(getActivity());
+                                cardFragmentAdapter.add(mChart);
+                                mChart.updateData(entries);
+                                mChart.invalidate();
+                                cardFragmentAdapter.notifyDataSetChanged();
+cardMergeAdapter.notifyDataSetInvalidated();
+
+                                cardFragmentAdapter.getView(0,null,null).invalidate();
+                                System.out.println("hereeeee");
+
+                            }
+                        });
+                    }
+                }).start();
 
                 System.out.println("===================== ENTITIES =======================");
 

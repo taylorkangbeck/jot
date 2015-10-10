@@ -59,17 +59,19 @@ public class SentimentGraphFragment extends LineChart implements OnChartGestureL
         InfoExtractor ie = new InfoExtractor(context);
         this.entryList = ie.getAllEntries();
 
-        setupChart(ie.getAllEntries());
+        setupChart();
 
     }
 
     public SentimentGraphFragment(Context context, AttributeSet attrs) {
         super(context, attrs);
-        //setupChart();
+        InfoExtractor ie = new InfoExtractor(context);
+        this.entryList = ie.getAllEntries();
+        setupChart();
 
     }
 
-    public void setupChart(List<com.taylorandtucker.jot.Entry> entries) {
+    public void setupChart() {
         this.setOnChartGestureListener(this);
         this.setOnChartValueSelectedListener(this);
         this.setDrawGridBackground(false);
@@ -135,7 +137,8 @@ public class SentimentGraphFragment extends LineChart implements OnChartGestureL
         //this.getViewPortHandler().setMaximumScaleY(2f);
         //this.getViewPortHandler().setMaximumScaleX(2f);
 
-        //addDatat(entries);
+        xAxis.setLabelsToSkip(60*60);
+        addDatat(entryList);
         //formatData(new ArrayList(), new ArrayList());
 
 
@@ -145,7 +148,7 @@ public class SentimentGraphFragment extends LineChart implements OnChartGestureL
 
         //this.animateX(2500, Easing.EasingOption.EaseInOutQuart);
 
-        //this.addData(dataCursor);
+        //this.addDatat(entries);
         // get the legend (only possible after setting data)
         //Legend l = this.getLegend();
 
@@ -164,60 +167,39 @@ public class SentimentGraphFragment extends LineChart implements OnChartGestureL
 
     public void addDatat(List<com.taylorandtucker.jot.Entry> entries) {
 
+        //formatData(new ArrayList(), new ArrayList());
 
         ArrayList<Entry> yVals = new ArrayList<Entry>();
 
-        if (this.entryList == entries){
-            System.out.println("ENTRY LIST IS NULL> OK");
-        }
-        try {
+        if (!entries.isEmpty()) {
+
+            long startTime = entries.get(0).getCreatedOn().getTime() / 1000;
             for (com.taylorandtucker.jot.Entry diaryEntry : entries) {
 
-                double sent = diaryEntry.getSentiment();
-                long seconds = diaryEntry.getCreatedOn().getTime() / 1000;
+                double sent = diaryEntry.getSentiment() + .01;
+                long seconds = diaryEntry.getCreatedOn().getTime()/1000;
 
-                yVals.add(new Entry((float) sent, (int) seconds));
+                yVals.add(new Entry((float) sent, (int) (seconds)));
             }
 
+            int startX = yVals.get(0).getXIndex();
+            int endX = yVals.get(yVals.size() - 1).getXIndex();
 
-            if (!yVals.isEmpty()) {
-                int startX = yVals.get(0).getXIndex();
-                int endX = yVals.get(yVals.size() - 1).getXIndex();
-
-                System.out.println(yVals.size());
-                System.out.println(startX + " " + endX);
-                ArrayList<String> xVals = new ArrayList<String>();
-                for (int i = startX - 1; i <= endX + 1; i++) {
-                    xVals.add(i + "");
-                }
-
-                System.out.println("YSIZE: " + yVals.size() + " xVals: " + xVals.size());
-                formatData(xVals, yVals);
-                this.invalidate();
+            System.out.println(yVals.size());
+            System.out.println(startX + " " + endX);
+            ArrayList<String> xVals = new ArrayList<String>();
+            for (int i = 0; i <= endX-startX; i++) {
+                //System.out.println("XVAL: " + i);
+                xVals.add(i + "");
             }
-        }catch(Exception e ){
-            System.out.println("CAUGHT ERROR IN ADDDATA: " + e);
+
+            System.out.println("YSIZE: " + yVals.size() + " xVals: " + xVals.size());
+            formatData(xVals, yVals);
+
         }
 
     }
     public void formatData(List xVals, List yVals) {
-
-        int now = 0;
-        xVals = new ArrayList<String>();
-               for (int i = 0; i < 20; i++) {
-                   xVals.add((now) + "");
-                   now += 24*60*60*1000;
-               }
-
-        yVals = new ArrayList<Entry>();
-        for (int i = 0; i < 20; i++) {
-            float val = (float) (Math.random() * 4) - 2;// + (float)
-            // ((mult *
-            // 0.1) / 10);
-            if (Math.random() < .233) {
-                yVals.add(new Entry(val, i));
-            }
-        }
 
         // create a dataset and give it a type
         LineDataSet set1 = new LineDataSet(yVals, "");
@@ -316,7 +298,7 @@ public class SentimentGraphFragment extends LineChart implements OnChartGestureL
 
             Calendar calendar = Calendar.getInstance();
 
-            calendar.setTimeInMillis(Long.parseLong(original));
+            calendar.setTimeInMillis(Long.parseLong(original)*1000);
 
 
             int mYear = calendar.get(Calendar.YEAR);

@@ -174,22 +174,20 @@ public class SentimentGraphFragment extends LineChart implements OnChartGestureL
                 long seconds = diaryEntry.getCreatedOn().getTime()/1000;
 
                 yVals.add(new Entry((float) sent, (int) (seconds- startTime)));
-                System.out.println(seconds);
+
             }
 
             int startX = yVals.get(0).getXIndex();
             int endX = yVals.get(yVals.size() - 1).getXIndex();
 
-            System.out.println(yVals.size());
             range = endX - startX;
 
             ArrayList<String> xVals = new ArrayList<String>();
             for (int i = startX ; i <= endX; i++) {
-                //System.out.println("XVAL: " + i);
+
                 xVals.add(i + "");
             }
 
-            System.out.println("YSIZE: " + yVals.size() + " xVals: " + xVals.size());
             formatData(xVals, yVals);
 
         }
@@ -211,7 +209,7 @@ public class SentimentGraphFragment extends LineChart implements OnChartGestureL
         LineData data = new LineData(xVals, dataSets);
 
         // set data
-        System.out.println("HHHEEEEEERE");
+
         this.setData(data);
         this.notifyDataSetChanged();
         this.invalidate();

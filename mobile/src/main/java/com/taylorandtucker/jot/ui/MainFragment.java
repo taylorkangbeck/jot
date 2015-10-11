@@ -78,7 +78,26 @@ public class MainFragment extends Fragment implements LoaderManager.LoaderCallba
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View rootView = inflater.inflate(R.layout.fragment_main, container, false);
+
+        View rootView;
+        switch (getArguments().getInt(ARG_SECTION_NUMBER)){
+            case 1:
+                System.out.println("CASE1");
+                rootView = inflater.inflate(R.layout.fragment_main, container, false);
+                break;
+            case 2:
+                System.out.println("CASE2");
+                rootView = inflater.inflate(R.layout.fragment_entities_list, container, false);
+                break;
+            case 3:
+                System.out.println("CASE3");
+                rootView = inflater.inflate(R.layout.fragment_main, container, false);
+                break;
+            default:
+                rootView = inflater.inflate(R.layout.fragment_main, container, false);
+
+        }
+
 
 
         context = getContext();
@@ -89,34 +108,51 @@ public class MainFragment extends Fragment implements LoaderManager.LoaderCallba
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
-        getLoaderManager().initLoader(LOADER_ID, null, this);
+        View rootView;
+        switch (getArguments().getInt(ARG_SECTION_NUMBER)){
+            case 1:
 
-        final ListView entriesFeed = (ListView) getActivity().findViewById(R.id.entriesFeed);
+                getLoaderManager().initLoader(LOADER_ID, null, this);
 
-        //merging adapters for the entries feed
-        cardMergeAdapter = new CardMergeAdapter();
-        cardFragmentAdapter = new CardFragmentAdapter(getContext());
+                final ListView entriesFeed = (ListView) getActivity().findViewById(R.id.entriesFeed);
 
-
-        //InfoExtractor ie = new InfoExtractor(getActivity());
-        //mChart = new SentimentGraphFragment(getContext());
-mChart = (SentimentGraphFragment) getActivity().findViewById(R.id.chart);
-        //cardFragmentAdapter.add(mChart);
-        cardMergeAdapter.addAdapter(cardFragmentAdapter);
+                //merging adapters for the entries feed
+                cardMergeAdapter = new CardMergeAdapter();
+                cardFragmentAdapter = new CardFragmentAdapter(getContext());
 
 
-        cardCursorAdapter = new CardCursorAdapter(getContext(), null);
-        cardMergeAdapter.addAdapter(cardCursorAdapter);
-        entriesFeed.setAdapter(cardMergeAdapter);
+                //InfoExtractor ie = new InfoExtractor(getActivity());
+                //mChart = new SentimentGraphFragment(getContext());
+                mChart = (SentimentGraphFragment) getActivity().findViewById(R.id.chart);
+                //cardFragmentAdapter.add(mChart);
+                cardMergeAdapter.addAdapter(cardFragmentAdapter);
 
-        // submit listener
-        Button submitButton = (Button) getActivity().findViewById(R.id.submitButton);
-        submitButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                onSubmit();
-            }
-        });
+
+                cardCursorAdapter = new CardCursorAdapter(getContext(), null);
+                cardMergeAdapter.addAdapter(cardCursorAdapter);
+                entriesFeed.setAdapter(cardMergeAdapter);
+
+                // submit listener
+                Button submitButton = (Button) getActivity().findViewById(R.id.submitButton);
+                submitButton.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        onSubmit();
+                    }
+                });
+                break;
+            case 2:
+
+                break;
+            case 3:
+
+                break;
+            default:
+
+        }
+
+
+
     }
 
     @Override

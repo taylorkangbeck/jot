@@ -1,14 +1,22 @@
 package com.taylorandtucker.jot.ui;
 
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.app.ActionBar;
-import android.support.v4.app.FragmentManager;
+import android.app.SearchManager;
+import android.content.Context;
+import android.database.Cursor;
 import android.os.Bundle;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.ActionBar;
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.SearchView;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.support.v4.widget.DrawerLayout;
 
 import com.taylorandtucker.jot.R;
+import com.taylorandtucker.jot.localdb.DBContentProvider;
+import com.taylorandtucker.jot.localdb.DBUtils;
+
+//import android.support.v7.widget.SearchView;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationDrawerFragment.NavigationDrawerCallbacks {
@@ -78,6 +86,33 @@ public class MainActivity extends AppCompatActivity
             // decide what to show in the action bar.
             getMenuInflater().inflate(R.menu.main, menu);
             restoreActionBar();
+            SearchManager searchManager = (SearchManager) getSystemService(Context.SEARCH_SERVICE);
+            SearchView searchView = (SearchView) menu.findItem(R.id.menu_search).getActionView();
+            searchView.setSearchableInfo(searchManager.getSearchableInfo(getComponentName()));
+            searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+                @Override
+                public boolean onQueryTextSubmit(String query) {
+                    //TODO
+                    return true;
+                }
+
+                @Override
+                public boolean onQueryTextChange(String query) {
+
+                    //do query and sqap cursor
+                    String[] Values = new String[1];
+                    Values[0] = query;
+                    Cursor c = getApplicationContext().getContentResolver().query(DBContentProvider.ENTITY_URI, DBUtils.entityProjection, "name = ?", Values, null);
+                    CardCursorAdapter.getInstance(getApplicationContext(), c);
+
+                    //TODO when cleared, set original cursor
+
+                    return true;
+
+                }
+
+            });
+
             return true;
         }
         return super.onCreateOptionsMenu(menu);
@@ -91,9 +126,10 @@ public class MainActivity extends AppCompatActivity
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
+        /*
         if (id == R.id.action_settings) {
             return true;
-        }
+        }*/
 
         return super.onOptionsItemSelected(item);
     }

@@ -105,7 +105,7 @@ mChart = (SentimentGraphFragment) getActivity().findViewById(R.id.chart);
         cardMergeAdapter.addAdapter(cardFragmentAdapter);
 
 
-        cardCursorAdapter = new CardCursorAdapter(getContext(), null);
+        cardCursorAdapter = CardCursorAdapter.getInstance(getContext(), null);
         cardMergeAdapter.addAdapter(cardCursorAdapter);
         entriesFeed.setAdapter(cardMergeAdapter);
 

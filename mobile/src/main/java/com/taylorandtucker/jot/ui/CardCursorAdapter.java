@@ -16,8 +16,19 @@ import com.taylorandtucker.jot.R;
 public class CardCursorAdapter extends CursorAdapter {
     //use .changeCursor for specific queries
 
+    //TODO maybe change from being singleton
+
     public CardCursorAdapter(Context context, Cursor cursor) {
         super(context, cursor, 0);
+    }
+
+    private static CardCursorAdapter instance;
+    public static CardCursorAdapter getInstance(Context context, Cursor cursor) {
+        if (instance == null)
+            instance = new CardCursorAdapter(context, cursor);
+        else
+            instance.changeCursor(cursor);
+        return instance;
     }
 
     @Override

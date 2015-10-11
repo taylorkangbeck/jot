@@ -1,5 +1,6 @@
 package com.taylorandtucker.jot.ui;
 
+import android.animation.Animator;
 import android.app.Activity;
 import android.content.Context;
 import android.database.Cursor;
@@ -12,10 +13,14 @@ import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewAnimationUtils;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
+import android.view.animation.TranslateAnimation;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.ListView;
 
 import com.taylorandtucker.jot.Entry;
@@ -60,6 +65,8 @@ public class MainFragment extends Fragment implements LoaderManager.LoaderCallba
     private Context context;
     private SentimentGraphFragment mChart;
 
+    private ImageButton fab;
+
     /**
      * Returns a new instance of this fragment for the given section
      * number.
@@ -72,8 +79,7 @@ public class MainFragment extends Fragment implements LoaderManager.LoaderCallba
         return fragment;
     }
 
-    public MainFragment() {
-    }
+    public MainFragment() {}
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -117,6 +123,94 @@ mChart = (SentimentGraphFragment) getActivity().findViewById(R.id.chart);
                 onSubmit();
             }
         });
+
+
+        // Set up FAB
+        fab = (ImageButton) getActivity().findViewById(R.id.fab);
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                fabAnim();
+                EditText textEntry = (EditText) getActivity().findViewById(R.id.textEntry);
+                textEntry.setFocusableInTouchMode(true);
+                textEntry.requestFocus();
+            }
+        });
+//
+//        View feed = getActivity().findViewById(R.id.entriesFeed);
+//        feed.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                View feed = getActivity().findViewById(R.id.entriesFeed);
+//                feed.setFocusableInTouchMode(true);
+//                feed.requestFocus();
+//            }
+//        });
+
+        EditText textEntry = (EditText) getActivity().findViewById(R.id.textEntry);
+        textEntry.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+
+            public void onFocusChange(View v, boolean hasFocus) {
+                if (!hasFocus) {
+                    View view = getActivity().getCurrentFocus();
+                    if (view != null) {
+                        InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+                        imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
+                    }
+                }
+            }
+        });
+    }
+
+    private void textEntryReveal() {
+        //setting up circular reveal
+
+        View textEntryLayout = getActivity().findViewById(R.id.textEntryLayout);
+
+        View submitButton = getActivity().findViewById(R.id.submitButton);
+        int cx = (submitButton.getLeft() + submitButton.getRight())  / 2;
+        int cy = (submitButton.getTop() + submitButton.getBottom())  / 2;
+
+        int startRadius = fab.getWidth()/2;
+        int finalRadius = Math.max(textEntryLayout.getWidth(), textEntryLayout.getHeight());
+        Animator anim =
+                ViewAnimationUtils.createCircularReveal(textEntryLayout, cx, cy, startRadius, finalRadius);
+        textEntryLayout.setVisibility(View.VISIBLE);
+        anim.start();
+    }
+
+    private void fabAnim() {
+        //Moving the fab
+        int[] fabLoc = {0,0};
+        fab.getLocationOnScreen(fabLoc);
+        int[] subLoc = {0,0};
+        View submitButton = getActivity().findViewById(R.id.submitButton);
+        submitButton.getLocationOnScreen(subLoc);
+        int subMidx = (submitButton.getLeft() + submitButton.getRight())  / 2;
+        int subMidy = (submitButton.getTop() + submitButton.getBottom())  / 2;
+        int dx = subMidx - (fab.getLeft() + fab.getRight())/2;
+        int dy = subMidy - (fab.getTop() + fab.getBottom())/2;
+
+        TranslateAnimation animation = new TranslateAnimation(0, dx, 0, dy);
+        animation.setDuration(150);
+        animation.setFillAfter(false);
+        animation.setAnimationListener(new Animation.AnimationListener() {
+            @Override
+            public void onAnimationEnd(Animation animation) {
+                textEntryReveal();
+                fab.setVisibility(View.INVISIBLE);
+            }
+
+            @Override
+            public void onAnimationRepeat(Animation animation) {
+            }
+
+            @Override
+            public void onAnimationStart(Animation animation) {
+            }
+        });
+
+        fab.startAnimation(animation);
     }
 
     @Override

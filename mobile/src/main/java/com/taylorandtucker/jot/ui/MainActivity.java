@@ -11,6 +11,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.SearchView;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.ImageButton;
 
 import com.taylorandtucker.jot.R;
 import com.taylorandtucker.jot.localdb.DBContentProvider;
@@ -30,6 +31,7 @@ public class MainActivity extends AppCompatActivity
      * Used to store the last screen title. For use in {@link #restoreActionBar()}.
      */
     private CharSequence mTitle;
+    private ImageButton fab;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

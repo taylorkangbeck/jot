@@ -216,15 +216,13 @@ public class MainFragment extends Fragment implements LoaderManager.LoaderCallba
                  InfoExtractor ie = new InfoExtractor(getActivity());
                 ie.processNewEntryData(Long.parseLong(entryID), ent);
                 try {
-                    wait(1000);
+                    wait(3000);
                 }catch (Exception e){
 
                 }
 
                 final List entries = ie.getAllEntries();
-                new Thread(new Runnable() {
-                    @Override
-                    public void run() {
+
                         getActivity().runOnUiThread(new Runnable() {
 
                             @Override
@@ -235,17 +233,16 @@ public class MainFragment extends Fragment implements LoaderManager.LoaderCallba
                                 mChart = new SentimentGraphFragment(getActivity());
                                 cardFragmentAdapter.add(mChart);
                                 mChart.updateData(entries);
-                                mChart.invalidate();
+                                //mChart.invalidate();
                                 cardFragmentAdapter.notifyDataSetChanged();
+                                cardMergeAdapter.notifyDataSetChanged();
 cardMergeAdapter.notifyDataSetInvalidated();
 
-                                cardFragmentAdapter.getView(0,null,null).invalidate();
+                                //cardFragmentAdapter.getView(0,null,null).invalidate();
                                 System.out.println("hereeeee");
 
                             }
                         });
-                    }
-                }).start();
 
                 System.out.println("===================== ENTITIES =======================");
 

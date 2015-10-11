@@ -63,7 +63,6 @@ public class SentimentGraphFragment extends LineChart implements OnChartGestureL
         this.entryList = ie.getAllEntries();
 
         setupChart();
-
     }
 
     public SentimentGraphFragment(Context context, AttributeSet attrs) {
@@ -71,7 +70,6 @@ public class SentimentGraphFragment extends LineChart implements OnChartGestureL
         InfoExtractor ie = new InfoExtractor(context);
         this.entryList = ie.getAllEntries();
         setupChart();
-
     }
 
     public void setupChart() {

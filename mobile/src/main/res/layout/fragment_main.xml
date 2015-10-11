@@ -5,13 +5,20 @@
     tools:context=".PlaceholderFragment"
     android:background="@color/mainBackground">
 
+    <com.taylorandtucker.jot.ui.SentimentGraphFragment
+        android:id="@+id/chart"
+        android:layout_height="200dp"
+        android:layout_width="match_parent"
+        android:layout_alignParentStart="false" />
+
     <ListView
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:id="@+id/entriesFeed"
         android:divider="@null"
         android:dividerHeight="0dp"
-        android:layout_above="@+id/textEntryLayout">
+        android:layout_above="@+id/textEntryLayout"
+        android:layout_below="@+id/chart">
     </ListView>
 
     <RelativeLayout

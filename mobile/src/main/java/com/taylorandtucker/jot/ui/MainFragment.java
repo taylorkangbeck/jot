@@ -99,9 +99,9 @@ public class MainFragment extends Fragment implements LoaderManager.LoaderCallba
 
 
         //InfoExtractor ie = new InfoExtractor(getActivity());
-        mChart = new SentimentGraphFragment(getContext());
-
-        cardFragmentAdapter.add(mChart);
+        //mChart = new SentimentGraphFragment(getContext());
+mChart = (SentimentGraphFragment) getActivity().findViewById(R.id.chart);
+        //cardFragmentAdapter.add(mChart);
         cardMergeAdapter.addAdapter(cardFragmentAdapter);
 
 
@@ -228,18 +228,18 @@ public class MainFragment extends Fragment implements LoaderManager.LoaderCallba
                             @Override
                             public void run() {
 
-                                cardFragmentAdapter.remove(0);
-                                mChart = null;
-                                mChart = new SentimentGraphFragment(getActivity());
-                                cardFragmentAdapter.add(mChart);
+                                //cardFragmentAdapter.remove(0);
+                                //mChart = null;
+                                //mChart = new SentimentGraphFragment(getActivity());
+                                //cardFragmentAdapter.add(mChart);
                                 mChart.updateData(entries);
                                 //mChart.invalidate();
-                                cardFragmentAdapter.notifyDataSetChanged();
-                                cardMergeAdapter.notifyDataSetChanged();
-cardMergeAdapter.notifyDataSetInvalidated();
+                                //cardFragmentAdapter.notifyDataSetChanged();
+                                //cardMergeAdapter.notifyDataSetChanged();
+                                //cardMergeAdapter.notifyDataSetInvalidated();
 
                                 //cardFragmentAdapter.getView(0,null,null).invalidate();
-                                System.out.println("hereeeee");
+                                //System.out.println("hereeeee");
 
                             }
                         });

@@ -96,8 +96,6 @@ public class SentimentGraphFragment extends LineChart implements OnChartGestureL
         // create a custom MarkerView (extend MarkerView) and specify the layout
         // to use for it
 
-
-
         XAxis xAxis = this.getXAxis();
         //xAxis.setValueFormatter(new MyCustomXAxisValueFormatter());
         // add x-axis limit line

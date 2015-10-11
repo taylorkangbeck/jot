@@ -115,6 +115,8 @@ public class MainFragment extends Fragment implements LoaderManager.LoaderCallba
         cardMergeAdapter = new CardMergeAdapter();
         cardFragmentAdapter = new CardFragmentAdapter(getContext());
 
+        cardMergeAdapter.addAdapter(cardFragmentAdapter);
+
 
         switch (getArguments().getInt(ARG_SECTION_NUMBER)){
             case 1:
@@ -123,13 +125,8 @@ public class MainFragment extends Fragment implements LoaderManager.LoaderCallba
 
                 final ListView entriesFeed = (ListView) getActivity().findViewById(R.id.entriesFeed);
 
-                //InfoExtractor ie = new InfoExtractor(getActivity());
-                //mChart = new SentimentGraphFragment(getContext());
                 mChart = (SentimentGraphFragment) getActivity().findViewById(R.id.chart);
                 mChart.updateData(ie.getAllEntries());
-
-                cardMergeAdapter.addAdapter(cardFragmentAdapter);
-
 
                 cardCursorAdapter = new CardCursorAdapter(getContext(), null);
                 cardMergeAdapter.addAdapter(cardCursorAdapter);
@@ -147,8 +144,6 @@ public class MainFragment extends Fragment implements LoaderManager.LoaderCallba
             case 2:
                 final ListView entitiesFeed = (ListView) getActivity().findViewById(R.id.entitiesList);
 
-                cardMergeAdapter.addAdapter(cardFragmentAdapter);
-
                 entityCardCursorAdapter = new EntityCardCursorAdapter(getContext(), null);
                 cardMergeAdapter.addAdapter(entityCardCursorAdapter);
                 entitiesFeed.setAdapter(cardMergeAdapter);
@@ -157,9 +152,7 @@ public class MainFragment extends Fragment implements LoaderManager.LoaderCallba
 
                 break;
             default:
-
         }
-
     }
 
     @Override
@@ -176,7 +169,7 @@ public class MainFragment extends Fragment implements LoaderManager.LoaderCallba
             final Entry entry = new Entry(entryText.getText().toString());
 
             InfoExtractor ie = new InfoExtractor(getActivity());
-            DBUtils dbUtils = DBUtils.getInstance(getActivity());
+
             Uri uri = ie.putEntry(entry);
             String[] segments = uri.getPath().split("/");
             String idStr = segments[segments.length-1];
@@ -190,8 +183,6 @@ public class MainFragment extends Fragment implements LoaderManager.LoaderCallba
             imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
             entryText.setText("");
         }
-
-
     }
 
     @Override
@@ -243,9 +234,7 @@ public class MainFragment extends Fragment implements LoaderManager.LoaderCallba
                 break;
             default:
                 cardCursorAdapter.swapCursor(data);
-
         }
-
     }
 
     @Override

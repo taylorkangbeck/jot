@@ -281,11 +281,6 @@ public class MainFragment extends Fragment implements LoaderManager.LoaderCallba
 
                  InfoExtractor ie = new InfoExtractor(getActivity());
                 ie.processNewEntryData(Long.parseLong(entryID), ent);
-                try {
-                    wait(3000);
-                }catch (Exception e){
-
-                }
 
                 final List entries = ie.getAllEntries();
 

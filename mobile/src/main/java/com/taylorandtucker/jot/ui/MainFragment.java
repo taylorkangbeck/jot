@@ -23,6 +23,7 @@ import com.taylorandtucker.jot.NLP.InfoExtractor;
 import com.taylorandtucker.jot.NLP.ProcessedEntry;
 import com.taylorandtucker.jot.R;
 import com.taylorandtucker.jot.localdb.DBContentProvider;
+import com.taylorandtucker.jot.localdb.DBContract.EntityContract;
 import com.taylorandtucker.jot.localdb.DBContract.EntryContract;
 import com.taylorandtucker.jot.localdb.DBUtils;
 
@@ -56,6 +57,7 @@ public class MainFragment extends Fragment implements LoaderManager.LoaderCallba
     private CardMergeAdapter cardMergeAdapter;
     private CardFragmentAdapter cardFragmentAdapter;
     private CardCursorAdapter cardCursorAdapter;
+    private EntityCardCursorAdapter entityCardCursorAdapter;
     private int LOADER_ID = 1;
     private Context context;
     private SentimentGraphFragment mChart;
@@ -98,8 +100,6 @@ public class MainFragment extends Fragment implements LoaderManager.LoaderCallba
 
         }
 
-
-
         context = getContext();
         return rootView;
     }
@@ -108,7 +108,14 @@ public class MainFragment extends Fragment implements LoaderManager.LoaderCallba
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
+        InfoExtractor ie = new InfoExtractor(getActivity());
         View rootView;
+
+        //merging adapters for the entries feed
+        cardMergeAdapter = new CardMergeAdapter();
+        cardFragmentAdapter = new CardFragmentAdapter(getContext());
+
+
         switch (getArguments().getInt(ARG_SECTION_NUMBER)){
             case 1:
 
@@ -116,15 +123,11 @@ public class MainFragment extends Fragment implements LoaderManager.LoaderCallba
 
                 final ListView entriesFeed = (ListView) getActivity().findViewById(R.id.entriesFeed);
 
-                //merging adapters for the entries feed
-                cardMergeAdapter = new CardMergeAdapter();
-                cardFragmentAdapter = new CardFragmentAdapter(getContext());
-
-
                 //InfoExtractor ie = new InfoExtractor(getActivity());
                 //mChart = new SentimentGraphFragment(getContext());
                 mChart = (SentimentGraphFragment) getActivity().findViewById(R.id.chart);
-                //cardFragmentAdapter.add(mChart);
+                mChart.updateData(ie.getAllEntries());
+
                 cardMergeAdapter.addAdapter(cardFragmentAdapter);
 
 
@@ -142,7 +145,13 @@ public class MainFragment extends Fragment implements LoaderManager.LoaderCallba
                 });
                 break;
             case 2:
+                final ListView entitiesFeed = (ListView) getActivity().findViewById(R.id.entitiesList);
 
+                cardMergeAdapter.addAdapter(cardFragmentAdapter);
+
+                entityCardCursorAdapter = new EntityCardCursorAdapter(getContext(), null);
+                cardMergeAdapter.addAdapter(entityCardCursorAdapter);
+                entitiesFeed.setAdapter(cardMergeAdapter);
                 break;
             case 3:
 
@@ -150,8 +159,6 @@ public class MainFragment extends Fragment implements LoaderManager.LoaderCallba
             default:
 
         }
-
-
 
     }
 
@@ -189,22 +196,56 @@ public class MainFragment extends Fragment implements LoaderManager.LoaderCallba
 
     @Override
     public Loader<Cursor> onCreateLoader(int id, Bundle args) {
-        String[] projection = {
-                EntryContract._ID,
-                EntryContract.COLUMN_DATE,
-                EntryContract.COLUMN_BODY,
-                EntryContract.COLUMN_SENTIMENT
-        };
-        String sortOrder = EntryContract._ID + " DESC"; //ordering by descending id (couldn't get date to work)
+        String[] projection;
+        String sortOrder;
+        Uri uri;
 
-        CursorLoader cursorLoader = new CursorLoader(getContext(),
-                DBContentProvider.ENTRY_URI, projection, null, null, sortOrder);
+        View rootView;
+        switch (getArguments().getInt(ARG_SECTION_NUMBER)){
+            case 1:
+                projection = DBUtils.entryProjection;
+                sortOrder = EntryContract._ID + " DESC";
+                uri = DBContentProvider.ENTRY_URI;
+                break;
+            case 2:
+               projection = DBUtils.entityProjection;
+                sortOrder = EntityContract.COLUMN_IMPORTANCE + " DESC";
+                uri = DBContentProvider.ENTITY_URI;
+                break;
+            case 3:
+                projection = DBUtils.entityProjection;
+                sortOrder = EntityContract.COLUMN_IMPORTANCE + " DESC";
+                uri = DBContentProvider.ENTITY_URI;
+                break;
+            default:
+                projection = DBUtils.entityProjection;
+                sortOrder = EntityContract.COLUMN_IMPORTANCE + " DESC";
+                uri = DBContentProvider.ENTITY_URI;
+
+        }
+
+        CursorLoader cursorLoader = new CursorLoader(getContext(), uri, projection, null, null, sortOrder);
+
         return cursorLoader;
     }
 
     @Override
     public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
-        cardCursorAdapter.swapCursor(data);
+        switch (getArguments().getInt(ARG_SECTION_NUMBER)){
+            case 1:
+                cardCursorAdapter.swapCursor(data);
+                break;
+            case 2:
+                entityCardCursorAdapter.swapCursor(data);
+                break;
+            case 3:
+                cardCursorAdapter.swapCursor(data);
+                break;
+            default:
+                cardCursorAdapter.swapCursor(data);
+
+        }
+
     }
 
     @Override
@@ -259,26 +300,12 @@ public class MainFragment extends Fragment implements LoaderManager.LoaderCallba
 
                 final List entries = ie.getAllEntries();
 
-                        getActivity().runOnUiThread(new Runnable() {
-
-                            @Override
-                            public void run() {
-
-                                //cardFragmentAdapter.remove(0);
-                                //mChart = null;
-                                //mChart = new SentimentGraphFragment(getActivity());
-                                //cardFragmentAdapter.add(mChart);
-                                mChart.updateData(entries);
-                                //mChart.invalidate();
-                                //cardFragmentAdapter.notifyDataSetChanged();
-                                //cardMergeAdapter.notifyDataSetChanged();
-                                //cardMergeAdapter.notifyDataSetInvalidated();
-
-                                //cardFragmentAdapter.getView(0,null,null).invalidate();
-                                //System.out.println("hereeeee");
-
-                            }
-                        });
+                getActivity().runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        mChart.updateData(entries);
+                    }
+                });
 
                 System.out.println("===================== ENTITIES =======================");
 

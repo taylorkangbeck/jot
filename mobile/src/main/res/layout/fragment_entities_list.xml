@@ -8,7 +8,7 @@
     <ListView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/entriesFeed"
+        android:id="@+id/entitiesList"
         android:divider="@null"
         android:dividerHeight="0dp">
     </ListView>

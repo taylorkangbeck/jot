@@ -24,7 +24,6 @@ import com.github.mikephil.charting.interfaces.LineDataProvider;
 import com.github.mikephil.charting.listener.OnChartGestureListener;
 import com.github.mikephil.charting.listener.OnChartValueSelectedListener;
 import com.github.mikephil.charting.utils.ViewPortHandler;
-import com.taylorandtucker.jot.NLP.InfoExtractor;
 import com.taylorandtucker.jot.R;
 
 import java.text.SimpleDateFormat;
@@ -59,16 +58,11 @@ public class SentimentGraphFragment extends LineChart implements OnChartGestureL
 
     public SentimentGraphFragment(Context context) {
         super(context);
-        InfoExtractor ie = new InfoExtractor(context);
-        this.entryList = ie.getAllEntries();
-
         setupChart();
     }
 
     public SentimentGraphFragment(Context context, AttributeSet attrs) {
         super(context, attrs);
-        InfoExtractor ie = new InfoExtractor(context);
-        this.entryList = ie.getAllEntries();
         setupChart();
     }
 
@@ -137,8 +131,6 @@ public class SentimentGraphFragment extends LineChart implements OnChartGestureL
         //this.getViewPortHandler().setMaximumScaleX(2f);
 
         xAxis.setLabelsToSkip(60*60);
-        updateData(entryList);
-
         //this.animateX(2500, Easing.EasingOption.EaseInOutQuart);
 
         //this.addDatat(entries);
@@ -211,7 +203,6 @@ public class SentimentGraphFragment extends LineChart implements OnChartGestureL
         // set data
 
         this.setData(data);
-        this.notifyDataSetChanged();
         this.invalidate();
     }
     private LineDataSet createSet(List<Entry> data) {

@@ -27,6 +27,7 @@ public class CardCursorAdapter extends CursorAdapter {
 
     @Override
     public void bindView(View view, Context context, Cursor cursor) {
+        System.out.println("BINDVIEW");
         TextView entryDateTextView = (TextView) view.findViewById(R.id.entryDate);
         TextView entryBodyTextView = (TextView) view.findViewById(R.id.entryBody);
         TextView entrySentimentTextView = (TextView) view.findViewById(R.id.entrySentiment);

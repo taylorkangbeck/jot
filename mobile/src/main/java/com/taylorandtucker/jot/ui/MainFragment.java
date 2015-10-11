@@ -142,6 +142,9 @@ public class MainFragment extends Fragment implements LoaderManager.LoaderCallba
                 });
                 break;
             case 2:
+
+                getLoaderManager().initLoader(LOADER_ID, null, this);
+
                 final ListView entitiesFeed = (ListView) getActivity().findViewById(R.id.entitiesList);
 
                 entityCardCursorAdapter = new EntityCardCursorAdapter(getContext(), null);
@@ -239,7 +242,20 @@ public class MainFragment extends Fragment implements LoaderManager.LoaderCallba
 
     @Override
     public void onLoaderReset(Loader<Cursor> loader) {
-        cardCursorAdapter.swapCursor(null);
+        switch (getArguments().getInt(ARG_SECTION_NUMBER)){
+            case 1:
+                cardCursorAdapter.swapCursor(null);
+                break;
+            case 2:
+                entityCardCursorAdapter.swapCursor(null);
+                break;
+            case 3:
+                cardCursorAdapter.swapCursor(null);
+                break;
+            default:
+                cardCursorAdapter.swapCursor(null);
+        }
+
     }
 
     class RetrieveNLPdata extends AsyncTask<Void, Void, Void> {

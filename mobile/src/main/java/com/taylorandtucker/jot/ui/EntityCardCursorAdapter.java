@@ -27,6 +27,7 @@ public class EntityCardCursorAdapter extends CursorAdapter {
 
     @Override
     public void bindView(View view, Context context, Cursor cursor) {
+
         TextView entityNameTextView = (TextView) view.findViewById(R.id.entityName);
         TextView entitySentTextView = (TextView) view.findViewById(R.id.entitySentiment);
 

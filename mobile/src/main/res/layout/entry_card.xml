@@ -41,14 +41,13 @@
 
     </GridLayout>
 
-    <View
+    <com.taylorandtucker.jot.ui.GradientView
         android:layout_height="fill_parent"
         android:id="@+id/sentGrad"
         android:layout_width="60dp"
         android:layout_alignParentEnd="true"
         android:layout_alignParentRight="true"
         android:visibility="visible"
-        android:foregroundGravity="bottom|right|top"
-        android:alpha="1" />
+        android:foregroundGravity="bottom|right|top" />
 
 </RelativeLayout>

@@ -2,8 +2,6 @@ package com.taylorandtucker.jot.ui;
 
 import android.content.Context;
 import android.database.Cursor;
-import android.graphics.Color;
-import android.graphics.drawable.GradientDrawable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -29,10 +27,10 @@ public class CardCursorAdapter extends CursorAdapter {
 
     @Override
     public void bindView(View view, Context context, Cursor cursor) {
-        
+
         TextView entryDateTextView = (TextView) view.findViewById(R.id.entryDate);
         TextView entryBodyTextView = (TextView) view.findViewById(R.id.entryBody);
-        View entrySentimentGradient = (View) view.findViewById(R.id.sentGrad);
+        GradientView entrySentimentGradient = (GradientView) view.findViewById(R.id.sentGrad);
 
         // Extract properties from cursor
         String date = cursor.getString(cursor.getColumnIndexOrThrow("date"));
@@ -43,53 +41,10 @@ public class CardCursorAdapter extends CursorAdapter {
         entryDateTextView.setText(date);
         entryBodyTextView.setText(body);
 
-        GradientDrawable d = new GradientDrawable(GradientDrawable.Orientation.BL_TR,
-                new int[] {Color.WHITE,getColorFromGradient(sent)});
-        d.setCornerRadius(0f);
+        //view.setBackgroundDrawable(d);
 
-        view.setBackgroundDrawable(d);
-        //entrySentimentGradient.setBackground(d);
+        entrySentimentGradient.setgradient(sent);
 
     }
-private int getColorFromGradient(double sent){
-    /*double resultRed = color1.red + percent * (color2.red - color1.red);
-    double resultGreen = color1.green + percent * (color2.green - color1.green);
-    double resultBlue = color1.blue + percent * (color2.blue - color1.blue);
-    */
 
-    int red = Color.RED;
-    int redR = Color.red(red);
-    int redG = Color.green(red);
-    int redB = Color.blue(red);
-
-    int yellow = Color.YELLOW;
-    int yellowR = Color.red(yellow);
-    int yellowG = Color.green(yellow);
-    int yellowB = Color.blue(yellow);
-
-    int green = Color.GREEN;
-    int greenR = Color.red(green);
-    int greenG = Color.green(green);
-    int greenB = Color.blue(green);
-
-    double resultR;
-    double resultG;
-    double resultB;
-
-    if(sent>=0){
-        double percent = sent/2;
-        resultR = yellowR + percent*(greenR-yellowR);
-        resultG = yellowG + percent*(greenG-yellowG);
-        resultB = yellowB + percent*(greenB-yellowB);
-
-    }else{
-        double percent = -1*sent/2;
-        resultR = redR + percent*(yellowR-redR);
-        resultG = redG + percent*(yellowG-redG);
-        resultB = redB + percent*(yellowB-redB);
-    }
-
-
-    return Color.rgb((int) resultR, (int) resultG, (int)resultB);
-}
 }

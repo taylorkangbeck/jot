@@ -36,7 +36,6 @@ public class EntityCursorLoader extends CursorLoader {
 
         cursor = db.getReadableDatabase().rawQuery(query, null);
 
-        System.out.println("cursor count from cursorloader: " + cursor.getCount());
         return cursor;
     }
 

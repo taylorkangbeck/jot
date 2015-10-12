@@ -37,7 +37,7 @@ public class EntityCardCursorAdapter extends CursorAdapter {
                 Bundle data = new Bundle();
                 data.putLong("entityId", entityId);
                 Fragment ef = new EntityFragment(data);
-                fm.beginTransaction().add(R.id.container,ef, "entityFrag1").commit();
+                fm.beginTransaction().replace(R.id.container,ef, "entityFrag1").commit();
             }
         });
 

@@ -3,8 +3,6 @@ package com.taylorandtucker.jot.ui;
 import android.app.Activity;
 import android.content.Context;
 import android.database.Cursor;
-import android.net.Uri;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.LoaderManager;
@@ -12,34 +10,13 @@ import android.support.v4.content.Loader;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.inputmethod.InputMethodManager;
-import android.widget.Button;
-import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.TextView;
 
-import com.taylorandtucker.jot.Entry;
 import com.taylorandtucker.jot.NLP.InfoExtractor;
-import com.taylorandtucker.jot.NLP.ProcessedEntry;
 import com.taylorandtucker.jot.R;
 import com.taylorandtucker.jot.localdb.EntityCursorLoader;
 import com.taylorandtucker.jot.localdb.jotDBHelper;
-
-import org.apache.http.HttpEntity;
-import org.apache.http.HttpResponse;
-import org.apache.http.client.ClientProtocolException;
-import org.apache.http.client.HttpClient;
-import org.apache.http.client.methods.HttpPost;
-import org.apache.http.entity.ByteArrayEntity;
-import org.apache.http.impl.client.DefaultHttpClient;
-import org.xml.sax.InputSource;
-
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.util.List;
-
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
 
 /**
  * Created by Taylor on 9/16/-015.
@@ -60,6 +37,7 @@ public class EntityFragment extends Fragment implements LoaderManager.LoaderCall
     private SentimentGraphFragment mChart;
 
     static private long entityId;
+    private String entityName;
     /**
      * Returns a new instance of this fragment for the given section
      * number.
@@ -70,6 +48,7 @@ public class EntityFragment extends Fragment implements LoaderManager.LoaderCall
     }
     public EntityFragment(Bundle data){
         entityId = data.getLong("entityId");
+        entityName = data.getString("entityName");
     }
 
     @Override
@@ -79,10 +58,6 @@ public class EntityFragment extends Fragment implements LoaderManager.LoaderCall
 
         rootView = inflater.inflate(R.layout.fragment_entity, container, false);
 
-        if (rootView == null){
-            System.out.println("ROOT VIEW NULLLL");
-        }
-        System.out.println("ROOT VIEW notttt NULLLL");
         context = getContext();
         return rootView;
     }
@@ -102,6 +77,9 @@ public class EntityFragment extends Fragment implements LoaderManager.LoaderCall
         getLoaderManager().initLoader(LOADER_ID, null, this);
 
         final ListView entriesFeed = (ListView) getActivity().findViewById(R.id.entriesFeed);
+
+        TextView entityNameView = (TextView) getActivity().findViewById(R.id.entityNameView);
+        entityNameView.setText(entityName);
 
         mChart = (SentimentGraphFragment) getActivity().findViewById(R.id.chartE);
         mChart.updateData(ie.getEntriesForEntity(entityId));

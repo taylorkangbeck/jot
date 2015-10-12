@@ -11,13 +11,15 @@
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceLarge"
         android:text="Large Text"
-        android:id="@+id/textView" />
+        android:id="@+id/entityNameView"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true" />
 
     <com.taylorandtucker.jot.ui.SentimentGraphFragment
         android:id="@+id/chartE"
         android:layout_height="200dp"
         android:layout_width="match_parent"
-        android:layout_below="@+id/textView" />
+        android:layout_below="@+id/entNameView" />
 
     <ListView
         android:layout_width="match_parent"

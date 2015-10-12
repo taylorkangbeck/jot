@@ -12,6 +12,9 @@ import android.widget.TextView;
 
 import com.taylorandtucker.jot.R;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 /**
  * Created by Taylor on 9/16/2015.
  */
@@ -36,12 +39,15 @@ public class CardCursorAdapter extends CursorAdapter {
         View background = (View) view.findViewById((R.id.cardContent));
 
         // Extract properties from cursor
-        long date = cursor.getLong(cursor.getColumnIndexOrThrow("date"));
+        long dateMil = cursor.getLong(cursor.getColumnIndexOrThrow("date"));
         String body = cursor.getString(cursor.getColumnIndexOrThrow("body"));
         double sent = cursor.getDouble(cursor.getColumnIndexOrThrow("sentiment"));
 
         // Populate fields with extracted properties
-        entryDateTextView.setText(date);
+        Date date = new Date(dateMil*1000);
+        SimpleDateFormat formatter = new SimpleDateFormat("MMM, dd yyyy    h:mm a");
+        String formattedDate = formatter.format(date);
+        entryDateTextView.setText(formattedDate);
         entryBodyTextView.setText(body);
 
         //view.setBackgroundDrawable(d);

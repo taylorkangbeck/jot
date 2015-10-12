@@ -33,6 +33,7 @@ public class EntityCursorLoader extends CursorLoader {
         query +=  "FROM ("+entities+" Inner Join "+eTOe+" on "+entities+"._id = "+eTOe+"."+entityID+") ";
         query += "Inner Join "+entries+" on "+entries+"._id = " + eTOe+"."+entryID;
         query += " WHERE "+ entities+"."+EntityContract._ID + " = " + id;
+        query += " ORDER BY "+EntryContract.COLUMN_DATE+" DESC";
 
         cursor = db.getReadableDatabase().rawQuery(query, null);
 

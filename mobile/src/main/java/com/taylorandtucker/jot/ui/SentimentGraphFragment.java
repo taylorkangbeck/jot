@@ -86,7 +86,6 @@ public class SentimentGraphFragment extends LineChart implements OnChartGestureL
         this.setScaleEnabled(true);
         // this.setScaleXEnabled(true);
         // this.setScaleYEnabled(true);
-
         // if disabled, scaling can be done on x- and y-axis separately
         this.setPinchZoom(true);
 

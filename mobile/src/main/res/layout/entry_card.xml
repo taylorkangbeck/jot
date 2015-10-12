@@ -5,13 +5,18 @@
     android:layout_height="wrap_content"
     android:paddingLeft="@dimen/cardEdgePadding"
     android:paddingRight="@dimen/cardEdgePadding"
-    android:paddingTop="@dimen/cardEdgePadding">
+    android:paddingTop="@dimen/cardEdgePadding"
+    android:alpha="1">
+
     <GridLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:padding="@dimen/entryCardContentPadding"
         android:background="@color/entryCardBackground"
-        android:id="@+id/cardContent">
+        android:id="@+id/cardContent"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
+        android:alpha="1">
 
         <TextView
             android:layout_width="wrap_content"
@@ -34,15 +39,16 @@
             android:layout_row="1"
             android:layout_column="0" />
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textAppearance="?android:attr/textAppearanceLarge"
-            android:text="Sent"
-            android:id="@+id/entrySentiment"
-            android:layout_row="1"
-            android:layout_column="12" />
-
-
     </GridLayout>
+
+    <View
+        android:layout_height="fill_parent"
+        android:id="@+id/sentGrad"
+        android:layout_width="60dp"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
+        android:visibility="visible"
+        android:foregroundGravity="bottom|right|top"
+        android:alpha="1" />
+
 </RelativeLayout>

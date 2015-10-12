@@ -1,0 +1,32 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".PlaceholderFragment"
+    android:background="@color/mainBackground"
+    android:id="@+id/entityFrag" >
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:text="Large Text"
+        android:id="@+id/textView" />
+
+    <com.taylorandtucker.jot.ui.SentimentGraphFragment
+        android:id="@+id/chartE"
+        android:layout_height="200dp"
+        android:layout_width="match_parent"
+        android:layout_below="@+id/textView" />
+
+    <ListView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/entriesFeed"
+        android:divider="@null"
+        android:dividerHeight="0dp"
+        android:layout_above="@+id/textEntryLayout"
+        android:layout_below="@+id/chartE">
+    </ListView>
+
+</RelativeLayout>

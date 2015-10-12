@@ -2,6 +2,10 @@ package com.taylorandtucker.jot.ui;
 
 import android.content.Context;
 import android.database.Cursor;
+import android.os.Bundle;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentActivity;
+import android.support.v4.app.FragmentManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -21,8 +25,23 @@ public class EntityCardCursorAdapter extends CursorAdapter {
     }
 
     @Override
-    public View newView(Context context, Cursor cursor, ViewGroup parent) {
-        return LayoutInflater.from(context).inflate(R.layout.entity_card, parent, false);
+    public View newView(final Context context, Cursor cursor, ViewGroup parent) {
+        View view = LayoutInflater.from(context).inflate(R.layout.entity_card, parent, false);
+
+        final long entityId = cursor.getLong(cursor.getColumnIndexOrThrow("_id"));
+        view.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                FragmentManager fm = ((FragmentActivity)context).getSupportFragmentManager();
+                Bundle data = new Bundle();
+                data.putLong("entityId", entityId);
+                Fragment ef = new EntityFragment(data);
+                fm.beginTransaction().add(R.id.container,ef, "entityFrag1").commit();
+            }
+        });
+
+        return view;
     }
 
     @Override
@@ -41,5 +60,4 @@ public class EntityCardCursorAdapter extends CursorAdapter {
         entityNameTextView.setText(name);
         entitySentTextView.setText(sent);
     }
-
 }

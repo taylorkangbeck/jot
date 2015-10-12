@@ -12,6 +12,7 @@ import com.taylorandtucker.jot.localdb.DBContract;
 import com.taylorandtucker.jot.localdb.DBContract.EntityContract;
 import com.taylorandtucker.jot.localdb.DBContract.EntryContract;
 import com.taylorandtucker.jot.localdb.DBUtils;
+import com.taylorandtucker.jot.localdb.jotDBHelper;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -50,6 +51,22 @@ public class InfoExtractor {
 
         List<Entry> l = getListEntries(c);
         return l;
+    }
+    public List<Entry> getEntriesForEntity(long id){
+        String query = "SELECT * ";
+
+        String entries = EntryContract.TABLE_NAME;
+        String entities = EntityContract.TABLE_NAME;
+        String eTOe = DBContract.EtoEContract.TABLE_NAME;
+        String entityID = DBContract.EtoEContract.COLUMN_ENTITY_ID;
+        String entryID = DBContract.EtoEContract.COLUMN_ENTRY_ID;
+        query +=  "FROM ("+entities+" Inner Join "+eTOe+" on "+entities+"._id = "+eTOe+"."+entityID+") ";
+        query += "Inner Join "+entries+" on "+entries+"._id = " + eTOe+"."+entryID;
+        query += " WHERE "+ entities+"."+EntityContract._ID + " = " + id;
+
+        Cursor cursor = new jotDBHelper(context).getReadableDatabase().rawQuery(query, null);
+
+        return getListEntries(cursor);
     }
     public Entry getEntryById(long entryID){
         String[] Values = new String[1];

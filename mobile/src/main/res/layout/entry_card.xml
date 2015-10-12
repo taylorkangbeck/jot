@@ -30,16 +30,6 @@
             android:layout_row="0"
             android:layout_column="0" />
 
-        <com.taylorandtucker.jot.ui.GradientView
-            android:layout_height="fill_parent"
-            android:id="@+id/sentGrad"
-            android:layout_width="120dp"
-            android:visibility="visible"
-            android:foregroundGravity="bottom|right|top"
-            android:background="#fff000"
-            android:layout_row="0"
-            android:layout_column="9" />
-
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

@@ -2,6 +2,8 @@ package com.taylorandtucker.jot.ui;
 
 import android.content.Context;
 import android.database.Cursor;
+import android.graphics.Color;
+import android.graphics.drawable.GradientDrawable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -30,10 +32,11 @@ public class CardCursorAdapter extends CursorAdapter {
 
         TextView entryDateTextView = (TextView) view.findViewById(R.id.entryDate);
         TextView entryBodyTextView = (TextView) view.findViewById(R.id.entryBody);
-        GradientView entrySentimentGradient = (GradientView) view.findViewById(R.id.sentGrad);
+        //GradientView entrySentimentGradient = (GradientView) view.findViewById(R.id.sentGrad);
+        View background = (View) view.findViewById((R.id.cardContent));
 
         // Extract properties from cursor
-        String date = cursor.getString(cursor.getColumnIndexOrThrow("date"));
+        long date = cursor.getLong(cursor.getColumnIndexOrThrow("date"));
         String body = cursor.getString(cursor.getColumnIndexOrThrow("body"));
         double sent = cursor.getDouble(cursor.getColumnIndexOrThrow("sentiment"));
 
@@ -42,8 +45,12 @@ public class CardCursorAdapter extends CursorAdapter {
         entryBodyTextView.setText(body);
 
         //view.setBackgroundDrawable(d);
-
-        entrySentimentGradient.setgradient(sent);
+        int a = Color.WHITE;
+        GradientDrawable d = new GradientDrawable(GradientDrawable.Orientation.BL_TR,
+                new int[] {a,a,a,a,a,a,a,a,GradientView.getColorFromGradient(sent)});
+        d.setCornerRadius(0f);
+        background.setBackground(d);
+       // entrySentimentGradient.setgradient(sent);
 
     }
 

@@ -26,7 +26,7 @@ class GradientView extends View {
         d.setCornerRadius(0f);
         this.setBackground(d);
     }
-    private int getColorFromGradient(double sent){
+    public static int getColorFromGradient(double sent){
     /*double resultRed = color1.red + percent * (color2.red - color1.red);
     double resultGreen = color1.green + percent * (color2.green - color1.green);
     double resultBlue = color1.blue + percent * (color2.blue - color1.blue);

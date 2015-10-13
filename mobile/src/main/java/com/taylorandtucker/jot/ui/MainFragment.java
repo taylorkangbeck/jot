@@ -113,7 +113,6 @@ public class MainFragment extends Fragment implements LoaderManager.LoaderCallba
         }
 
         context = getContext();
-        setupUIKeyboardDisapear(rootView);
         return rootView;
     }
 
@@ -160,65 +159,64 @@ public class MainFragment extends Fragment implements LoaderManager.LoaderCallba
                 });
 
 		
-        // Set up FAB
-        fab = (ImageButton) getActivity().findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                //fabAnim();
-                textEntryReveal(); //instead
-                fab.setVisibility(View.INVISIBLE); //instead
-                invisFrame.setVisibility(View.VISIBLE);
+                // Set up FAB
+                fab = (ImageButton) getActivity().findViewById(R.id.fab);
+                fab.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        //fabAnim();
+                        textEntryReveal(); //instead
+                        fab.setVisibility(View.INVISIBLE); //instead
+                        invisFrame.setVisibility(View.VISIBLE);
+
+                        EditText textEntry = (EditText) getActivity().findViewById(R.id.textEntry);
+                        textEntry.setFocusableInTouchMode(true);
+                        textEntry.requestFocus();
+
+                        InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+                        imm.showSoftInput(textEntry, InputMethodManager.SHOW_IMPLICIT);
+                    }
+                });
+
+                //Set up invis framelayout, onclick hides textentry if it's visible
+                invisFrame = (FrameLayout) getActivity().findViewById(R.id.invisFrame);
+                invisFrame.setOnTouchListener(new View.OnTouchListener() {
+                    @Override
+                    public boolean onTouch(View v, MotionEvent me) {
+                        View textEntryLayout = getActivity().findViewById(R.id.textEntryLayout);
+
+                        if (textEntryLayout.getVisibility() == View.VISIBLE) {
+                            textEntryHide();
+                            InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+                            imm.hideSoftInputFromWindow(v.getWindowToken(), 0);
+                        }
+                        return false;
+                    }
+                });
+        //
+        //        View feed = getActivity().findViewById(R.id.entriesFeed);
+        //        feed.setOnClickListener(new View.OnClickListener() {
+        //            @Override
+        //            public void onClick(View v) {
+        //                View feed = getActivity().findViewById(R.id.entriesFeed);
+        //                feed.setFocusableInTouchMode(true);
+        //                feed.requestFocus();
+        //            }
+        //        });
 
                 EditText textEntry = (EditText) getActivity().findViewById(R.id.textEntry);
-                textEntry.setFocusableInTouchMode(true);
-                textEntry.requestFocus();
+                textEntry.setOnFocusChangeListener(new View.OnFocusChangeListener() {
 
-                InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
-                imm.showSoftInput(textEntry, InputMethodManager.SHOW_IMPLICIT);
-            }
-        });
-
-        //Set up invis framelayout, onclick hides textentry if it's visible
-        invisFrame = (FrameLayout) getActivity().findViewById(R.id.invisFrame);
-        invisFrame.setOnTouchListener(new View.OnTouchListener() {
-            @Override
-            public boolean onTouch(View v, MotionEvent me) {
-                View textEntryLayout = getActivity().findViewById(R.id.textEntryLayout);
-
-                if (textEntryLayout.getVisibility() == View.VISIBLE) {
-                    textEntryHide();
-                    InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
-                    imm.hideSoftInputFromWindow(v.getWindowToken(), 0);
-                }
-                return false;
-            }
-        });
-//
-//        View feed = getActivity().findViewById(R.id.entriesFeed);
-//        feed.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                View feed = getActivity().findViewById(R.id.entriesFeed);
-//                feed.setFocusableInTouchMode(true);
-//                feed.requestFocus();
-//            }
-//        });
-
-        EditText textEntry = (EditText) getActivity().findViewById(R.id.textEntry);
-        textEntry.setOnFocusChangeListener(new View.OnFocusChangeListener() {
-
-            public void onFocusChange(View v, boolean hasFocus) {
-                if (!hasFocus) {
-                    View view = getActivity().getCurrentFocus();
-                    if (view != null) {
-                        InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
-                        imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
+                    public void onFocusChange(View v, boolean hasFocus) {
+                        if (!hasFocus) {
+                            View view = getActivity().getCurrentFocus();
+                            if (view != null) {
+                                InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+                                imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
+                            }
+                        }
                     }
-                }
-            }
-        });
-    }
+                });
                 break;
             case 2:
 

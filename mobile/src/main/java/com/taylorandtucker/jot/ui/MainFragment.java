@@ -235,7 +235,7 @@ public class MainFragment extends Fragment implements LoaderManager.LoaderCallba
                 break;
             default:
         }
-}
+
 
     private void textEntryReveal() {
         //setting up circular reveal
@@ -524,4 +524,4 @@ public class MainFragment extends Fragment implements LoaderManager.LoaderCallba
         InputMethodManager inputMethodManager = (InputMethodManager)  activity.getSystemService(Activity.INPUT_METHOD_SERVICE);
         inputMethodManager.hideSoftInputFromWindow(activity.getCurrentFocus().getWindowToken(), 0);
     }
-}
+    }

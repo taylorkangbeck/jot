@@ -27,7 +27,6 @@ import android.widget.ImageButton;
 import android.widget.ListView;
 
 import com.taylorandtucker.jot.Entry;
-import com.taylorandtucker.jot.NLP.DemoHelper;
 import com.taylorandtucker.jot.NLP.InfoExtractor;
 import com.taylorandtucker.jot.NLP.ProcessedEntry;
 import com.taylorandtucker.jot.R;
@@ -130,8 +129,7 @@ public class MainFragment extends Fragment implements LoaderManager.LoaderCallba
         cardMergeAdapter.addAdapter(cardFragmentAdapter);
 
 
-
-        switch (getArguments().getInt(ARG_SECTION_NUMBER)){
+        switch (getArguments().getInt(ARG_SECTION_NUMBER)) {
             case 1:
 
                 getLoaderManager().initLoader(LOADER_ID, null, this);
@@ -139,8 +137,8 @@ public class MainFragment extends Fragment implements LoaderManager.LoaderCallba
                 final ListView entriesFeed = (ListView) getActivity().findViewById(R.id.entriesFeed);
 
                 mChart = (SentimentGraphFragment) getActivity().findViewById(R.id.chart);
-                if(ie.getAllEntries().size() <= 200){
-                    DemoHelper dh = new DemoHelper(10, 24*60*60, getActivity());
+                if (ie.getAllEntries().size() <= 2) {
+                    //DemoHelper dh = new DemoHelper(10, 24 * 60 * 60, getActivity());
                     System.out.println("DEMO HELPER FINISHED MAKING CALLS");
                 }
                 mChart.updateData(ie.getAllEntries());
@@ -158,7 +156,7 @@ public class MainFragment extends Fragment implements LoaderManager.LoaderCallba
                     }
                 });
 
-		
+
                 // Set up FAB
                 fab = (ImageButton) getActivity().findViewById(R.id.fab);
                 fab.setOnClickListener(new View.OnClickListener() {
@@ -193,16 +191,16 @@ public class MainFragment extends Fragment implements LoaderManager.LoaderCallba
                         return false;
                     }
                 });
-        //
-        //        View feed = getActivity().findViewById(R.id.entriesFeed);
-        //        feed.setOnClickListener(new View.OnClickListener() {
-        //            @Override
-        //            public void onClick(View v) {
-        //                View feed = getActivity().findViewById(R.id.entriesFeed);
-        //                feed.setFocusableInTouchMode(true);
-        //                feed.requestFocus();
-        //            }
-        //        });
+                //
+                //        View feed = getActivity().findViewById(R.id.entriesFeed);
+                //        feed.setOnClickListener(new View.OnClickListener() {
+                //            @Override
+                //            public void onClick(View v) {
+                //                View feed = getActivity().findViewById(R.id.entriesFeed);
+                //                feed.setFocusableInTouchMode(true);
+                //                feed.requestFocus();
+                //            }
+                //        });
 
                 EditText textEntry = (EditText) getActivity().findViewById(R.id.textEntry);
                 textEntry.setOnFocusChangeListener(new View.OnFocusChangeListener() {
@@ -233,7 +231,7 @@ public class MainFragment extends Fragment implements LoaderManager.LoaderCallba
                 break;
             default:
         }
-
+    }
 
     private void textEntryReveal() {
         //setting up circular reveal

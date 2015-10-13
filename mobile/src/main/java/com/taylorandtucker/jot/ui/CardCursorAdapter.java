@@ -45,7 +45,7 @@ public class CardCursorAdapter extends CursorAdapter {
 
         // Populate fields with extracted properties
         Date date = new Date(dateMil*1000);
-        SimpleDateFormat formatter = new SimpleDateFormat("MMM, dd yyyy    h:mm a");
+        SimpleDateFormat formatter = new SimpleDateFormat("EEEE MMM dd, yyyy    h:mm a");
         String formattedDate = formatter.format(date);
         entryDateTextView.setText(formattedDate);
         entryBodyTextView.setText(body);

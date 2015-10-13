@@ -29,6 +29,7 @@ import com.taylorandtucker.jot.R;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -36,12 +37,13 @@ import java.util.List;
  */
 public class SentimentGraphFragment extends LineChart implements OnChartGestureListener, OnChartValueSelectedListener, IFragmentCard {
 
-    private int SECONDS = 1000;
+    private int SECONDS = 1;
     private int MINUTES = SECONDS*60;
     private int HOURS = MINUTES*60;
     private int DAYS = HOURS*24;
+    private int WEEKS = DAYS*7;
     private int MONTHS = DAYS*30;
-    private int YEARS = MONTHS*12;
+    private int YEARS = DAYS*365;
 
     private long startTime;
     private long range;
@@ -127,7 +129,7 @@ public class SentimentGraphFragment extends LineChart implements OnChartGestureL
         //this.getViewPortHandler().setMaximumScaleY(2f);
         //this.getViewPortHandler().setMaximumScaleX(2f);
 
-        xAxis.setLabelsToSkip(60*60);
+        xAxis.setLabelsToSkip(60 * 60);
         //this.animateX(2500, Easing.EasingOption.EaseInOutQuart);
 
         //this.addDatat(entries);
@@ -162,7 +164,7 @@ public class SentimentGraphFragment extends LineChart implements OnChartGestureL
                 double sent = diaryEntry.getSentiment() + .01;
                 long seconds = diaryEntry.getCreatedOn().getTime()/1000;
 
-                yVals.add(new Entry((float) sent, (int) (seconds- startTime)));
+                yVals.add(new Entry((float) sent, (int) (seconds - startTime)));
 
             }
 
@@ -181,6 +183,7 @@ public class SentimentGraphFragment extends LineChart implements OnChartGestureL
 
         }
 
+        this.getViewPortHandler().setMaximumScaleX((float) (range/1.1*HOURS));
 
     }
     public void formatData(List xVals, List yVals) {
@@ -204,7 +207,7 @@ public class SentimentGraphFragment extends LineChart implements OnChartGestureL
     }
     private LineDataSet createSet(List<Entry> data) {
 
-        LineDataSet set1 = new LineDataSet(data, "Dynamic Data");
+        LineDataSet set1 = new LineDataSet(data, "");
         set1.setFillColor(Color.BLUE);
         //set1.setDrawCubic(true);
         set1.setDrawValues(false);
@@ -248,23 +251,16 @@ public class SentimentGraphFragment extends LineChart implements OnChartGestureL
 
     @Override
     public void onChartFling(MotionEvent me1, MotionEvent me2, float velocityX, float velocityY) {
-        Log.i("Fling", "Chart flinged. VeloX: " + velocityX + ", VeloY: " + velocityY);
+
     }
 
     @Override
     public void onChartScale(MotionEvent me, float scaleX, float scaleY) {
-        Log.i("", "" + this.getViewPortHandler().getScaleX());
 
-        List<String> label = new ArrayList<>();
-        label.add(this.getViewPortHandler().getScaleX()+"");
-        this.getLegend().setComputedLabels(label);
-        Log.i("", "low: " + this.getLowestVisibleXIndex() + ", high: " + this.getHighestVisibleXIndex());
     }
 
     @Override
     public void onChartTranslate(MotionEvent me, float dX, float dY) {
-        Log.i("Translate / Move", "dX: " + dX + ", dY: " + dY);
-        Log.i("", "lowwwwwwwwwwwwwww: " + this.getLowestVisibleXIndex() + ", high: " + this.getHighestVisibleXIndex());
     }
 
     @Override
@@ -290,9 +286,11 @@ public class SentimentGraphFragment extends LineChart implements OnChartGestureL
 
             Calendar calendar = Calendar.getInstance();
 
-            calendar.setTimeInMillis((Long.parseLong(original)+startTime)*1000);
+            calendar.setTimeInMillis((Long.parseLong(original) + startTime) * 1000);
 
+            //System.out.println("Center: " + viewPortHandler.);
 
+            Date centerDate = new Date(getMinViewX()*1000);
             int mYear = calendar.get(Calendar.YEAR);
 
             int nMonth = calendar.get(Calendar.MONTH);
@@ -300,16 +298,62 @@ public class SentimentGraphFragment extends LineChart implements OnChartGestureL
             String mMonthDay = new SimpleDateFormat("MM/dd").format(calendar.getTime());
             int mDay = calendar.get(Calendar.DAY_OF_MONTH);
 
+            String xStr = "idk";
+            String bigLabel = "";
+            int skipLabels = DAYS;
 
+            int vpRange = getVPRange();
             // e.g. adjust the x-axis values depending on scale / zoom level
-            if (viewPortHandler.getScaleX() > YEARS/DAYS)
-                return mMonthDay+"";
-            else if (viewPortHandler.getScaleX() > YEARS/MONTHS)
-                return mMonth;
-            else if (viewPortHandler.getScaleX() > YEARS/YEARS)
-                return mYear+"";
-            else
-                return original;
+            if (vpRange > YEARS) {
+                xStr = new SimpleDateFormat("YYYY").format(calendar.getTime());
+                skipLabels = YEARS;
+            }
+            else if (vpRange <= YEARS && vpRange > YEARS / 2) {
+                bigLabel = new SimpleDateFormat("YYYY").format(centerDate);
+                xStr = new SimpleDateFormat("MMM").format(calendar.getTime());
+                skipLabels = MONTHS*2;
+            }
+            else if (vpRange <= YEARS / 2 && vpRange > MONTHS) {
+                bigLabel = new SimpleDateFormat("YYYY").format(centerDate);
+                xStr = new SimpleDateFormat("MMM").format(calendar.getTime());
+                skipLabels = MONTHS;
+            }
+            else if (vpRange <= MONTHS && vpRange > MONTHS/2) {
+                bigLabel = new SimpleDateFormat("MMMM").format(centerDate);
+                xStr = new SimpleDateFormat("dd").format(calendar.getTime());
+                skipLabels = DAYS*5;
+            }
+            else if (vpRange <= MONTHS/2 && vpRange > WEEKS){
+                bigLabel = new SimpleDateFormat("MMMM").format(centerDate);
+                xStr = new SimpleDateFormat("dd").format(calendar.getTime());
+                skipLabels = DAYS*2;
+            }
+            else if (vpRange <= WEEKS && vpRange > DAYS){
+                //todo find closest monday?
+
+                xStr = new SimpleDateFormat("E MM/d").format(calendar.getTime());
+                skipLabels = DAYS;
+            }
+            else if (vpRange <= DAYS && vpRange > DAYS/2){
+                bigLabel = new SimpleDateFormat("EEEE").format(centerDate);
+                xStr = new SimpleDateFormat("h a").format(calendar.getTime());
+                skipLabels = HOURS*4;
+            }
+            else if (vpRange <= DAYS/2 && vpRange > DAYS/4){
+                bigLabel = new SimpleDateFormat("EEEE").format(centerDate);
+                xStr = new SimpleDateFormat("h a").format(calendar.getTime());
+                skipLabels = HOURS*2;
+            }
+            else{
+                bigLabel = new SimpleDateFormat("EEEE").format(centerDate);
+                xStr = new SimpleDateFormat("h a").format(calendar.getTime());
+                skipLabels = HOURS;
+            }
+
+            SentimentGraphFragment.this.getXAxis().setLabelsToSkip(skipLabels);
+            setBigLabel(bigLabel);
+            return xStr;
+
         }
 
     }
@@ -321,5 +365,22 @@ public class SentimentGraphFragment extends LineChart implements OnChartGestureL
             return 0;
             //return dataSet.getYValForXIndex(dataSet.getEntryCount());
         }
+    }
+    private int getVPRange(){
+        return  (int) (range/getViewPortHandler().getScaleX());
+    }
+    private long getMidViewPoint(){
+        return getMinViewX() + range/2;
+    }
+    private long getMinViewX(){
+        return startTime + getLowestVisibleXIndex();
+    }
+    private long getMaxViewX(){
+        return startTime + getHighestVisibleXIndex();
+    }
+    private void setBigLabel(String text){
+        List<String> label = new ArrayList<>();
+        label.add(text);
+        SentimentGraphFragment.this.getLegend().setComputedLabels(label);
     }
 }

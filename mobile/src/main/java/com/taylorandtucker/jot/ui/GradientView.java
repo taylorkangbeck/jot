@@ -37,7 +37,7 @@ class GradientView extends View {
         int redG = Color.green(red);
         int redB = Color.blue(red);
 
-        int yellow = Color.YELLOW;
+        int yellow = Color.WHITE;
         int yellowR = Color.red(yellow);
         int yellowG = Color.green(yellow);
         int yellowB = Color.blue(yellow);

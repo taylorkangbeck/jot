@@ -129,7 +129,7 @@ public class SentimentGraphFragment extends LineChart implements OnChartGestureL
         //this.getViewPortHandler().setMaximumScaleY(2f);
         //this.getViewPortHandler().setMaximumScaleX(2f);
 
-        xAxis.setLabelsToSkip(60 * 60);
+        xAxis.setLabelsToSkip(60 * 60*24);
         //this.animateX(2500, Easing.EasingOption.EaseInOutQuart);
 
         //this.addDatat(entries);

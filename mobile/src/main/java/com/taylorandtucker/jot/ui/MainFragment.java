@@ -1,5 +1,7 @@
 package com.taylorandtucker.jot.ui;
 
+import android.animation.Animator;
+import android.animation.AnimatorListenerAdapter;
 import android.app.Activity;
 import android.content.Context;
 import android.database.Cursor;
@@ -13,10 +15,15 @@ import android.support.v4.content.Loader;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.ViewAnimationUtils;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
+import android.view.animation.TranslateAnimation;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.FrameLayout;
+import android.widget.ImageButton;
 import android.widget.ListView;
 
 import com.taylorandtucker.jot.Entry;
@@ -64,6 +71,9 @@ public class MainFragment extends Fragment implements LoaderManager.LoaderCallba
     private Context context;
     private SentimentGraphFragment mChart;
 
+    private ImageButton fab;
+    private FrameLayout invisFrame;
+
     /**
      * Returns a new instance of this fragment for the given section
      * number.
@@ -76,8 +86,7 @@ public class MainFragment extends Fragment implements LoaderManager.LoaderCallba
         return fragment;
     }
 
-    public MainFragment() {
-    }
+    public MainFragment() {}
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -122,6 +131,7 @@ public class MainFragment extends Fragment implements LoaderManager.LoaderCallba
         cardMergeAdapter.addAdapter(cardFragmentAdapter);
 
 
+
         switch (getArguments().getInt(ARG_SECTION_NUMBER)){
             case 1:
 
@@ -148,6 +158,67 @@ public class MainFragment extends Fragment implements LoaderManager.LoaderCallba
                         onSubmit();
                     }
                 });
+
+		
+        // Set up FAB
+        fab = (ImageButton) getActivity().findViewById(R.id.fab);
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //fabAnim();
+                textEntryReveal(); //instead
+                fab.setVisibility(View.INVISIBLE); //instead
+                invisFrame.setVisibility(View.VISIBLE);
+
+                EditText textEntry = (EditText) getActivity().findViewById(R.id.textEntry);
+                textEntry.setFocusableInTouchMode(true);
+                textEntry.requestFocus();
+
+                InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+                imm.showSoftInput(textEntry, InputMethodManager.SHOW_IMPLICIT);
+            }
+        });
+
+        //Set up invis framelayout, onclick hides textentry if it's visible
+        invisFrame = (FrameLayout) getActivity().findViewById(R.id.invisFrame);
+        invisFrame.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent me) {
+                View textEntryLayout = getActivity().findViewById(R.id.textEntryLayout);
+
+                if (textEntryLayout.getVisibility() == View.VISIBLE) {
+                    textEntryHide();
+                    InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+                    imm.hideSoftInputFromWindow(v.getWindowToken(), 0);
+                }
+                return false;
+            }
+        });
+//
+//        View feed = getActivity().findViewById(R.id.entriesFeed);
+//        feed.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                View feed = getActivity().findViewById(R.id.entriesFeed);
+//                feed.setFocusableInTouchMode(true);
+//                feed.requestFocus();
+//            }
+//        });
+
+        EditText textEntry = (EditText) getActivity().findViewById(R.id.textEntry);
+        textEntry.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+
+            public void onFocusChange(View v, boolean hasFocus) {
+                if (!hasFocus) {
+                    View view = getActivity().getCurrentFocus();
+                    if (view != null) {
+                        InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+                        imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
+                    }
+                }
+            }
+        });
+    }
                 break;
             case 2:
 
@@ -164,6 +235,87 @@ public class MainFragment extends Fragment implements LoaderManager.LoaderCallba
                 break;
             default:
         }
+}
+
+    private void textEntryReveal() {
+        //setting up circular reveal
+
+        View textEntryLayout = getActivity().findViewById(R.id.textEntryLayout);
+
+        View submitButton = getActivity().findViewById(R.id.submitButton);
+        int cx = (submitButton.getLeft() + submitButton.getRight())  / 2;
+        int cy = (submitButton.getTop() + submitButton.getBottom())  / 2;
+
+        int startRadius = fab.getWidth()/2;
+        int finalRadius = Math.max(textEntryLayout.getWidth(), textEntryLayout.getHeight());
+        Animator anim =
+                ViewAnimationUtils.createCircularReveal(textEntryLayout, cx, cy, startRadius, finalRadius);
+        textEntryLayout.setVisibility(View.VISIBLE);
+        anim.start();
+    }
+
+    private void textEntryHide() {
+        final View myView = getActivity().findViewById(R.id.textEntryLayout);
+
+        View submitButton = getActivity().findViewById(R.id.submitButton);
+        int cx = (submitButton.getLeft() + submitButton.getRight())  / 2;
+        int cy = (submitButton.getTop() + submitButton.getBottom())  / 2;
+
+        // get the initial radius for the clipping circle
+        int initialRadius = myView.getWidth() / 2;
+
+        // create the animation (the final radius is zero)
+        Animator anim =
+                ViewAnimationUtils.createCircularReveal(myView, cx, cy, initialRadius, 0);
+
+        // make the view invisible when the animation is done
+        anim.addListener(new AnimatorListenerAdapter() {
+            @Override
+            public void onAnimationEnd(Animator animation) {
+                super.onAnimationEnd(animation);
+                myView.setVisibility(View.INVISIBLE);
+                fab.setVisibility(View.VISIBLE);
+                invisFrame.setVisibility(View.INVISIBLE);
+            }
+        });
+
+        // start the animation
+        anim.start();
+    }
+
+    private void fabAnim() {
+        //Moving the fab
+        int[] fabLoc = {0,0};
+        fab.getLocationOnScreen(fabLoc);
+        int[] subLoc = {0,0};
+        View submitButton = getActivity().findViewById(R.id.submitButton);
+        submitButton.getLocationOnScreen(subLoc);
+        int subMidx = (submitButton.getLeft() + submitButton.getRight())  / 2;
+        int subMidy = (submitButton.getTop() + submitButton.getBottom())  / 2;
+        int dx = subMidx - (fab.getLeft() + fab.getRight())/2;
+        int dy = subMidy - (fab.getTop() + fab.getBottom())/2;
+
+        TranslateAnimation animation = new TranslateAnimation(0, dx, 0, dy);
+        animation.setDuration(150);
+        animation.setFillAfter(false);
+        animation.setAnimationListener(new Animation.AnimationListener() {
+            @Override
+            public void onAnimationEnd(Animation animation) {
+                textEntryReveal();
+                fab.setVisibility(View.INVISIBLE);
+            }
+
+            @Override
+            public void onAnimationRepeat(Animation animation) {
+            }
+
+            @Override
+            public void onAnimationStart(Animation animation) {
+            }
+        });
+
+        fab.startAnimation(animation);
+
     }
 
     @Override
@@ -193,6 +345,7 @@ public class MainFragment extends Fragment implements LoaderManager.LoaderCallba
             InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
             imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
             entryText.setText("");
+            textEntryHide();
         }
     }
 

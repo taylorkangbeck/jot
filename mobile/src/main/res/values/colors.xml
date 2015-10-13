@@ -3,4 +3,6 @@
     <color name="textEntryBackground">#FF7043</color>
     <color name="entryCardBackground">#FFFFFF</color>
     <color name="mainBackground">#eaeaea</color>
+    <color name="ColorPrimary">#FF5722</color>
+    <color name="ColorPrimaryDark">#E64A19</color>
 </resources>

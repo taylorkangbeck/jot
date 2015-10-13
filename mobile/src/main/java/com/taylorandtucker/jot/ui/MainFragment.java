@@ -1,6 +1,7 @@
 package com.taylorandtucker.jot.ui;
 
 import android.animation.Animator;
+import android.animation.AnimatorListenerAdapter;
 import android.app.Activity;
 import android.content.Context;
 import android.database.Cursor;
@@ -12,6 +13,7 @@ import android.support.v4.app.LoaderManager;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewAnimationUtils;
 import android.view.ViewGroup;
@@ -20,6 +22,7 @@ import android.view.animation.TranslateAnimation;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.FrameLayout;
 import android.widget.ImageButton;
 import android.widget.ListView;
 
@@ -66,6 +69,7 @@ public class MainFragment extends Fragment implements LoaderManager.LoaderCallba
     private SentimentGraphFragment mChart;
 
     private ImageButton fab;
+    private FrameLayout invisFrame;
 
     /**
      * Returns a new instance of this fragment for the given section
@@ -130,10 +134,33 @@ mChart = (SentimentGraphFragment) getActivity().findViewById(R.id.chart);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                fabAnim();
+                //fabAnim();
+                textEntryReveal(); //instead
+                fab.setVisibility(View.INVISIBLE); //instead
+                invisFrame.setVisibility(View.VISIBLE);
+
                 EditText textEntry = (EditText) getActivity().findViewById(R.id.textEntry);
                 textEntry.setFocusableInTouchMode(true);
                 textEntry.requestFocus();
+
+                InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+                imm.showSoftInput(textEntry, InputMethodManager.SHOW_IMPLICIT);
+            }
+        });
+
+        //Set up invis framelayout, onclick hides textentry if it's visible
+        invisFrame = (FrameLayout) getActivity().findViewById(R.id.invisFrame);
+        invisFrame.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent me) {
+                View textEntryLayout = getActivity().findViewById(R.id.textEntryLayout);
+
+                if (textEntryLayout.getVisibility() == View.VISIBLE) {
+                    textEntryHide();
+                    InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+                    imm.hideSoftInputFromWindow(v.getWindowToken(), 0);
+                }
+                return false;
             }
         });
 //
@@ -176,6 +203,35 @@ mChart = (SentimentGraphFragment) getActivity().findViewById(R.id.chart);
         Animator anim =
                 ViewAnimationUtils.createCircularReveal(textEntryLayout, cx, cy, startRadius, finalRadius);
         textEntryLayout.setVisibility(View.VISIBLE);
+        anim.start();
+    }
+
+    private void textEntryHide() {
+        final View myView = getActivity().findViewById(R.id.textEntryLayout);
+
+        View submitButton = getActivity().findViewById(R.id.submitButton);
+        int cx = (submitButton.getLeft() + submitButton.getRight())  / 2;
+        int cy = (submitButton.getTop() + submitButton.getBottom())  / 2;
+
+        // get the initial radius for the clipping circle
+        int initialRadius = myView.getWidth() / 2;
+
+        // create the animation (the final radius is zero)
+        Animator anim =
+                ViewAnimationUtils.createCircularReveal(myView, cx, cy, initialRadius, 0);
+
+        // make the view invisible when the animation is done
+        anim.addListener(new AnimatorListenerAdapter() {
+            @Override
+            public void onAnimationEnd(Animator animation) {
+                super.onAnimationEnd(animation);
+                myView.setVisibility(View.INVISIBLE);
+                fab.setVisibility(View.VISIBLE);
+                invisFrame.setVisibility(View.INVISIBLE);
+            }
+        });
+
+        // start the animation
         anim.start();
     }
 
@@ -240,6 +296,7 @@ mChart = (SentimentGraphFragment) getActivity().findViewById(R.id.chart);
             InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
             imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
             entryText.setText("");
+            textEntryHide();
         }
 
 

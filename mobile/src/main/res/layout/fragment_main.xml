@@ -3,7 +3,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".PlaceholderFragment"
-    android:background="@color/mainBackground">
+    android:background="@color/mainBackground"
+    android:id="@+id/mainfrag">
 
     <com.taylorandtucker.jot.ui.SentimentGraphFragment
         android:id="@+id/chart"
@@ -17,8 +18,8 @@
         android:id="@+id/entriesFeed"
         android:divider="@null"
         android:dividerHeight="0dp"
-        android:layout_above="@+id/textEntryLayout"
-        android:layout_below="@+id/chart">
+        android:layout_below="@+id/chart"
+        android:layout_alignParentBottom="true">
         <!--
                 android:layout_alignParentBottom="true"
                 android:focusableInTouchMode="true"
@@ -55,6 +56,13 @@
             android:onClick="onSubmit"
             android:layout_alignBottom="@+id/textEntry" />
     </RelativeLayout>
+
+    <FrameLayout
+        android:id="@+id/invisFrame"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_above="@+id/textEntryLayout"
+        android:visibility="invisible"></FrameLayout>
 
     <ImageButton
         android:layout_width="70dp"

@@ -95,14 +95,18 @@ public class MainActivity extends AppCompatActivity
             searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
                 @Override
                 public boolean onQueryTextSubmit(String query) {
-                    //TODO
+                    //TODO hide keyboard
                     return true;
                 }
 
                 @Override
                 public boolean onQueryTextChange(String query) {
+                    if (query == "") {
+                        //TODO reset cursor to original
+                    }
 
-                    //do query and sqap cursor
+
+                    //do query and swap cursor
                     String[] Values = new String[1];
                     Values[0] = query;
                     Cursor c = getApplicationContext().getContentResolver().query(DBContentProvider.ENTITY_URI, DBUtils.entityProjection, "name = ?", Values, null);

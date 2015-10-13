@@ -172,7 +172,7 @@ public class SentimentGraphFragment extends LineChart implements OnChartGestureL
             int endX = yVals.get(yVals.size() - 1).getXIndex();
 
             range = endX - startX;
-
+            System.out.println("Range!: " + range);
             ArrayList<String> xVals = new ArrayList<String>();
             for (int i = startX ; i <= endX; i++) {
 

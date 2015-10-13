@@ -20,6 +20,7 @@ import android.widget.EditText;
 import android.widget.ListView;
 
 import com.taylorandtucker.jot.Entry;
+import com.taylorandtucker.jot.NLP.DemoHelper;
 import com.taylorandtucker.jot.NLP.InfoExtractor;
 import com.taylorandtucker.jot.NLP.ProcessedEntry;
 import com.taylorandtucker.jot.R;
@@ -82,6 +83,7 @@ public class MainFragment extends Fragment implements LoaderManager.LoaderCallba
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
+
         View rootView;
         switch (getArguments().getInt(ARG_SECTION_NUMBER)){
             case 1:
@@ -128,6 +130,10 @@ public class MainFragment extends Fragment implements LoaderManager.LoaderCallba
                 final ListView entriesFeed = (ListView) getActivity().findViewById(R.id.entriesFeed);
 
                 mChart = (SentimentGraphFragment) getActivity().findViewById(R.id.chart);
+                if(ie.getAllEntries().size() <= 200){
+                    DemoHelper dh = new DemoHelper(10, 24*60*60, getActivity());
+                    System.out.println("DEMO HELPER FINISHED MAKING CALLS");
+                }
                 mChart.updateData(ie.getAllEntries());
 
                 cardCursorAdapter = new CardCursorAdapter(getContext(), null);

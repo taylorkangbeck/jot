@@ -1,5 +1,32 @@
 package com.taylorandtucker.jot.NLP;
 
+import android.app.Activity;
+import android.net.Uri;
+import android.os.AsyncTask;
+
+import com.taylorandtucker.jot.Entry;
+
+import org.apache.http.HttpEntity;
+import org.apache.http.HttpResponse;
+import org.apache.http.client.ClientProtocolException;
+import org.apache.http.client.HttpClient;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.entity.ByteArrayEntity;
+import org.apache.http.impl.client.DefaultHttpClient;
+import org.xml.sax.InputSource;
+
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Date;
+import java.util.List;
+import java.util.Random;
+
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+
 /**
  * Created by tuckerkirven on 10/11/15.
  */
@@ -21,6 +48,132 @@ public class DemoHelper {
             "\n" +
             "Yeah...i should get start with my 2 essays but i really don't feel like doing it. I think i'm going watch a tv-show instead. Maybe ex on the beatch. The Swedish version of it. I usual don't like that type of tv-shows but i've tried other things and it's kinda okay. So yup.\n" +
             "\n" +
-            "Hope y'll had a great day. I didn't but i'm about to change that now"
-            
+            "Hope y'll had a great day. I didn't but i'm about to change that now. ";
+
+    String entryNeutralShort = "this is supposed to be a neutral enty. ";
+    String entryNeutralLong = "This is supposed to be a neutral entry with a little bit more length. These are just words with no meaning or significant sentiment. ";
+
+    String entryNegativeShort = "This is bad. ";
+    String entryNegativeLong = "This is the worst thing ever! I hate this so much! ";
+
+    String entryPositiveShort = "This is good. ";
+    String entryVeryPositiveShort = "This is great! ";
+
+    String a = entryNeutralShort;
+    String b = entryNeutralLong;
+    String c = entryNegativeShort;
+    String d = entryPositiveShort;
+    String e = entryVeryPositiveShort;
+    String f = entryNegativeLong;
+
+    Activity activity;
+    public DemoHelper(int numEntries, int avgTimeSecBetween, Activity activity) {
+        this.activity = activity;
+
+        List entries = Arrays.asList(a, b, c, d, e, f);
+
+        long nowSec = new Date().getTime()/1000;
+        List fakeEntries = new ArrayList();
+        List dates = new ArrayList();
+        Random rand = new Random();
+        for (int i = 0; i < numEntries; i++){
+            int randomNum = rand.nextInt(6);
+            String entry = "";
+            for (int j = 0; j < randomNum; j++){
+                int randSent = rand.nextInt((entries.size()));
+                entry += entries.get(randSent);
+            }
+            //fakeEntries.add(entry);
+
+            long nextTime = nowSec - rand.nextInt(avgTimeSecBetween)-avgTimeSecBetween/2;
+            System.out.println("nextTime: " + nextTime);
+            //dates.add(nextTime);
+            nowSec = nextTime;
+
+            process(entry,nextTime);
+        }
+
+
+    }
+
+    public void process(String entryText, long dateSec){
+        final Entry entry = new Entry(new Date(dateSec*1000), entryText);
+
+        InfoExtractor ie = new InfoExtractor(activity);
+
+        Uri uri = ie.putEntry(entry);
+        String[] segments = uri.getPath().split("/");
+        String idStr = segments[segments.length-1];
+
+        RetrieveNLPdata nlp = new RetrieveNLPdata(idStr, entry.getBody());
+        nlp.execute();
+    }
+    class RetrieveNLPdata extends AsyncTask<Void, Void, Void> {
+
+        private String entryID;
+        private String entry;
+
+        public RetrieveNLPdata(String entryID, String entry) {
+            this.entryID = entryID;
+            this.entry = entry;
+        }
+
+        protected Void doInBackground(Void... param) {
+            // Create a new HttpClient and Post Header
+            HttpClient httpclient = new DefaultHttpClient();
+            HttpPost httppost = new HttpPost("http://54.173.123.6:8000/entry");
+
+            try {
+                HttpEntity entity = new ByteArrayEntity(entry.getBytes("UTF-8"));
+                httppost.setEntity(entity);
+
+                // Execute HTTP Post Request
+                HttpResponse response = httpclient.execute(httppost);
+
+                BufferedReader rd = new BufferedReader(new InputStreamReader(response.getEntity().getContent()));
+                String line = "";
+                String xml = "";
+
+                DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
+                DocumentBuilder builder;
+                InputSource is;
+
+                while ((line = rd.readLine()) != null) {
+                    xml += line;
+                }
+
+                final ProcessedEntry ent = new ProcessedEntry(xml);
+
+
+                InfoExtractor ie = new InfoExtractor(activity);
+                ie.processNewEntryData(Long.parseLong(entryID), ent);
+
+                final List entries = ie.getAllEntries();
+
+                System.out.println("===================== ENTITIES =======================");
+
+
+
+                System.out.println("===================== ENTRIES =======================");
+
+                /*
+                    DBUtils utils = DBUtils.getInstance(getContext());
+                    cardCursorAdapter.swapCursor(utils.getAllEntriesQuery());
+                */
+
+                return null;
+
+            } catch (ClientProtocolException e) {
+                System.out.println(e);
+                return null;
+                // TODO Auto-generated catch block
+            } catch (IOException e) {
+                System.out.println(e);
+                return null;
+                // TODO Auto-generated catch block
+            }
+
+        }
+
+    }
 }

@@ -479,6 +479,7 @@ public class MainFragment extends Fragment implements LoaderManager.LoaderCallba
 
                 System.out.println("===================== ENTITIES =======================");
 
+                
 
 
                 System.out.println("===================== ENTRIES =======================");

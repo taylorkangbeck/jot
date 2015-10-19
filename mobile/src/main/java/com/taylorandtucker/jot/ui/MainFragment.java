@@ -48,6 +48,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.List;
+import java.util.Map;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -471,15 +472,21 @@ public class MainFragment extends Fragment implements LoaderManager.LoaderCallba
                 getActivity().runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                       if(mChart != null) {
-                           mChart.updateData(entries);
-                       }
+                        if (mChart != null) {
+                            mChart.updateData(entries);
+                        }
                     }
                 });
 
                 System.out.println("===================== ENTITIES =======================");
 
-                
+                Map<String, Integer> entityMap = ent.personSentiment();
+
+                for(Map.Entry<String, Integer> a: entityMap.entrySet()){
+                    System.out.println(a.getKey() + " : " + a.getValue());
+                }
+
+
 
 
                 System.out.println("===================== ENTRIES =======================");

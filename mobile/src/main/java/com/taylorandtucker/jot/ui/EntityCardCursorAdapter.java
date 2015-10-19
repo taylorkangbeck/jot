@@ -15,6 +15,7 @@ import android.widget.CursorAdapter;
 import android.widget.TextView;
 
 import com.taylorandtucker.jot.R;
+import com.taylorandtucker.jot.localdb.DBContract.EntityContract;
 
 /**
  * Created by Taylor on 9/16/2015.
@@ -56,9 +57,9 @@ public class EntityCardCursorAdapter extends CursorAdapter {
         View background = (View) view.findViewById((R.id.cardContent));
 
         // Extract properties from cursor
-        String name = cursor.getString(cursor.getColumnIndexOrThrow("name"));
-        double sent = cursor.getDouble(cursor.getColumnIndexOrThrow("sentiment"));
-        int mentions = cursor.getInt(cursor.getColumnIndex("importance"));
+        String name = cursor.getString(cursor.getColumnIndexOrThrow(EntityContract.COLUMN_NAME));
+        double sent = cursor.getDouble(cursor.getColumnIndexOrThrow(EntityContract.COLUMN_SENTIMENT));
+        int mentions = cursor.getInt(cursor.getColumnIndex(EntityContract.COLUMN_IMPORTANCE));
 
         // Populate fields with extracted properties
         entityNameTextView.setText(name);
@@ -73,7 +74,7 @@ public class EntityCardCursorAdapter extends CursorAdapter {
         int a = Color.WHITE;
         GradientDrawable d = new GradientDrawable(GradientDrawable.Orientation.BL_TR,
                 new int[] {a,a,a,a,a,a,a,a,GradientView.getColorFromGradient(sent)});
-        d.setCornerRadius(0f);
+        d.setCornerRadius(20f);
         background.setBackground(d);
     }
 }

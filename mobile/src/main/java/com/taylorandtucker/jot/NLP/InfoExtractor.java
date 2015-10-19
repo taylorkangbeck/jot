@@ -49,7 +49,7 @@ public class InfoExtractor {
                 null,
                 DBContract.EntryContract.COLUMN_DATE + " ASC");
 
-        List<Entry> l = getListEntries(c);
+        List<Entry> l = getListEntries(c, false);
 
         return l;
     }
@@ -67,14 +67,14 @@ public class InfoExtractor {
 
         Cursor cursor = new jotDBHelper(context).getReadableDatabase().rawQuery(query, null);
 
-        return getListEntries(cursor);
+        return getListEntries(cursor, true);
     }
     public Entry getEntryById(long entryID){
         String[] Values = new String[1];
         Values[0] = entryID+"";
         Cursor c = context.getContentResolver().query(DBContentProvider.ENTRY_URI, DBUtils.entryProjection, "_id = ?", Values, null);
 
-        List<Entry> l = getListEntries(c);
+        List<Entry> l = getListEntries(c, false);
         if (!l.isEmpty())
             return l.get(0);
         else
@@ -199,11 +199,16 @@ public class InfoExtractor {
         long days = hours / 24;
         return days;
     }
-    private List<Entry> getListEntries(Cursor c){
+    private List<Entry> getListEntries(Cursor c, boolean entitySent){
         List<Entry> l = new ArrayList<Entry>();
         while(c.moveToNext()){
             long date = c.getLong(c.getColumnIndex(EntryContract.COLUMN_DATE));
-            double sent  = c.getDouble(c.getColumnIndex(EntryContract.COLUMN_SENTIMENT));
+            double sent;
+            if (entitySent)
+                sent = c.getDouble(c.getColumnIndex(EntityContract.COLUMN_SENTIMENT));
+            else
+                sent  = c.getDouble(c.getColumnIndex(EntryContract.COLUMN_SENTIMENT));
+
             String body = c.getString(c.getColumnIndex(EntryContract.COLUMN_BODY));
 
             Entry ent  = new Entry(new Date(date*1000), body);

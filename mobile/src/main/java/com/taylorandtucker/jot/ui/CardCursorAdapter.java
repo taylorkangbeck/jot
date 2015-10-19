@@ -11,6 +11,7 @@ import android.widget.CursorAdapter;
 import android.widget.TextView;
 
 import com.taylorandtucker.jot.R;
+import com.taylorandtucker.jot.localdb.DBContract.EntryContract;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -50,9 +51,9 @@ public class CardCursorAdapter extends CursorAdapter {
         View background = (View) view.findViewById((R.id.cardContent));
 
         // Extract properties from cursor
-        long dateMil = cursor.getLong(cursor.getColumnIndexOrThrow("date"));
-        String body = cursor.getString(cursor.getColumnIndexOrThrow("body"));
-        double sent = cursor.getDouble(cursor.getColumnIndexOrThrow("sentiment"));
+        long dateMil = cursor.getLong(cursor.getColumnIndexOrThrow(EntryContract.COLUMN_DATE));
+        String body = cursor.getString(cursor.getColumnIndexOrThrow(EntryContract.COLUMN_BODY));
+        double sent = cursor.getDouble(cursor.getColumnIndexOrThrow(EntryContract.COLUMN_SENTIMENT));
 
         // Populate fields with extracted properties
         Date date = new Date(dateMil*1000);

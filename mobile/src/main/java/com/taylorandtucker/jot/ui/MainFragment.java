@@ -27,7 +27,6 @@ import android.widget.ImageButton;
 import android.widget.ListView;
 
 import com.taylorandtucker.jot.Entry;
-import com.taylorandtucker.jot.NLP.DemoHelper;
 import com.taylorandtucker.jot.NLP.InfoExtractor;
 import com.taylorandtucker.jot.NLP.ProcessedEntry;
 import com.taylorandtucker.jot.R;
@@ -88,6 +87,7 @@ public class MainFragment extends Fragment implements LoaderManager.LoaderCallba
 
     public MainFragment() {}
 
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -139,11 +139,15 @@ public class MainFragment extends Fragment implements LoaderManager.LoaderCallba
 
                 mChart = (SentimentGraphFragment) getActivity().findViewById(R.id.chart);
                 if (ie.getAllEntries().size() <= 2) {
-                    DemoHelper dh = new DemoHelper(35, 2*24 * 60 * 60, getActivity(), mChart);
+                   // DemoHelper dh = new DemoHelper(35, 2*24 * 60 * 60, getActivity(), mChart);
                     System.out.println("DEMO HELPER FINISHED MAKING CALLS");
                 }
                 mChart.updateData(ie.getAllEntries());
 
+                for (int i = 0; i < 40; i++){
+                    System.out.println((2-i/10));
+                    GradientView.getColorFromGradient(2.0 - i/10.0);
+                }
                 cardCursorAdapter = new CardCursorAdapter(getContext(), null);
                 cardMergeAdapter.addAdapter(cardCursorAdapter);
                 entriesFeed.setAdapter(cardMergeAdapter);

@@ -144,6 +144,26 @@ public class SentimentGraphFragment extends LineChart implements OnChartGestureL
         // // dont forget to refresh the drawing
          this.invalidate();
 
+
+    }
+
+    @Override
+    public void onWindowFocusChanged(boolean hasWindowFocus) {
+        super.onWindowFocusChanged(hasWindowFocus);
+        setGradient();
+    }
+
+    public void setGradient(){
+        Paint paintRenderer =  this.getRenderer().getPaintRender();
+
+        int[] gradColors = {Color.GREEN, Color.LTGRAY, Color.RED};
+
+        float startY = this.getViewPortHandler().contentTop();
+        float endY = this.getViewPortHandler().contentBottom();
+
+        System.out.println("top = " + startY);
+        System.out.println("bottom = " + endY);
+        paintRenderer.setShader(new LinearGradient(0, startY, 0, endY, gradColors, null, Shader.TileMode.MIRROR));
     }
 
     private List<DayEntry> dataToDays(List<com.taylorandtucker.jot.Entry> origEntries){
@@ -202,7 +222,7 @@ public class SentimentGraphFragment extends LineChart implements OnChartGestureL
                 int day = diaryEntry.day;
 
                 System.out.println(day+ " : " +startTime);
-                yVals.add(new Entry((float) sent, (int) (day-startTime)));
+                yVals.add(new Entry((float) sent, (int) (day - startTime)));
             }
 
             int startX = yVals.get(0).getXIndex();
@@ -241,6 +261,7 @@ public class SentimentGraphFragment extends LineChart implements OnChartGestureL
 
         this.setData(data);
         this.invalidate();
+
     }
     private LineDataSet createSet(List<Entry> data) {
 
@@ -262,11 +283,6 @@ public class SentimentGraphFragment extends LineChart implements OnChartGestureL
         set1.setDrawFilled(true);
         set1.setFillFormatter(new MyCustomFillFormatter());
 
-        Paint paintRenderer =  this.getRenderer().getPaintRender();
-
-        float height = mViewPortHandler.getContentCenter().y;
-        int[] gradColors = {Color.GREEN, Color.LTGRAY, Color.RED};
-        paintRenderer.setShader(new LinearGradient(0, 20, 0, 600, gradColors, null, Shader.TileMode.MIRROR));
         set1.setColor(Color.DKGRAY);
         return set1;
     }
@@ -303,6 +319,7 @@ public class SentimentGraphFragment extends LineChart implements OnChartGestureL
     @Override
     public void onValueSelected(Entry e, int dataSetIndex, Highlight h) {
         Log.i("Entry selected", e.toString());
+        setGradient();
 
     }
 

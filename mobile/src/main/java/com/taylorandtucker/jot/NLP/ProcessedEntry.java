@@ -49,7 +49,7 @@ public class ProcessedEntry {
         return sum/((float)sents.size());
     }
     //returns a list of integer sentiment values for each sentence
-    private List<Integer> getSentenceSentiments(){
+    public List<Integer> getSentenceSentiments(){
      List sentenceSents = new ArrayList<Integer>();
 
         NodeList sNodes = getSentenceNodes();

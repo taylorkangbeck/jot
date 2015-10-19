@@ -1,5 +1,8 @@
 package com.taylorandtucker.jot;
 
+import org.joda.time.Days;
+import org.joda.time.MutableDateTime;
+
 import java.util.Date;
 
 /**
@@ -24,6 +27,14 @@ public class Entry {
         return createdOn;
     }
 
+    public int createdDaysAfterEpoch(){
+        MutableDateTime epoch = new MutableDateTime();
+        epoch.setDate(0); //Set to Epoch time
+        MutableDateTime now = new MutableDateTime();
+        now.setDate(getCreatedOn().getTime());
+
+        return Days.daysBetween(epoch, now).getDays();
+    }
     public void setCreatedOn(Date createdOn) {
         this.createdOn = createdOn;
     }

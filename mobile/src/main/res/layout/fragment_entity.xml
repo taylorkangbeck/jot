@@ -13,13 +13,17 @@
         android:text="Large Text"
         android:id="@+id/entityNameView"
         android:layout_alignParentEnd="true"
-        android:layout_alignParentRight="true" />
+        android:layout_alignParentRight="true"
+        android:layout_alignParentStart="true"
+        android:gravity="right"
+        android:background="@color/ChartDarkGrey"
+        android:textColor="@color/mainBackground"/>
 
     <com.taylorandtucker.jot.ui.SentimentGraphFragment
         android:id="@+id/chartE"
         android:layout_height="200dp"
         android:layout_width="match_parent"
-        android:layout_below="@+id/entNameView" />
+        android:layout_below="@+id/entityNameView" />
 
     <ListView
         android:layout_width="match_parent"
@@ -30,5 +34,38 @@
         android:layout_above="@+id/textEntryLayout"
         android:layout_below="@+id/chartE">
     </ListView>
+
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentRight="true"
+        android:gravity="bottom"
+        android:id="@+id/textEntryLayout"
+        android:background="@color/textEntryBackground"
+        android:visibility="invisible">
+
+        <EditText
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/textEntry"
+            android:layout_toLeftOf="@+id/submitButton"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentBottom="false" />
+
+        <Button
+            style="?android:attr/buttonStyleSmall"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Submit"
+            android:id="@+id/submitButton"
+            android:layout_alignParentEnd="false"
+            android:layout_alignParentRight="true"
+            android:onClick="onSubmit"
+            android:layout_alignBottom="@+id/textEntry" />
+    </RelativeLayout>
+
 
 </RelativeLayout>

@@ -50,6 +50,7 @@ public class InfoExtractor {
                 DBContract.EntryContract.COLUMN_DATE + " ASC");
 
         List<Entry> l = getListEntries(c);
+
         return l;
     }
     public List<Entry> getEntriesForEntity(long id){
@@ -71,7 +72,7 @@ public class InfoExtractor {
     public Entry getEntryById(long entryID){
         String[] Values = new String[1];
         Values[0] = entryID+"";
-        Cursor c = context.getContentResolver().query(DBContentProvider.ENTITY_URI, DBUtils.entityProjection, "_id = ?", Values, null);
+        Cursor c = context.getContentResolver().query(DBContentProvider.ENTRY_URI, DBUtils.entryProjection, "_id = ?", Values, null);
 
         List<Entry> l = getListEntries(c);
         if (!l.isEmpty())
@@ -121,9 +122,6 @@ public class InfoExtractor {
         values.put(EntityContract.COLUMN_NAME, name);
         values.put(EntityContract.COLUMN_SENTIMENT, sentVal);
         values.put(EntityContract.COLUMN_IMPORTANCE, getInitialImportance());
-        System.out.println("insterting entity to: ");
-        System.out.println(context.getContentResolver().insert(DBContentProvider.ENTITY_URI, values));
-
     }
     public Entity getEntityByName(String name){
         String[] Values = new String[1];
@@ -218,6 +216,7 @@ public class InfoExtractor {
             double sent = c.getDouble(c.getColumnIndex(EntityContract.COLUMN_SENTIMENT));
             int imp = c.getInt(c.getColumnIndex(EntityContract.COLUMN_IMPORTANCE));
             long id = c.getLong(c.getColumnIndex(EntityContract._ID));
+
 
             Entity ent = new Entity(name, imp, sent);
             ent.setId(id);

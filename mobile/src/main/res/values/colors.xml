@@ -5,4 +5,5 @@
     <color name="mainBackground">#eaeaea</color>
     <color name="ColorPrimary">#FF5722</color>
     <color name="ColorPrimaryDark">#E64A19</color>
+    <color name="ChartDarkGrey">#ff444444</color>
 </resources>

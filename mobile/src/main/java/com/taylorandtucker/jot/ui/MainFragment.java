@@ -27,6 +27,7 @@ import android.widget.ImageButton;
 import android.widget.ListView;
 
 import com.taylorandtucker.jot.Entry;
+import com.taylorandtucker.jot.NLP.DemoHelper;
 import com.taylorandtucker.jot.NLP.InfoExtractor;
 import com.taylorandtucker.jot.NLP.ProcessedEntry;
 import com.taylorandtucker.jot.R;
@@ -138,7 +139,7 @@ public class MainFragment extends Fragment implements LoaderManager.LoaderCallba
 
                 mChart = (SentimentGraphFragment) getActivity().findViewById(R.id.chart);
                 if (ie.getAllEntries().size() <= 2) {
-                    //DemoHelper dh = new DemoHelper(10, 24 * 60 * 60, getActivity());
+                    DemoHelper dh = new DemoHelper(35, 2*24 * 60 * 60, getActivity(), mChart);
                     System.out.println("DEMO HELPER FINISHED MAKING CALLS");
                 }
                 mChart.updateData(ie.getAllEntries());
@@ -147,74 +148,7 @@ public class MainFragment extends Fragment implements LoaderManager.LoaderCallba
                 cardMergeAdapter.addAdapter(cardCursorAdapter);
                 entriesFeed.setAdapter(cardMergeAdapter);
 
-                // submit listener
-                Button submitButton = (Button) getActivity().findViewById(R.id.submitButton);
-                submitButton.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        onSubmit();
-                    }
-                });
-
-
-                // Set up FAB
-                fab = (ImageButton) getActivity().findViewById(R.id.fab);
-                fab.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        //fabAnim();
-                        textEntryReveal(); //instead
-                        fab.setVisibility(View.INVISIBLE); //instead
-                        invisFrame.setVisibility(View.VISIBLE);
-
-                        EditText textEntry = (EditText) getActivity().findViewById(R.id.textEntry);
-                        textEntry.setFocusableInTouchMode(true);
-                        textEntry.requestFocus();
-
-                        InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
-                        imm.showSoftInput(textEntry, InputMethodManager.SHOW_IMPLICIT);
-                    }
-                });
-
-                //Set up invis framelayout, onclick hides textentry if it's visible
-                invisFrame = (FrameLayout) getActivity().findViewById(R.id.invisFrame);
-                invisFrame.setOnTouchListener(new View.OnTouchListener() {
-                    @Override
-                    public boolean onTouch(View v, MotionEvent me) {
-                        View textEntryLayout = getActivity().findViewById(R.id.textEntryLayout);
-
-                        if (textEntryLayout.getVisibility() == View.VISIBLE) {
-                            textEntryHide();
-                            InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
-                            imm.hideSoftInputFromWindow(v.getWindowToken(), 0);
-                        }
-                        return false;
-                    }
-                });
-                //
-                //        View feed = getActivity().findViewById(R.id.entriesFeed);
-                //        feed.setOnClickListener(new View.OnClickListener() {
-                //            @Override
-                //            public void onClick(View v) {
-                //                View feed = getActivity().findViewById(R.id.entriesFeed);
-                //                feed.setFocusableInTouchMode(true);
-                //                feed.requestFocus();
-                //            }
-                //        });
-
-                EditText textEntry = (EditText) getActivity().findViewById(R.id.textEntry);
-                textEntry.setOnFocusChangeListener(new View.OnFocusChangeListener() {
-
-                    public void onFocusChange(View v, boolean hasFocus) {
-                        if (!hasFocus) {
-                            View view = getActivity().getCurrentFocus();
-                            if (view != null) {
-                                InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
-                                imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
-                            }
-                        }
-                    }
-                });
+                setupFAB();
                 break;
             case 2:
 
@@ -225,12 +159,85 @@ public class MainFragment extends Fragment implements LoaderManager.LoaderCallba
                 entityCardCursorAdapter = new EntityCardCursorAdapter(getContext(), null);
                 cardMergeAdapter.addAdapter(entityCardCursorAdapter);
                 entitiesFeed.setAdapter(cardMergeAdapter);
+
+                setupFAB();
+
                 break;
             case 3:
 
                 break;
             default:
         }
+    }
+    private void setupFAB(){
+        // submit listener
+        Button submitButton = (Button) getActivity().findViewById(R.id.submitButton);
+        submitButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onSubmit();
+            }
+        });
+
+
+        // Set up FAB
+        fab = (ImageButton) getActivity().findViewById(R.id.fab);
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //fabAnim();
+                textEntryReveal(); //instead
+                fab.setVisibility(View.INVISIBLE); //instead
+                invisFrame.setVisibility(View.VISIBLE);
+
+                EditText textEntry = (EditText) getActivity().findViewById(R.id.textEntry);
+                textEntry.setFocusableInTouchMode(true);
+                textEntry.requestFocus();
+
+                InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+                imm.showSoftInput(textEntry, InputMethodManager.SHOW_IMPLICIT);
+            }
+        });
+
+        //Set up invis framelayout, onclick hides textentry if it's visible
+        invisFrame = (FrameLayout) getActivity().findViewById(R.id.invisFrame);
+        invisFrame.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent me) {
+                View textEntryLayout = getActivity().findViewById(R.id.textEntryLayout);
+
+                if (textEntryLayout.getVisibility() == View.VISIBLE) {
+                    textEntryHide();
+                    InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+                    imm.hideSoftInputFromWindow(v.getWindowToken(), 0);
+                }
+                return false;
+            }
+        });
+        //
+        //        View feed = getActivity().findViewById(R.id.entriesFeed);
+        //        feed.setOnClickListener(new View.OnClickListener() {
+        //            @Override
+        //            public void onClick(View v) {
+        //                View feed = getActivity().findViewById(R.id.entriesFeed);
+        //                feed.setFocusableInTouchMode(true);
+        //                feed.requestFocus();
+        //            }
+        //        });
+
+        EditText textEntry = (EditText) getActivity().findViewById(R.id.textEntry);
+        textEntry.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+
+            public void onFocusChange(View v, boolean hasFocus) {
+                if (!hasFocus) {
+                    View view = getActivity().getCurrentFocus();
+                    if (view != null) {
+                        InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+                        imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
+                    }
+                }
+            }
+        });
     }
 
     private void textEntryReveal() {
@@ -355,7 +362,7 @@ public class MainFragment extends Fragment implements LoaderManager.LoaderCallba
         switch (getArguments().getInt(ARG_SECTION_NUMBER)){
             case 1:
                 projection = DBUtils.entryProjection;
-                sortOrder = EntryContract._ID + " DESC";
+                sortOrder = EntryContract.COLUMN_DATE + " DESC";
                 uri = DBContentProvider.ENTRY_URI;
                 break;
             case 2:
@@ -460,7 +467,9 @@ public class MainFragment extends Fragment implements LoaderManager.LoaderCallba
                 getActivity().runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        mChart.updateData(entries);
+                       if(mChart != null) {
+                           mChart.updateData(entries);
+                       }
                     }
                 });
 

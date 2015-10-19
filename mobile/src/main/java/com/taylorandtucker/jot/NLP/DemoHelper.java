@@ -5,6 +5,7 @@ import android.net.Uri;
 import android.os.AsyncTask;
 
 import com.taylorandtucker.jot.Entry;
+import com.taylorandtucker.jot.ui.SentimentGraphFragment;
 
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
@@ -22,10 +23,12 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 import java.util.Random;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
+
 
 /**
  * Created by tuckerkirven on 10/11/15.
@@ -50,8 +53,8 @@ public class DemoHelper {
             "\n" +
             "Hope y'll had a great day. I didn't but i'm about to change that now. ";
 
-    String entryNeutralShort = "this is supposed to be a neutral enty. ";
-    String entryNeutralLong = "This is supposed to be a neutral entry with a little bit more length. These are just words with no meaning or significant sentiment. ";
+    String entryNeutralShort = "this is supposed to be a neutral sentence. ";
+    String entryNeutralLong = "This is supposed to be a neutral sentence with more length. These are average words. ";
 
     String entryNegativeShort = "This is bad. ";
     String entryNegativeLong = "This is the worst thing ever! I hate this so much! ";
@@ -67,47 +70,52 @@ public class DemoHelper {
     String f = entryNegativeLong;
 
     Activity activity;
-    public DemoHelper(int numEntries, int avgTimeSecBetween, Activity activity) {
+
+    SentimentGraphFragment sgChart;
+
+    public DemoHelper(int numEntries, int avgTimeSecBetween, Activity activity, SentimentGraphFragment sgChart) {
         this.activity = activity;
+        this.sgChart = sgChart;
 
         List entries = Arrays.asList(a, b, c, d, e, f);
 
-        long nowSec = new Date().getTime()/1000;
+        long nowSec = new Date().getTime() / 1000;
         List fakeEntries = new ArrayList();
         List dates = new ArrayList();
         Random rand = new Random();
-        for (int i = 0; i < numEntries; i++){
-            int randomNum = rand.nextInt(6);
+        for (int i = 0; i < numEntries; i++) {
+            int randomNum = rand.nextInt(4)+1;
             String entry = "";
-            for (int j = 0; j < randomNum; j++){
+            for (int j = 0; j < randomNum; j++) {
                 int randSent = rand.nextInt((entries.size()));
                 entry += entries.get(randSent);
             }
             //fakeEntries.add(entry);
 
-            long nextTime = nowSec - rand.nextInt(avgTimeSecBetween)-avgTimeSecBetween/2;
+            long nextTime = nowSec - rand.nextInt(avgTimeSecBetween) - avgTimeSecBetween / 2;
             System.out.println("nextTime: " + nextTime);
             //dates.add(nextTime);
             nowSec = nextTime;
 
-            process(entry,nextTime);
+            process(entry, nextTime);
         }
 
 
     }
 
-    public void process(String entryText, long dateSec){
-        final Entry entry = new Entry(new Date(dateSec*1000), entryText);
+    public void process(String entryText, long dateSec) {
+        final Entry entry = new Entry(new Date(dateSec * 1000), entryText);
 
         InfoExtractor ie = new InfoExtractor(activity);
 
         Uri uri = ie.putEntry(entry);
         String[] segments = uri.getPath().split("/");
-        String idStr = segments[segments.length-1];
+        String idStr = segments[segments.length - 1];
 
         RetrieveNLPdata nlp = new RetrieveNLPdata(idStr, entry.getBody());
         nlp.execute();
     }
+
     class RetrieveNLPdata extends AsyncTask<Void, Void, Void> {
 
         private String entryID;
@@ -148,9 +156,36 @@ public class DemoHelper {
                 InfoExtractor ie = new InfoExtractor(activity);
                 ie.processNewEntryData(Long.parseLong(entryID), ent);
 
-                final List entries = ie.getAllEntries();
 
-                System.out.println("===================== ENTITIES =======================");
+
+                final List entries = ie.getAllEntries();
+                activity.runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        if(sgChart != null) {
+                            sgChart.updateData(entries);
+                        }
+                    }
+                });
+
+                String entryText = ie.getEntryById(Long.parseLong(entryID)).getBody();
+
+                Map<String, Integer> a = ent.personSentiment();
+                double b = ent.getEntrySentiment();
+                System.out.println("===============================================================");
+                System.out.println(entryText);
+                System.out.print("ENTRY CUM SUM: ");
+                System.out.println(b);
+                System.out.print("IND SENT SENT: ");
+                for (int val : ent.getSentenceSentiments()) {
+                    System.out.print(val);
+                }
+                System.out.println();
+                System.out.print("ENTITIES: ");
+                for (Map.Entry<String, Integer> entry : a.entrySet()) {
+                    System.out.print(entry.getKey() + " : " + entry.getValue());
+                }
+                System.out.println();
 
 
 
@@ -174,6 +209,7 @@ public class DemoHelper {
             }
 
         }
-
     }
+
+
 }

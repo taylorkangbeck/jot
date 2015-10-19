@@ -62,7 +62,13 @@ public class EntityCardCursorAdapter extends CursorAdapter {
 
         // Populate fields with extracted properties
         entityNameTextView.setText(name);
-        entityMentionTextView.setText(mentions + " entries");
+
+        String eString = "entries";
+
+        if (mentions == 1)
+            eString = "entry";
+
+        entityMentionTextView.setText(mentions + " " + eString);
 
         int a = Color.WHITE;
         GradientDrawable d = new GradientDrawable(GradientDrawable.Orientation.BL_TR,

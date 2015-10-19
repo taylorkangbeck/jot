@@ -485,6 +485,7 @@ public class MainFragment extends Fragment implements LoaderManager.LoaderCallba
                 for(Map.Entry<String, Integer> a: entityMap.entrySet()){
                     System.out.println(a.getKey() + " : " + a.getValue());
                 }
+                System.out.println("entity count : " + ie.getAllEntitiesByImportance().size());
 
 
 

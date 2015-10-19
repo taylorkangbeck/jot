@@ -122,6 +122,8 @@ public class InfoExtractor {
         values.put(EntityContract.COLUMN_NAME, name);
         values.put(EntityContract.COLUMN_SENTIMENT, sentVal);
         values.put(EntityContract.COLUMN_IMPORTANCE, getInitialImportance());
+
+        System.out.println(context.getContentResolver().insert(DBContentProvider.ENTITY_URI, values));
     }
     public Entity getEntityByName(String name){
         String[] Values = new String[1];
@@ -135,9 +137,11 @@ public class InfoExtractor {
             return null;
     }
 
+    //Keeps same name - updates all other values
     public void updateEntityByName(String name, int importance, double sentiment){
         updateEntityByName(name, name, importance, sentiment);
     }
+    //changes name
     public void updateEntityByName(String name, String newName, int importance, double sentiment){
         ContentValues values = new ContentValues();
         values.put(EntityContract.COLUMN_SENTIMENT, sentiment);

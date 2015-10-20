@@ -154,6 +154,13 @@ public class SentimentGraphFragment extends LineChart implements OnChartGestureL
     }
 
     public void setGradient(){
+
+        try {
+            wait(200);
+        }catch(Exception e){
+
+        }
+
         Paint paintRenderer =  this.getRenderer().getPaintRender();
 
         int[] gradColors = {Color.GREEN, Color.LTGRAY, Color.RED};
@@ -240,7 +247,11 @@ public class SentimentGraphFragment extends LineChart implements OnChartGestureL
 
         }
 
-        this.getViewPortHandler().setMaximumScaleX((float) (range/1.1*HOURS));
+        //setting the max scale and range min does something dumb andscrolls to the end of the chart
+        //when max scale is reached. dumb
+        //this.getViewPortHandler().setMaximumScaleX((float) (2));
+        //this.setVisibleXRangeMinimum(7f);
+
 
     }
     public void formatData(List xVals, List yVals) {
@@ -358,7 +369,7 @@ public class SentimentGraphFragment extends LineChart implements OnChartGestureL
             String bigLabel = "";
             long skipLabels = DAYS;
 
-            int vpRange = getVPRange();
+            long vpRange = getVPRange();
             // e.g. adjust the x-axis values depending on scale / zoom level
 
 
@@ -410,9 +421,9 @@ public class SentimentGraphFragment extends LineChart implements OnChartGestureL
             //return dataSet.getYValForXIndex(dataSet.getEntryCount());
         }
     }
-    private int getVPRange(){
+    private long getVPRange(){
 
-        return  (int) ((DAYS*range)/getViewPortHandler().getScaleX());
+        return (long) ((DAYS*range)/getViewPortHandler().getScaleX());
     }
     private long getMidViewPoint(){
         return getMinViewX()*DAYS + range/2;

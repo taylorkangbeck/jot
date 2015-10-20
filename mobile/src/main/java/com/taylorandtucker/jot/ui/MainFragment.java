@@ -27,6 +27,7 @@ import android.widget.ImageButton;
 import android.widget.ListView;
 
 import com.taylorandtucker.jot.Entry;
+import com.taylorandtucker.jot.NLP.DemoHelper;
 import com.taylorandtucker.jot.NLP.InfoExtractor;
 import com.taylorandtucker.jot.NLP.ProcessedEntry;
 import com.taylorandtucker.jot.R;
@@ -86,7 +87,8 @@ public class MainFragment extends Fragment implements LoaderManager.LoaderCallba
         return fragment;
     }
 
-    public MainFragment() {}
+    public MainFragment() {
+    }
 
 
     @Override
@@ -95,7 +97,7 @@ public class MainFragment extends Fragment implements LoaderManager.LoaderCallba
 
 
         View rootView;
-        switch (getArguments().getInt(ARG_SECTION_NUMBER)){
+        switch (getArguments().getInt(ARG_SECTION_NUMBER)) {
             case 1:
                 System.out.println("CASE1");
                 rootView = inflater.inflate(R.layout.fragment_main, container, false);
@@ -140,14 +142,14 @@ public class MainFragment extends Fragment implements LoaderManager.LoaderCallba
 
                 mChart = (SentimentGraphFragment) getActivity().findViewById(R.id.chart);
                 if (ie.getAllEntries().size() <= 2) {
-                   // DemoHelper dh = new DemoHelper(35, 2*24 * 60 * 60, getActivity(), mChart);
+                    DemoHelper dh = new DemoHelper(60, 4 * 24 * 60 * 60, getActivity(), mChart);
                     System.out.println("DEMO HELPER FINISHED MAKING CALLS");
                 }
                 mChart.updateData(ie.getAllEntries());
 
-                for (int i = 0; i < 40; i++){
-                    System.out.println((2-i/10));
-                    GradientView.getColorFromGradient(2.0 - i/10.0);
+                for (int i = 0; i < 40; i++) {
+                    System.out.println((2 - i / 10));
+                    GradientView.getColorFromGradient(2.0 - i / 10.0);
                 }
                 cardCursorAdapter = new CardCursorAdapter(getContext(), null);
                 cardMergeAdapter.addAdapter(cardCursorAdapter);
@@ -174,7 +176,8 @@ public class MainFragment extends Fragment implements LoaderManager.LoaderCallba
             default:
         }
     }
-    private void setupFAB(){
+
+    private void setupFAB() {
         // submit listener
         Button submitButton = (Button) getActivity().findViewById(R.id.submitButton);
         submitButton.setOnClickListener(new View.OnClickListener() {
@@ -245,16 +248,24 @@ public class MainFragment extends Fragment implements LoaderManager.LoaderCallba
         });
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+        if (mChart != null) {
+            mChart.setGradient();
+        }
+    }
+
     private void textEntryReveal() {
         //setting up circular reveal
 
         View textEntryLayout = getActivity().findViewById(R.id.textEntryLayout);
 
         View submitButton = getActivity().findViewById(R.id.submitButton);
-        int cx = (submitButton.getLeft() + submitButton.getRight())  / 2;
-        int cy = (submitButton.getTop() + submitButton.getBottom())  / 2;
+        int cx = (submitButton.getLeft() + submitButton.getRight()) / 2;
+        int cy = (submitButton.getTop() + submitButton.getBottom()) / 2;
 
-        int startRadius = fab.getWidth()/2;
+        int startRadius = fab.getWidth() / 2;
         int finalRadius = Math.max(textEntryLayout.getWidth(), textEntryLayout.getHeight());
         Animator anim =
                 ViewAnimationUtils.createCircularReveal(textEntryLayout, cx, cy, startRadius, finalRadius);
@@ -266,8 +277,8 @@ public class MainFragment extends Fragment implements LoaderManager.LoaderCallba
         final View myView = getActivity().findViewById(R.id.textEntryLayout);
 
         View submitButton = getActivity().findViewById(R.id.submitButton);
-        int cx = (submitButton.getLeft() + submitButton.getRight())  / 2;
-        int cy = (submitButton.getTop() + submitButton.getBottom())  / 2;
+        int cx = (submitButton.getLeft() + submitButton.getRight()) / 2;
+        int cy = (submitButton.getTop() + submitButton.getBottom()) / 2;
 
         // get the initial radius for the clipping circle
         int initialRadius = myView.getWidth() / 2;
@@ -293,15 +304,15 @@ public class MainFragment extends Fragment implements LoaderManager.LoaderCallba
 
     private void fabAnim() {
         //Moving the fab
-        int[] fabLoc = {0,0};
+        int[] fabLoc = {0, 0};
         fab.getLocationOnScreen(fabLoc);
-        int[] subLoc = {0,0};
+        int[] subLoc = {0, 0};
         View submitButton = getActivity().findViewById(R.id.submitButton);
         submitButton.getLocationOnScreen(subLoc);
-        int subMidx = (submitButton.getLeft() + submitButton.getRight())  / 2;
-        int subMidy = (submitButton.getTop() + submitButton.getBottom())  / 2;
-        int dx = subMidx - (fab.getLeft() + fab.getRight())/2;
-        int dy = subMidy - (fab.getTop() + fab.getBottom())/2;
+        int subMidx = (submitButton.getLeft() + submitButton.getRight()) / 2;
+        int subMidy = (submitButton.getTop() + submitButton.getBottom()) / 2;
+        int dx = subMidx - (fab.getLeft() + fab.getRight()) / 2;
+        int dy = subMidy - (fab.getTop() + fab.getBottom()) / 2;
 
         TranslateAnimation animation = new TranslateAnimation(0, dx, 0, dy);
         animation.setDuration(150);
@@ -343,7 +354,7 @@ public class MainFragment extends Fragment implements LoaderManager.LoaderCallba
 
             Uri uri = ie.putEntry(entry);
             String[] segments = uri.getPath().split("/");
-            String idStr = segments[segments.length-1];
+            String idStr = segments[segments.length - 1];
 
             RetrieveNLPdata nlp = new RetrieveNLPdata(idStr, entry.getBody());
             nlp.execute();
@@ -364,14 +375,14 @@ public class MainFragment extends Fragment implements LoaderManager.LoaderCallba
         Uri uri;
 
         View rootView;
-        switch (getArguments().getInt(ARG_SECTION_NUMBER)){
+        switch (getArguments().getInt(ARG_SECTION_NUMBER)) {
             case 1:
                 projection = DBUtils.entryProjection;
                 sortOrder = EntryContract.COLUMN_DATE + " DESC";
                 uri = DBContentProvider.ENTRY_URI;
                 break;
             case 2:
-               projection = DBUtils.entityProjection;
+                projection = DBUtils.entityProjection;
                 sortOrder = EntityContract.COLUMN_IMPORTANCE + " DESC";
                 uri = DBContentProvider.ENTITY_URI;
                 break;
@@ -394,7 +405,7 @@ public class MainFragment extends Fragment implements LoaderManager.LoaderCallba
 
     @Override
     public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
-        switch (getArguments().getInt(ARG_SECTION_NUMBER)){
+        switch (getArguments().getInt(ARG_SECTION_NUMBER)) {
             case 1:
                 cardCursorAdapter.swapCursor(data);
                 break;
@@ -411,7 +422,7 @@ public class MainFragment extends Fragment implements LoaderManager.LoaderCallba
 
     @Override
     public void onLoaderReset(Loader<Cursor> loader) {
-        switch (getArguments().getInt(ARG_SECTION_NUMBER)){
+        switch (getArguments().getInt(ARG_SECTION_NUMBER)) {
             case 1:
                 cardCursorAdapter.swapCursor(null);
                 break;
@@ -464,7 +475,7 @@ public class MainFragment extends Fragment implements LoaderManager.LoaderCallba
                 final ProcessedEntry ent = new ProcessedEntry(xml);
 
 
-                 InfoExtractor ie = new InfoExtractor(getActivity());
+                InfoExtractor ie = new InfoExtractor(getActivity());
                 ie.processNewEntryData(Long.parseLong(entryID), ent);
 
                 final List entries = ie.getAllEntries();
@@ -482,12 +493,10 @@ public class MainFragment extends Fragment implements LoaderManager.LoaderCallba
 
                 Map<String, Integer> entityMap = ent.personSentiment();
 
-                for(Map.Entry<String, Integer> a: entityMap.entrySet()){
+                for (Map.Entry<String, Integer> a : entityMap.entrySet()) {
                     System.out.println(a.getKey() + " : " + a.getValue());
                 }
                 System.out.println("entity count : " + ie.getAllEntitiesByImportance().size());
-
-
 
 
                 System.out.println("===================== ENTRIES =======================");
@@ -506,16 +515,17 @@ public class MainFragment extends Fragment implements LoaderManager.LoaderCallba
             } catch (IOException e) {
                 System.out.println(e);
                 return null;
-            // TODO Auto-generated catch block
+                // TODO Auto-generated catch block
             }
 
         }
 
     }
+
     public void setupUIKeyboardDisapear(View view) {
 
         //Set up touch listener for non-text box views to hide keyboard.
-        if(!(view instanceof EditText)) {
+        if (!(view instanceof EditText)) {
 
             view.setOnTouchListener(new View.OnTouchListener() {
 
@@ -538,8 +548,9 @@ public class MainFragment extends Fragment implements LoaderManager.LoaderCallba
             }
         }
     }
+
     public static void hideSoftKeyboard(Activity activity) {
-        InputMethodManager inputMethodManager = (InputMethodManager)  activity.getSystemService(Activity.INPUT_METHOD_SERVICE);
+        InputMethodManager inputMethodManager = (InputMethodManager) activity.getSystemService(Activity.INPUT_METHOD_SERVICE);
         inputMethodManager.hideSoftInputFromWindow(activity.getCurrentFocus().getWindowToken(), 0);
     }
-    }
+}

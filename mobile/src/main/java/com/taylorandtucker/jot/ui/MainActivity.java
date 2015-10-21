@@ -1,5 +1,6 @@
 package com.taylorandtucker.jot.ui;
 
+import android.app.Activity;
 import android.app.SearchManager;
 import android.content.Context;
 import android.database.Cursor;
@@ -11,13 +12,13 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.SearchView;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.ImageButton;
 
 import com.taylorandtucker.jot.R;
 import com.taylorandtucker.jot.localdb.DBContentProvider;
+import com.taylorandtucker.jot.localdb.DBContract;
 import com.taylorandtucker.jot.localdb.DBUtils;
-
-//import android.support.v7.widget.SearchView;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationDrawerFragment.NavigationDrawerCallbacks {
@@ -69,7 +70,9 @@ public class MainActivity extends AppCompatActivity
             case 3:
                 mTitle = getString(R.string.title_section3);
                 break;
-            //TODO add settings link here
+            case 4:
+                mTitle = getString(R.string.action_settings);
+                break;
         }
     }
 
@@ -95,14 +98,23 @@ public class MainActivity extends AppCompatActivity
             searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
                 @Override
                 public boolean onQueryTextSubmit(String query) {
-                    //TODO hide keyboard
+                    //hiding keyboard
+                    InputMethodManager inputMethodManager = (InputMethodManager) getSystemService(Activity.INPUT_METHOD_SERVICE);
+                    inputMethodManager.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), 0);
                     return true;
                 }
 
                 @Override
                 public boolean onQueryTextChange(String query) {
+                    CardCursorAdapter cardCursorAdapter = CardCursorAdapter.getInstance(getApplicationContext(), null);
                     if (query == "") {
-                        //TODO reset cursor to original
+                        //reset cursor to original
+                        Cursor c = getContentResolver().query(DBContentProvider.ENTRY_URI,
+                                DBUtils.entryProjection,
+                                null,
+                                null,
+                                DBContract.EntryContract.COLUMN_DATE + " ASC");
+                        cardCursorAdapter.swapCursor(c);
                     }
 
 
@@ -110,12 +122,8 @@ public class MainActivity extends AppCompatActivity
                     String[] Values = new String[1];
                     Values[0] = query;
                     Cursor c = getApplicationContext().getContentResolver().query(DBContentProvider.ENTITY_URI, DBUtils.entityProjection, "name = ?", Values, null);
-                    CardCursorAdapter.getInstance(getApplicationContext(), c);
-
-                    //TODO when cleared, set original cursor
-
+                    cardCursorAdapter.swapCursor(c);
                     return true;
-
                 }
 
             });

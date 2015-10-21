@@ -22,7 +22,7 @@
         android:layout_alignParentRight="true"
         android:gravity="bottom"
         android:id="@+id/textEntryLayout"
-        android:background="@color/textEntryBackground"
+        android:background="@color/ColorPrimary"
         android:visibility="invisible">
 
         <EditText

@@ -75,6 +75,9 @@ public class MainFragment extends Fragment implements LoaderManager.LoaderCallba
     private ImageButton fab;
     private FrameLayout invisFrame;
 
+    private long minTimeChart = 0;
+    private long maxTimeChart = Long.MAX_VALUE;
+
     /**
      * Returns a new instance of this fragment for the given section
      * number.
@@ -149,13 +152,16 @@ public class MainFragment extends Fragment implements LoaderManager.LoaderCallba
 
                 mChart.addVPListener(new SentimentGraphFragment.GraphVPListener() {
                     @Override
-                    public void onNodeSelected(long date) {
+                    public void onNodeSelected(long startOfDay, long endOfDay) {
 
                     }
 
                     @Override
-                    public void onVPRangeChange(long startDate, long endDate) {
-
+                    public void onVPRangeChange(long startDate, long endDate)
+                    {
+                        minTimeChart = startDate;
+                        maxTimeChart = endDate;
+                        getLoaderManager().restartLoader(LOADER_ID, null, MainFragment.this);
                     }
                 });
 
@@ -393,7 +399,10 @@ public class MainFragment extends Fragment implements LoaderManager.LoaderCallba
     public Loader<Cursor> onCreateLoader(int id, Bundle args) {
         String[] projection;
         String sortOrder;
+        String selection;
+        String[] selectionArgs;
         Uri uri;
+
 
         View rootView;
         switch (getArguments().getInt(ARG_SECTION_NUMBER)) {
@@ -401,25 +410,34 @@ public class MainFragment extends Fragment implements LoaderManager.LoaderCallba
                 projection = DBUtils.entryProjection;
                 sortOrder = EntryContract.COLUMN_DATE + " DESC";
                 uri = DBContentProvider.ENTRY_URI;
+                selection = EntryContract.COLUMN_DATE + " BETWEEN ? and ? ";
+                selectionArgs = new String[] {Long.toString(minTimeChart / 1000), Long.toString(maxTimeChart/1000)};
+
                 break;
             case 2:
                 projection = DBUtils.entityProjection;
                 sortOrder = EntityContract.COLUMN_IMPORTANCE + " DESC";
                 uri = DBContentProvider.ENTITY_URI;
+                selection = null;
+                selectionArgs = null;
                 break;
             case 3:
                 projection = DBUtils.entityProjection;
                 sortOrder = EntityContract.COLUMN_IMPORTANCE + " DESC";
                 uri = DBContentProvider.ENTITY_URI;
+                selection = null;
+                selectionArgs = null;
                 break;
             default:
                 projection = DBUtils.entityProjection;
                 sortOrder = EntityContract.COLUMN_IMPORTANCE + " DESC";
                 uri = DBContentProvider.ENTITY_URI;
+                selection = null;
+                selectionArgs = null;
 
         }
 
-        CursorLoader cursorLoader = new CursorLoader(getContext(), uri, projection, null, null, sortOrder);
+        CursorLoader cursorLoader = new CursorLoader(getContext(), uri, projection, selection, selectionArgs, sortOrder);
 
         return cursorLoader;
     }

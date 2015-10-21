@@ -147,14 +147,14 @@ public class MainFragment extends Fragment implements LoaderManager.LoaderCallba
                 }
                 mChart.updateData(ie.getAllEntries());
 
-                mChart.addVPListener(new SentimentGraphFragment.graphVPChangeListener() {
+                mChart.addVPListener(new SentimentGraphFragment.GraphVPListener() {
                     @Override
-                    public void onNodeClicked(long date) {
+                    public void onNodeSelected(long date) {
 
                     }
 
                     @Override
-                    public void onVPChange(long startDate, long endDate) {
+                    public void onVPRangeChange(long startDate, long endDate) {
 
                     }
                 });
@@ -499,10 +499,6 @@ public class MainFragment extends Fragment implements LoaderManager.LoaderCallba
                 InfoExtractor ie = new InfoExtractor(getActivity());
                 ie.processNewEntryData(Long.parseLong(entryID), ent);
 
-
-                InfoExtractor ie = new InfoExtractor(getActivity());
-                ie.processNewEntryData(Long.parseLong(entryID), ent);
-
                 final List entries = ie.getAllEntries();
 
 
@@ -581,8 +577,5 @@ public class MainFragment extends Fragment implements LoaderManager.LoaderCallba
         InputMethodManager inputMethodManager = (InputMethodManager) activity.getSystemService(Activity.INPUT_METHOD_SERVICE);
         inputMethodManager.hideSoftInputFromWindow(activity.getCurrentFocus().getWindowToken(), 0);
     }
-<<<<<<< HEAD
-=======
 
->>>>>>> taylor
 }

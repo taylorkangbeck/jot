@@ -47,10 +47,14 @@ public class SentimentGraphFragment extends LineChart implements OnChartGestureL
 
     private long startTime;
     private long range;
-    private List<com.taylorandtucker.jot.Entry> entryList;
 
+    private GraphVPListener graphVPListener;
     private final int layoutId = R.layout.fragment_sentiment_graph;
 
+    public interface GraphVPListener{
+        public void onVPRangeChange(long startDate, long endDate);
+        public void onNodeSelected(long dateSelected);
+    }
     //private Cursor dataCursor;
     @Override
     public int getLayoutResourceId()
@@ -68,6 +72,9 @@ public class SentimentGraphFragment extends LineChart implements OnChartGestureL
         setupChart();
     }
 
+    public void addVPListener(GraphVPListener vpl){
+        this.graphVPListener = vpl;
+    }
     public void setupChart() {
         this.setOnChartGestureListener(this);
         this.setOnChartValueSelectedListener(this);

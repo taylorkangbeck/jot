@@ -256,6 +256,15 @@ public class MainFragment extends Fragment implements LoaderManager.LoaderCallba
         }
     }
 
+    @Override
+    public void onStart() {
+        super.onStart();
+        if (mChart != null) {
+            mChart.setGradient();
+        }
+
+    }
+
     private void textEntryReveal() {
         //setting up circular reveal
 

@@ -106,23 +106,24 @@ public class MainActivity extends AppCompatActivity
 
                 @Override
                 public boolean onQueryTextChange(String query) {
-                    CardCursorAdapter cardCursorAdapter = CardCursorAdapter.getInstance(getApplicationContext(), null);
+                    Cursor c;
                     if (query == "") {
                         //reset cursor to original
-                        Cursor c = getContentResolver().query(DBContentProvider.ENTRY_URI,
+                        c = getContentResolver().query(DBContentProvider.ENTRY_URI,
                                 DBUtils.entryProjection,
                                 null,
                                 null,
                                 DBContract.EntryContract.COLUMN_DATE + " ASC");
-                        cardCursorAdapter.swapCursor(c);
                     }
+                    else {
 
-
-                    //do query and swap cursor
-                    String[] Values = new String[1];
-                    Values[0] = query;
-                    Cursor c = getApplicationContext().getContentResolver().query(DBContentProvider.ENTITY_URI, DBUtils.entityProjection, "name = ?", Values, null);
-                    cardCursorAdapter.swapCursor(c);
+                        //do query and swap cursor
+                        String[] Values = new String[1];
+                        Values[0] = query;
+                        c = getApplicationContext().getContentResolver().query(DBContentProvider.ENTITY_URI, DBUtils.entityProjection, "name = ?", Values, null);
+                    }
+                    //this also does the cursor change, perhaps rewrite to be more explicitly named
+                    CardCursorAdapter.getInstance(getApplicationContext(), c);
                     return true;
                 }
 

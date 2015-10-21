@@ -32,7 +32,7 @@ public class CardCursorAdapter extends CursorAdapter {
     public static CardCursorAdapter getInstance(Context context, Cursor cursor) {
         if (instance == null)
             instance = new CardCursorAdapter(context, cursor);
-        else
+        else if (cursor != null)
             instance.changeCursor(cursor);
         return instance;
     }

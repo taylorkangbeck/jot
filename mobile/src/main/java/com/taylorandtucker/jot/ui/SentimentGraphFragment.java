@@ -26,6 +26,8 @@ import com.github.mikephil.charting.listener.OnChartValueSelectedListener;
 import com.github.mikephil.charting.utils.ViewPortHandler;
 import com.taylorandtucker.jot.R;
 
+import org.joda.time.DateTime;
+
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -52,8 +54,8 @@ public class SentimentGraphFragment extends LineChart implements OnChartGestureL
     private final int layoutId = R.layout.fragment_sentiment_graph;
 
     public interface GraphVPListener{
-        public void onVPRangeChange(long startDate, long endDate);
-        public void onNodeSelected(long dateSelected);
+        void onVPRangeChange(long startDate, long endDate);
+        void onNodeSelected(long startOfDay, long endOfDay);
     }
     //private Cursor dataCursor;
     @Override
@@ -134,7 +136,7 @@ public class SentimentGraphFragment extends LineChart implements OnChartGestureL
         this.getAxisRight().setEnabled(false);
         this.getViewPortHandler().setMaximumScaleY(1);
         //this.getViewPortHandler().setMaximumScaleY(2f);
-        this.getViewPortHandler().setMaximumScaleX(2f);
+
 
         xAxis.setLabelsToSkip(60 * 60*24);
         //this.animateX(2500, Easing.EasingOption.EaseInOutQuart);
@@ -327,17 +329,25 @@ public class SentimentGraphFragment extends LineChart implements OnChartGestureL
 
     @Override
     public void onChartScale(MotionEvent me, float scaleX, float scaleY) {
-
+        chartVisibleRangeChange(getMinViewX(), getMaxViewX());
     }
 
     @Override
     public void onChartTranslate(MotionEvent me, float dX, float dY) {
+
+        chartVisibleRangeChange(getMinViewX(), getMaxViewX());
     }
 
     @Override
     public void onValueSelected(Entry e, int dataSetIndex, Highlight h) {
         Log.i("Entry selected", e.toString());
         setGradient();
+
+        long dayTimeMilli = startTime*DAYS + dataSetIndex*DAYS;
+        DateTime startOfDay = new DateTime(dayTimeMilli).withTimeAtStartOfDay();
+        DateTime endOfDay = new DateTime(dayTimeMilli).plusDays(1).withTimeAtStartOfDay();
+
+        this.graphVPListener.onNodeSelected(startOfDay.getMillis(), endOfDay.getMillis());
 
     }
 
@@ -346,6 +356,15 @@ public class SentimentGraphFragment extends LineChart implements OnChartGestureL
         Log.i("Nothing selected", "Nothing selected.");
     }
 
+    public void chartVisibleRangeChange(long firstDay, long lastDay){
+        DateTime startOfStartDay = new DateTime(firstDay).withTimeAtStartOfDay();
+        DateTime endOfEndDay = new DateTime(lastDay).plusDays(1).withTimeAtStartOfDay();
+        System.out.println("startDay:" + startOfStartDay.toString());
+        System.out.println("enday:" + endOfEndDay.toString());
+
+        this.graphVPListener.onVPRangeChange(startOfStartDay.getMillis(), endOfEndDay.getMillis());
+
+    }
     public class MyCustomXAxisValueFormatter implements XAxisValueFormatter {
 
 
@@ -371,14 +390,12 @@ public class SentimentGraphFragment extends LineChart implements OnChartGestureL
             String mMonthDay = new SimpleDateFormat("MM/dd/yyy").format(calendar.getTime());
             int mDay = calendar.get(Calendar.DAY_OF_MONTH);
 
-
             String xStr = "idk";
             String bigLabel = "";
             long skipLabels = DAYS;
 
             long vpRange = getVPRange();
             // e.g. adjust the x-axis values depending on scale / zoom level
-
 
             if (vpRange > YEARS) {
 

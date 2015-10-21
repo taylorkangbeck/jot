@@ -147,6 +147,18 @@ public class MainFragment extends Fragment implements LoaderManager.LoaderCallba
                 }
                 mChart.updateData(ie.getAllEntries());
 
+                mChart.addVPListener(new SentimentGraphFragment.graphVPChangeListener() {
+                    @Override
+                    public void onNodeClicked(long date) {
+
+                    }
+
+                    @Override
+                    public void onVPChange(long startDate, long endDate) {
+
+                    }
+                });
+
                 for (int i = 0; i < 40; i++) {
                     System.out.println((2 - i / 10));
                     GradientView.getColorFromGradient(2.0 - i / 10.0);
@@ -487,7 +499,12 @@ public class MainFragment extends Fragment implements LoaderManager.LoaderCallba
                 InfoExtractor ie = new InfoExtractor(getActivity());
                 ie.processNewEntryData(Long.parseLong(entryID), ent);
 
+
+                InfoExtractor ie = new InfoExtractor(getActivity());
+                ie.processNewEntryData(Long.parseLong(entryID), ent);
+
                 final List entries = ie.getAllEntries();
+
 
                 getActivity().runOnUiThread(new Runnable() {
                     @Override
@@ -498,9 +515,11 @@ public class MainFragment extends Fragment implements LoaderManager.LoaderCallba
                     }
                 });
 
+
                 System.out.println("===================== ENTITIES =======================");
 
                 Map<String, Integer> entityMap = ent.personSentiment();
+
 
                 for (Map.Entry<String, Integer> a : entityMap.entrySet()) {
                     System.out.println(a.getKey() + " : " + a.getValue());
@@ -562,4 +581,8 @@ public class MainFragment extends Fragment implements LoaderManager.LoaderCallba
         InputMethodManager inputMethodManager = (InputMethodManager) activity.getSystemService(Activity.INPUT_METHOD_SERVICE);
         inputMethodManager.hideSoftInputFromWindow(activity.getCurrentFocus().getWindowToken(), 0);
     }
+<<<<<<< HEAD
+=======
+
+>>>>>>> taylor
 }

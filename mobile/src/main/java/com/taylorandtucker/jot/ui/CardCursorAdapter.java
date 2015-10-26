@@ -1,5 +1,7 @@
 package com.taylorandtucker.jot.ui;
 
+import android.animation.ArgbEvaluator;
+import android.animation.ValueAnimator;
 import android.content.Context;
 import android.database.Cursor;
 import android.graphics.Color;
@@ -50,13 +52,15 @@ public class CardCursorAdapter extends CursorAdapter {
         //GradientView entrySentimentGradient = (GradientView) view.findViewById(R.id.sentGrad);
         View background = (View) view.findViewById((R.id.cardContent));
 
+
         // Extract properties from cursor
-        long dateMil = cursor.getLong(cursor.getColumnIndexOrThrow(EntryContract.COLUMN_DATE));
+        long dateSec = cursor.getLong(cursor.getColumnIndexOrThrow(EntryContract.COLUMN_DATE));
         String body = cursor.getString(cursor.getColumnIndexOrThrow(EntryContract.COLUMN_BODY));
         double sent = cursor.getDouble(cursor.getColumnIndexOrThrow(EntryContract.COLUMN_SENTIMENT));
 
+        view.setTag(dateSec);
         // Populate fields with extracted properties
-        Date date = new Date(dateMil*1000);
+        Date date = new Date(dateSec*1000);
         SimpleDateFormat formatter = new SimpleDateFormat("EEEE MMM dd, yyyy    h:mm a");
         String formattedDate = formatter.format(date);
         entryDateTextView.setText(formattedDate);
@@ -69,6 +73,31 @@ public class CardCursorAdapter extends CursorAdapter {
         d.setCornerRadius(0f);
         background.setBackground(d);
        // entrySentimentGradient.setgradient(sent);
+
+
+        view.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                final View view = v;
+                Integer colorFrom = view.getSolidColor();
+                Integer colorTo = Color.YELLOW;
+                ValueAnimator colorAnimation = ValueAnimator.ofObject(new ArgbEvaluator(), colorFrom, colorTo, colorFrom);
+                System.out.println("card clicked");
+                colorAnimation.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+
+                    @Override
+                    public void onAnimationUpdate(ValueAnimator animator) {
+                        view.setBackgroundColor((Integer) animator.getAnimatedValue());
+                    }
+
+
+                });
+
+
+                colorAnimation.start();
+                //colorAnimation.reverse();
+            }
+        });
 
     }
 

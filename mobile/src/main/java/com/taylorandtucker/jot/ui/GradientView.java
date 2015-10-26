@@ -52,21 +52,21 @@ class GradientView extends View {
         double resultB;
 
         if(sent>=0){
-            System.out.println("sent > 0: " + sent);
+
             double percent = sent/2.0;
             resultR = grayR + percent*(greenR-grayR);
             resultG = grayG + percent*(greenG-grayG);
             resultB = grayB + percent*(greenB-grayB);
 
         }else{
-            System.out.println("sent < 0 : " + sent);
+
             double percent = -1*sent/2.0;
-            System.out.println("percent : " + percent);
+
             resultR = grayR + percent*(redR-grayR);
             resultG = grayG + percent*(redG-grayG);
             resultB = grayB + percent*(redB-grayB);
 
-            System.out.println("RGB " + resultR + " " + resultG + " " + resultB + " ");
+
         }
 
 

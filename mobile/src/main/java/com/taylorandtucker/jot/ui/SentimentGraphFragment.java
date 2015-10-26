@@ -49,6 +49,8 @@ public class SentimentGraphFragment extends LineChart implements OnChartGestureL
 
     private long startTime;
     private long range;
+    private long visibleRange;
+    private int nodeCount;
 
     private GraphVPListener graphVPListener;
     private final int layoutId = R.layout.fragment_sentiment_graph;
@@ -232,6 +234,7 @@ public class SentimentGraphFragment extends LineChart implements OnChartGestureL
 
             startTime = entries.get(0).createdDaysAfterEpoch();
             List<DayEntry> dayEntries = dataToDays(entries);
+            nodeCount = dayEntries.size();
             for (DayEntry diaryEntry : dayEntries) {
 
                 double sent = diaryEntry.sent;
@@ -330,12 +333,25 @@ public class SentimentGraphFragment extends LineChart implements OnChartGestureL
     @Override
     public void onChartScale(MotionEvent me, float scaleX, float scaleY) {
         chartVisibleRangeChange(getMinViewX(), getMaxViewX());
+        visibleRange = getMaxViewX()-getMinViewX();
     }
 
     @Override
     public void onChartTranslate(MotionEvent me, float dX, float dY) {
 
-        chartVisibleRangeChange(getMinViewX(), getMaxViewX());
+        long min = getMinViewX();
+        long max = getMaxViewX();
+
+               //on chartTranslate gets called on touch even when view is at maximum or minimum
+        if(getLowestVisibleXIndex() == 0){
+                        max = min+ visibleRange;
+        }
+        System.out.println(" -- " + range);
+        System.out.println(getHighestVisibleXIndex());
+        if (range == getHighestVisibleXIndex()){
+            min = max-visibleRange;
+        }
+        chartVisibleRangeChange(min, max);
     }
 
     @Override
@@ -343,7 +359,9 @@ public class SentimentGraphFragment extends LineChart implements OnChartGestureL
         Log.i("Entry selected", e.toString());
         setGradient();
 
-        long dayTimeMilli = startTime*DAYS + dataSetIndex*DAYS;
+        System.out.println("startTime: " + startTime);
+        System.out.println(e.getXIndex());
+        long dayTimeMilli = startTime*DAYS + e.getXIndex()*DAYS;
         DateTime startOfDay = new DateTime(dayTimeMilli).withTimeAtStartOfDay();
         DateTime endOfDay = new DateTime(dayTimeMilli).plusDays(1).withTimeAtStartOfDay();
 
@@ -359,8 +377,6 @@ public class SentimentGraphFragment extends LineChart implements OnChartGestureL
     public void chartVisibleRangeChange(long firstDay, long lastDay){
         DateTime startOfStartDay = new DateTime(firstDay).withTimeAtStartOfDay();
         DateTime endOfEndDay = new DateTime(lastDay).plusDays(1).withTimeAtStartOfDay();
-        System.out.println("startDay:" + startOfStartDay.toString());
-        System.out.println("enday:" + endOfEndDay.toString());
 
         this.graphVPListener.onVPRangeChange(startOfStartDay.getMillis(), endOfEndDay.getMillis());
 

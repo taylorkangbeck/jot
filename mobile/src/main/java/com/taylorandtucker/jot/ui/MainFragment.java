@@ -126,7 +126,7 @@ public class MainFragment extends Fragment implements LoaderManager.LoaderCallba
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
-        InfoExtractor ie = new InfoExtractor(getActivity());
+        final InfoExtractor ie = new InfoExtractor(getActivity());
         View rootView;
 
         //merging adapters for the entries feed
@@ -154,6 +154,27 @@ public class MainFragment extends Fragment implements LoaderManager.LoaderCallba
                     @Override
                     public void onNodeSelected(long startOfDay, long endOfDay) {
 
+                        List<Entry> entries = ie.getAllEntries();
+
+                        boolean first = true;
+                        for (int i = 0; i < entries.size(); i++) {
+                            Entry ent = entries.get(i);
+                            if(ent != null) {
+                                System.out.println("entry: "+ i + " not null");
+                                long entryTime = ent.getCreatedOn().getTime();
+                                System.out.println("entryTime = " + entryTime);
+                                System.out.println("end of day = " + endOfDay);
+                                final int index = i;
+                                if (entryTime <= endOfDay && entryTime >= startOfDay) {
+                                    if (first) {
+                                        //this is fucked
+                                        entriesFeed.smoothScrollToPosition(entries.size()- i+1);
+                                        first = false;
+                                    }
+
+                                }
+                            }
+                        }
                     }
 
                     @Override

@@ -146,14 +146,15 @@ public class MainFragment extends Fragment implements LoaderManager.LoaderCallba
                     System.out.println("DEMO HELPER FINISHED MAKING CALLS");
                 }
                 mChart.updateData(ie.getAllEntries());
-                mChart.addVPListener(new SentimentGraphFragment.graphVPChangeListener() {
+
+                mChart.addVPListener(new SentimentGraphFragment.GraphVPListener() {
                     @Override
-                    public void onNodeClicked(long date) {
+                    public void onNodeSelected(long date) {
 
                     }
 
                     @Override
-                    public void onVPChange(long startDate, long endDate) {
+                    public void onVPRangeChange(long startDate, long endDate) {
 
                     }
                 });
@@ -165,7 +166,6 @@ public class MainFragment extends Fragment implements LoaderManager.LoaderCallba
                 cardCursorAdapter = new CardCursorAdapter(getContext(), null);
                 cardMergeAdapter.addAdapter(cardCursorAdapter);
                 entriesFeed.setAdapter(cardMergeAdapter);
-
 
                 setupFAB();
                 break;
@@ -501,6 +501,7 @@ public class MainFragment extends Fragment implements LoaderManager.LoaderCallba
 
                 final List entries = ie.getAllEntries();
 
+
                 getActivity().runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
@@ -510,9 +511,11 @@ public class MainFragment extends Fragment implements LoaderManager.LoaderCallba
                     }
                 });
 
+
                 System.out.println("===================== ENTITIES =======================");
 
                 Map<String, Integer> entityMap = ent.personSentiment();
+
 
                 for (Map.Entry<String, Integer> a : entityMap.entrySet()) {
                     System.out.println(a.getKey() + " : " + a.getValue());

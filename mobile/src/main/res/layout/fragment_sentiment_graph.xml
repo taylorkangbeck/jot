@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/entryCardBackground"
+    android:paddingLeft="@dimen/cardEdgePadding"
+    android:paddingTop="@dimen/cardEdgePadding"
+    android:paddingRight="@dimen/cardEdgePadding">
+
+
+        <com.taylorandtucker.jot.ui.SentimentGraphFragment
+            android:id="@+id/chart"
+            android:layout_width="match_parent"
+            android:layout_height="200dp" />
+
+</RelativeLayout>

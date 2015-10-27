@@ -1,0 +1,68 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".PlaceholderFragment"
+    android:background="@color/mainBackground">
+
+    <ListView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/entitiesList"
+        android:divider="@null"
+        android:dividerHeight="0dp">
+    </ListView>
+
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentRight="true"
+        android:gravity="bottom"
+        android:id="@+id/textEntryLayout"
+        android:background="@color/ColorPrimary"
+        android:visibility="invisible">
+
+        <EditText
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/textEntry"
+            android:layout_toLeftOf="@+id/submitButton"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentBottom="false" />
+
+        <Button
+            style="?android:attr/buttonStyleSmall"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Submit"
+            android:id="@+id/submitButton"
+            android:layout_alignParentEnd="false"
+            android:layout_alignParentRight="true"
+            android:onClick="onSubmit"
+            android:layout_alignBottom="@+id/textEntry" />
+    </RelativeLayout>
+
+    <FrameLayout
+        android:id="@+id/invisFrame"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_above="@+id/textEntryLayout"
+        android:visibility="invisible"></FrameLayout>
+
+    <ImageButton
+        android:layout_width="70dp"
+        android:layout_height="70dp"
+        android:src="@drawable/ic_new_entry"
+        android:background="@drawable/circle"
+        android:id="@+id/fab"
+        android:layout_gravity="right|bottom"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
+        android:layout_margin="@dimen/fabMargin" />
+
+
+</RelativeLayout>

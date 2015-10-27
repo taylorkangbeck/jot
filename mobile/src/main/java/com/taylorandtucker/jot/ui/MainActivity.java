@@ -1,14 +1,24 @@
 package com.taylorandtucker.jot.ui;
 
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.app.ActionBar;
-import android.support.v4.app.FragmentManager;
+import android.app.Activity;
+import android.app.SearchManager;
+import android.content.Context;
+import android.database.Cursor;
 import android.os.Bundle;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.ActionBar;
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.SearchView;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.support.v4.widget.DrawerLayout;
+import android.view.inputmethod.InputMethodManager;
+import android.widget.ImageButton;
 
 import com.taylorandtucker.jot.R;
+import com.taylorandtucker.jot.localdb.DBContentProvider;
+import com.taylorandtucker.jot.localdb.DBContract;
+import com.taylorandtucker.jot.localdb.DBUtils;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationDrawerFragment.NavigationDrawerCallbacks {
@@ -22,6 +32,7 @@ public class MainActivity extends AppCompatActivity
      * Used to store the last screen title. For use in {@link #restoreActionBar()}.
      */
     private CharSequence mTitle;
+    private ImageButton fab;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,6 +70,9 @@ public class MainActivity extends AppCompatActivity
             case 3:
                 mTitle = getString(R.string.title_section3);
                 break;
+            case 4:
+                mTitle = getString(R.string.action_settings);
+                break;
         }
     }
 
@@ -78,6 +92,43 @@ public class MainActivity extends AppCompatActivity
             // decide what to show in the action bar.
             getMenuInflater().inflate(R.menu.main, menu);
             restoreActionBar();
+            SearchManager searchManager = (SearchManager) getSystemService(Context.SEARCH_SERVICE);
+            SearchView searchView = (SearchView) menu.findItem(R.id.menu_search).getActionView();
+            searchView.setSearchableInfo(searchManager.getSearchableInfo(getComponentName()));
+            searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+                @Override
+                public boolean onQueryTextSubmit(String query) {
+                    //hiding keyboard
+                    InputMethodManager inputMethodManager = (InputMethodManager) getSystemService(Activity.INPUT_METHOD_SERVICE);
+                    inputMethodManager.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), 0);
+                    return true;
+                }
+
+                @Override
+                public boolean onQueryTextChange(String query) {
+                    Cursor c;
+                    if (query == "") {
+                        //reset cursor to original
+                        c = getContentResolver().query(DBContentProvider.ENTRY_URI,
+                                DBUtils.entryProjection,
+                                null,
+                                null,
+                                DBContract.EntryContract.COLUMN_DATE + " ASC");
+                    }
+                    else {
+
+                        //do query and swap cursor
+                        String[] Values = new String[1];
+                        Values[0] = query;
+                        c = getApplicationContext().getContentResolver().query(DBContentProvider.ENTITY_URI, DBUtils.entityProjection, "name = ?", Values, null);
+                    }
+                    //this also does the cursor change, perhaps rewrite to be more explicitly named
+                    CardCursorAdapter.getInstance(getApplicationContext(), c);
+                    return true;
+                }
+
+            });
+
             return true;
         }
         return super.onCreateOptionsMenu(menu);
@@ -91,9 +142,10 @@ public class MainActivity extends AppCompatActivity
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
+        /*
         if (id == R.id.action_settings) {
             return true;
-        }
+        }*/
 
         return super.onOptionsItemSelected(item);
     }

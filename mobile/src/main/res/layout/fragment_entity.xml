@@ -1,0 +1,71 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".PlaceholderFragment"
+    android:background="@color/mainBackground"
+    android:id="@+id/entityFrag" >
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:text="Large Text"
+        android:id="@+id/entityNameView"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentStart="true"
+        android:gravity="right"
+        android:background="@color/ChartDarkGrey"
+        android:textColor="@color/mainBackground"/>
+
+    <com.taylorandtucker.jot.ui.SentimentGraphFragment
+        android:id="@+id/chartE"
+        android:layout_height="200dp"
+        android:layout_width="match_parent"
+        android:layout_below="@+id/entityNameView" />
+
+    <ListView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/entriesFeed"
+        android:divider="@null"
+        android:dividerHeight="0dp"
+        android:layout_above="@+id/textEntryLayout"
+        android:layout_below="@+id/chartE">
+    </ListView>
+
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentRight="true"
+        android:gravity="bottom"
+        android:id="@+id/textEntryLayout"
+        android:background="@color/ColorPrimary"
+        android:visibility="invisible">
+
+        <EditText
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/textEntry"
+            android:layout_toLeftOf="@+id/submitButton"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentBottom="false" />
+
+        <Button
+            style="?android:attr/buttonStyleSmall"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Submit"
+            android:id="@+id/submitButton"
+            android:layout_alignParentEnd="false"
+            android:layout_alignParentRight="true"
+            android:onClick="onSubmit"
+            android:layout_alignBottom="@+id/textEntry" />
+    </RelativeLayout>
+
+
+</RelativeLayout>

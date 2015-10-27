@@ -47,7 +47,6 @@ import org.apache.http.impl.client.DefaultHttpClient;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -71,11 +70,9 @@ public class MainFragment extends Fragment implements LoaderManager.LoaderCallba
 
     private ImageButton fab;
     private FrameLayout invisFrame;
-
+    
     private long minTimeChart = 0;
     private long maxTimeChart = Long.MAX_VALUE;
-
-    private List<Entry> currentEntries;
 
     /**
      * Returns a new instance of this fragment for the given section
@@ -143,8 +140,8 @@ public class MainFragment extends Fragment implements LoaderManager.LoaderCallba
                 final ListView entriesFeed = (ListView) getActivity().findViewById(R.id.entriesFeed);
 
                 mChart = (SentimentGraphFragment) getActivity().findViewById(R.id.chart);
-                currentEntries = ie.getAllEntries();
-                if (currentEntries.size() <= 2) {
+
+                if (ie.getAllEntries().size() <= 2) {
                     DemoHelper dh = new DemoHelper(60, 4 * 24 * 60 * 60, getActivity(), mChart);
                     System.out.println("DEMO HELPER FINISHED MAKING CALLS");
                 }
@@ -160,11 +157,12 @@ public class MainFragment extends Fragment implements LoaderManager.LoaderCallba
                             long entryTime = 1000*c.getLong(c.getColumnIndexOrThrow(EntryContract.COLUMN_DATE));
 
                             final int index = i;
-                            if (entryTime <= endOfDay && entryTime >= startOfDay){
+                            if (entryTime <= endOfDay && entryTime >= startOfDay) {
 
-                                entriesFeed.setSelectionFromTop(i,0);
+
+                                entriesFeed.setSelectionFromTop(i, 0);
                                 //entriesFeed.smoothScrollToPosition(i);
-                                break;
+
                             }
                         }
                     }
@@ -175,15 +173,6 @@ public class MainFragment extends Fragment implements LoaderManager.LoaderCallba
                         minTimeChart = startDate;
                         maxTimeChart = endDate;
                         getLoaderManager().restartLoader(LOADER_ID, null, MainFragment.this);
-                        List<Entry> newCurEntries = new ArrayList<Entry>();
-                        for(Entry e: ie.getAllEntries()){
-                            if(e.getCreatedOn().getTime() > startDate && e.getCreatedOn().getTime() < endDate){
-                                newCurEntries.add(e);
-                            }
-                        }
-                        currentEntries = newCurEntries;
-                        //
-                        // entriesFeed.smoothScrollToPosition(0);
                     }
                 });
 

@@ -179,8 +179,6 @@ public class SentimentGraphFragment extends LineChart implements OnChartGestureL
         float startY = this.getViewPortHandler().contentTop();
         float endY = this.getViewPortHandler().contentBottom();
 
-        System.out.println("top = " + startY);
-        System.out.println("bottom = " + endY);
         paintRenderer.setShader(new LinearGradient(0, startY, 0, endY, gradColors, null, Shader.TileMode.MIRROR));
     }
 
@@ -240,7 +238,7 @@ public class SentimentGraphFragment extends LineChart implements OnChartGestureL
                 double sent = diaryEntry.sent;
                 int day = diaryEntry.day;
 
-                System.out.println(day+ " : " +startTime);
+
                 yVals.add(new Entry((float) sent, (int) (day - startTime)));
             }
 
@@ -346,8 +344,7 @@ public class SentimentGraphFragment extends LineChart implements OnChartGestureL
         if(getLowestVisibleXIndex() == 0){
                         max = min+ visibleRange;
         }
-        System.out.println(" -- " + range);
-        System.out.println(getHighestVisibleXIndex());
+
         if (range == getHighestVisibleXIndex()){
             min = max-visibleRange;
         }
@@ -359,8 +356,6 @@ public class SentimentGraphFragment extends LineChart implements OnChartGestureL
         Log.i("Entry selected", e.toString());
         setGradient();
 
-        System.out.println("startTime: " + startTime);
-        System.out.println(e.getXIndex());
         long dayTimeMilli = startTime*DAYS + e.getXIndex()*DAYS;
         DateTime startOfDay = new DateTime(dayTimeMilli).withTimeAtStartOfDay();
         DateTime endOfDay = new DateTime(dayTimeMilli).plusDays(1).withTimeAtStartOfDay();

@@ -41,6 +41,7 @@ public class CardCursorAdapter extends CursorAdapter {
         return instance;
     }
 
+
     @Override
     public View newView(Context context, Cursor cursor, ViewGroup parent) {
         return LayoutInflater.from(context).inflate(R.layout.entry_card, parent, false);

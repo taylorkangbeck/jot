@@ -26,6 +26,8 @@ public class CardCursorAdapter extends CursorAdapter {
 
     //TODO maybe change from being singleton
 
+    public long date;
+
     public CardCursorAdapter(Context context, Cursor cursor) {
         super(context, cursor, 0);
     }
@@ -58,7 +60,7 @@ public class CardCursorAdapter extends CursorAdapter {
         String body = cursor.getString(cursor.getColumnIndexOrThrow(EntryContract.COLUMN_BODY));
         double sent = cursor.getDouble(cursor.getColumnIndexOrThrow(EntryContract.COLUMN_SENTIMENT));
 
-        view.setTag(dateSec*1000);
+        date = dateSec*1000;
         // Populate fields with extracted properties
         Date date = new Date(dateSec*1000);
         SimpleDateFormat formatter = new SimpleDateFormat("EEEE MMM dd, yyyy    h:mm a");

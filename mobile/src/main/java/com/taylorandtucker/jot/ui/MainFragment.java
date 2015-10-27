@@ -43,7 +43,6 @@ import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.entity.ByteArrayEntity;
 import org.apache.http.impl.client.DefaultHttpClient;
-import org.xml.sax.InputSource;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -51,9 +50,6 @@ import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
 
 /**
  * Created by Taylor on 9/16/-015.
@@ -158,19 +154,16 @@ public class MainFragment extends Fragment implements LoaderManager.LoaderCallba
                     @Override
                     public void onNodeSelected(long startOfDay, long endOfDay) {
 
-                        for (int i = 0; i < currentEntries.size(); i++) {
-                            Entry ent = currentEntries.get(i);
+                        for (int i = 0 ; i < cardMergeAdapter.getCount(); i++) {
+                            Cursor c = (Cursor) cardMergeAdapter.getItem(i);
 
-
-                            long entryTime = ent.getCreatedOn().getTime();
+                            long entryTime = 1000*c.getLong(c.getColumnIndexOrThrow(EntryContract.COLUMN_DATE));
 
                             final int index = i;
-                            if (entryTime <= endOfDay && entryTime >= startOfDay) {
+                            if (entryTime <= endOfDay && entryTime >= startOfDay){
 
-                                //this is fucked
-                                entriesFeed.smoothScrollToPosition(currentEntries.size() - i + 1);
-                                
-
+                                entriesFeed.setSelectionFromTop(i,0);
+                                //entriesFeed.smoothScrollToPosition(i);
                                 break;
                             }
                         }
@@ -412,6 +405,7 @@ public class MainFragment extends Fragment implements LoaderManager.LoaderCallba
             String[] segments = uri.getPath().split("/");
             String idStr = segments[segments.length - 1];
 
+
             RetrieveNLPdata nlp = new RetrieveNLPdata(idStr, entry.getBody());
             nlp.execute();
         }
@@ -520,7 +514,9 @@ public class MainFragment extends Fragment implements LoaderManager.LoaderCallba
             // Create a new HttpClient and Post Header
             HttpClient httpclient = new DefaultHttpClient();
             HttpPost httppost = new HttpPost("http://54.173.123.6:8000/entry");
-
+            String line = "";
+            String xml = "";
+            System.out.println("HHHEEEERRRREEE0");
             try {
                 HttpEntity entity = new ByteArrayEntity(entry.getBytes("UTF-8"));
                 httppost.setEntity(entity);
@@ -529,56 +525,10 @@ public class MainFragment extends Fragment implements LoaderManager.LoaderCallba
                 HttpResponse response = httpclient.execute(httppost);
 
                 BufferedReader rd = new BufferedReader(new InputStreamReader(response.getEntity().getContent()));
-                String line = "";
-                String xml = "";
-
-                DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
-                DocumentBuilder builder;
-                InputSource is;
 
                 while ((line = rd.readLine()) != null) {
                     xml += line;
                 }
-
-                final ProcessedEntry ent = new ProcessedEntry(xml);
-
-
-                InfoExtractor ie = new InfoExtractor(getActivity());
-                ie.processNewEntryData(Long.parseLong(entryID), ent);
-
-                final List entries = ie.getAllEntries();
-
-
-                getActivity().runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        if (mChart != null) {
-                            mChart.updateData(entries);
-                        }
-                    }
-                });
-
-
-                System.out.println("===================== ENTITIES =======================");
-
-                Map<String, Integer> entityMap = ent.personSentiment();
-
-
-                for (Map.Entry<String, Integer> a : entityMap.entrySet()) {
-                    System.out.println(a.getKey() + " : " + a.getValue());
-                }
-                System.out.println("entity count : " + ie.getAllEntitiesByImportance().size());
-
-
-                System.out.println("===================== ENTRIES =======================");
-
-                /*
-                    DBUtils utils = DBUtils.getInstance(getContext());
-                    cardCursorAdapter.swapCursor(utils.getAllEntriesQuery());
-                */
-
-                return null;
-
             } catch (ClientProtocolException e) {
                 System.out.println(e);
                 return null;
@@ -588,6 +538,44 @@ public class MainFragment extends Fragment implements LoaderManager.LoaderCallba
                 return null;
                 // TODO Auto-generated catch block
             }
+            final ProcessedEntry ent = new ProcessedEntry(xml);
+
+            System.out.println("HHHEEEERRRREEE1");
+            InfoExtractor ie = new InfoExtractor(getActivity());
+
+            ie.processNewEntryData(Long.parseLong(entryID), ent);
+            System.out.println("HHHEEEERRRREEE2");
+            final List entries = ie.getAllEntries();
+
+
+            getActivity().runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    if (mChart != null) {
+                        System.out.println("HHHEEEERRRREEE3");
+                        mChart.updateData(entries);
+                    }
+                }
+            });
+            System.out.println("===================== ENTITIES =======================");
+
+            Map<String, Integer> entityMap = ent.personSentiment();
+
+
+            for (Map.Entry<String, Integer> a : entityMap.entrySet()) {
+                System.out.println(a.getKey() + " : " + a.getValue());
+            }
+            System.out.println("entity count : " + ie.getAllEntitiesByImportance().size());
+
+
+            System.out.println("===================== ENTRIES =======================");
+
+                /*
+                    DBUtils utils = DBUtils.getInstance(getContext());
+                    cardCursorAdapter.swapCursor(utils.getAllEntriesQuery());
+                */
+
+            return null;
 
         }
 

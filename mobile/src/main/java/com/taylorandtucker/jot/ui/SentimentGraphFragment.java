@@ -166,12 +166,6 @@ public class SentimentGraphFragment extends LineChart implements OnChartGestureL
 
     public void setGradient(){
 
-        try {
-            wait(200);
-        }catch(Exception e){
-
-        }
-
         Paint paintRenderer =  this.getRenderer().getPaintRender();
 
         int[] gradColors = {Color.GREEN, Color.LTGRAY, Color.RED};

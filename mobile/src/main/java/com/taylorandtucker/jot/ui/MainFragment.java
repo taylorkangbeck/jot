@@ -70,7 +70,9 @@ public class MainFragment extends Fragment implements LoaderManager.LoaderCallba
 
     private ImageButton fab;
     private FrameLayout invisFrame;
-    
+
+    private InfoExtractor ie;
+
     private long minTimeChart = 0;
     private long maxTimeChart = Long.MAX_VALUE;
 
@@ -94,7 +96,7 @@ public class MainFragment extends Fragment implements LoaderManager.LoaderCallba
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
-
+        ie = new InfoExtractor(getActivity());
         View rootView;
         switch (getArguments().getInt(ARG_SECTION_NUMBER)) {
             case 1:
@@ -122,7 +124,6 @@ public class MainFragment extends Fragment implements LoaderManager.LoaderCallba
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
-        final InfoExtractor ie = new InfoExtractor(getActivity());
         View rootView;
 
         //merging adapters for the entries feed
@@ -166,7 +167,6 @@ public class MainFragment extends Fragment implements LoaderManager.LoaderCallba
                             }
                         }
                     }
-
                     @Override
                     public void onVPRangeChange(long startDate, long endDate)
                     {
@@ -176,10 +176,6 @@ public class MainFragment extends Fragment implements LoaderManager.LoaderCallba
                     }
                 });
 
-                for (int i = 0; i < 40; i++) {
-                    System.out.println((2 - i / 10));
-                    GradientView.getColorFromGradient(2.0 - i / 10.0);
-                }
                 cardCursorAdapter = new CardCursorAdapter(getContext(), null);
                 cardMergeAdapter.addAdapter(cardCursorAdapter);
                 entriesFeed.setAdapter(cardMergeAdapter);
@@ -281,7 +277,19 @@ public class MainFragment extends Fragment implements LoaderManager.LoaderCallba
     public void onResume() {
         super.onResume();
         if (mChart != null) {
-            mChart.setGradient();
+            getActivity().runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    mChart.postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            mChart.updateData(ie.getAllEntries());
+                            mChart.setGradient();
+                            System.out.println("2 delay resume");
+                        }
+                    }, 30);
+                }
+            });
         }
     }
 
@@ -289,7 +297,19 @@ public class MainFragment extends Fragment implements LoaderManager.LoaderCallba
     public void onStart() {
         super.onStart();
         if (mChart != null) {
-            mChart.setGradient();
+            getActivity().runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    mChart.postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            mChart.updateData(ie.getAllEntries());
+                            mChart.setGradient();
+                            System.out.println("2 delay start");
+                        }
+                    }, 30);
+                }
+            });
         }
 
     }

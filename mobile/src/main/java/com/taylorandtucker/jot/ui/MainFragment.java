@@ -48,6 +48,7 @@ import org.xml.sax.InputSource;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -77,6 +78,8 @@ public class MainFragment extends Fragment implements LoaderManager.LoaderCallba
 
     private long minTimeChart = 0;
     private long maxTimeChart = Long.MAX_VALUE;
+
+    private List<Entry> currentEntries;
 
     /**
      * Returns a new instance of this fragment for the given section
@@ -144,7 +147,8 @@ public class MainFragment extends Fragment implements LoaderManager.LoaderCallba
                 final ListView entriesFeed = (ListView) getActivity().findViewById(R.id.entriesFeed);
 
                 mChart = (SentimentGraphFragment) getActivity().findViewById(R.id.chart);
-                if (ie.getAllEntries().size() <= 2) {
+                currentEntries = ie.getAllEntries();
+                if (currentEntries.size() <= 2) {
                     DemoHelper dh = new DemoHelper(60, 4 * 24 * 60 * 60, getActivity(), mChart);
                     System.out.println("DEMO HELPER FINISHED MAKING CALLS");
                 }
@@ -154,25 +158,20 @@ public class MainFragment extends Fragment implements LoaderManager.LoaderCallba
                     @Override
                     public void onNodeSelected(long startOfDay, long endOfDay) {
 
-                        List<Entry> entries = ie.getAllEntries();
+                        for (int i = 0; i < currentEntries.size(); i++) {
+                            Entry ent = currentEntries.get(i);
 
-                        boolean first = true;
-                        for (int i = 0; i < entries.size(); i++) {
-                            Entry ent = entries.get(i);
-                            if(ent != null) {
-                                System.out.println("entry: "+ i + " not null");
-                                long entryTime = ent.getCreatedOn().getTime();
-                                System.out.println("entryTime = " + entryTime);
-                                System.out.println("end of day = " + endOfDay);
-                                final int index = i;
-                                if (entryTime <= endOfDay && entryTime >= startOfDay) {
-                                    if (first) {
-                                        //this is fucked
-                                        entriesFeed.smoothScrollToPosition(entries.size()- i+1);
-                                        first = false;
-                                    }
 
-                                }
+                            long entryTime = ent.getCreatedOn().getTime();
+
+                            final int index = i;
+                            if (entryTime <= endOfDay && entryTime >= startOfDay) {
+
+                                //this is fucked
+                                entriesFeed.smoothScrollToPosition(currentEntries.size() - i + 1);
+                                
+
+                                break;
                             }
                         }
                     }
@@ -183,7 +182,15 @@ public class MainFragment extends Fragment implements LoaderManager.LoaderCallba
                         minTimeChart = startDate;
                         maxTimeChart = endDate;
                         getLoaderManager().restartLoader(LOADER_ID, null, MainFragment.this);
-                        entriesFeed.smoothScrollToPosition(0);
+                        List<Entry> newCurEntries = new ArrayList<Entry>();
+                        for(Entry e: ie.getAllEntries()){
+                            if(e.getCreatedOn().getTime() > startDate && e.getCreatedOn().getTime() < endDate){
+                                newCurEntries.add(e);
+                            }
+                        }
+                        currentEntries = newCurEntries;
+                        //
+                        // entriesFeed.smoothScrollToPosition(0);
                     }
                 });
 

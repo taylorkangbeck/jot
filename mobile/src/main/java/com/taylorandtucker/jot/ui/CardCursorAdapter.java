@@ -58,7 +58,7 @@ public class CardCursorAdapter extends CursorAdapter {
         String body = cursor.getString(cursor.getColumnIndexOrThrow(EntryContract.COLUMN_BODY));
         double sent = cursor.getDouble(cursor.getColumnIndexOrThrow(EntryContract.COLUMN_SENTIMENT));
 
-        view.setTag(dateSec);
+        view.setTag(dateSec*1000);
         // Populate fields with extracted properties
         Date date = new Date(dateSec*1000);
         SimpleDateFormat formatter = new SimpleDateFormat("EEEE MMM dd, yyyy    h:mm a");

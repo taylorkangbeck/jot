@@ -143,7 +143,8 @@ public class MainFragment extends Fragment implements LoaderManager.LoaderCallba
                 mChart = (SentimentGraphFragment) getActivity().findViewById(R.id.chart);
 
                 if (ie.getAllEntries().size() <= 2) {
-                    DemoHelper dh = new DemoHelper(60, 4 * 24 * 60 * 60, getActivity(), mChart);
+                    DemoHelper dh = new DemoHelper(getActivity());
+                    //DemoHelper dh = new DemoHelper(60, 4 * 24 * 60 * 60, getActivity(), mChart);
                     System.out.println("DEMO HELPER FINISHED MAKING CALLS");
                 }
                 mChart.updateData(ie.getAllEntries());

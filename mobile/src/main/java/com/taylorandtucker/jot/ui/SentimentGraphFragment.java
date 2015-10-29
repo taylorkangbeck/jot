@@ -364,11 +364,12 @@ public class SentimentGraphFragment extends LineChart implements OnChartGestureL
     }
 
     public void chartVisibleRangeChange(long firstDay, long lastDay){
-        DateTime startOfStartDay = new DateTime(firstDay).withTimeAtStartOfDay();
-        DateTime endOfEndDay = new DateTime(lastDay).plusDays(1).withTimeAtStartOfDay();
+       if(this.graphVPListener != null) {
+           DateTime startOfStartDay = new DateTime(firstDay).withTimeAtStartOfDay();
+           DateTime endOfEndDay = new DateTime(lastDay).plusDays(1).withTimeAtStartOfDay();
 
-        this.graphVPListener.onVPRangeChange(startOfStartDay.getMillis(), endOfEndDay.getMillis());
-
+           this.graphVPListener.onVPRangeChange(startOfStartDay.getMillis(), endOfEndDay.getMillis());
+       }
     }
     public class MyCustomXAxisValueFormatter implements XAxisValueFormatter {
 

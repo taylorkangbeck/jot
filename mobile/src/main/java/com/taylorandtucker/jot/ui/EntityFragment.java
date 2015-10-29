@@ -36,6 +36,8 @@ public class EntityFragment extends Fragment implements LoaderManager.LoaderCall
     private Context context;
     private SentimentGraphFragment mChart;
 
+    private InfoExtractor ie;
+
     static private long entityId;
     private String entityName;
     /**
@@ -55,6 +57,8 @@ public class EntityFragment extends Fragment implements LoaderManager.LoaderCall
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View rootView;
+
+        ie = new InfoExtractor(getActivity());
 
         rootView = inflater.inflate(R.layout.fragment_entity, container, false);
 
@@ -92,6 +96,46 @@ public class EntityFragment extends Fragment implements LoaderManager.LoaderCall
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
+
+    }
+    @Override
+    public void onResume() {
+        super.onResume();
+        if (mChart != null) {
+            getActivity().runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    mChart.postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            mChart.updateData(ie.getAllEntries());
+                            mChart.setGradient();
+                            System.out.println("2 delay resume");
+                        }
+                    }, 30);
+                }
+            });
+        }
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        if (mChart != null) {
+            getActivity().runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    mChart.postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            mChart.updateData(ie.getAllEntries());
+                            mChart.setGradient();
+                            System.out.println("2 delay start");
+                        }
+                    }, 30);
+                }
+            });
+        }
 
     }
 

@@ -52,6 +52,9 @@ public class SentimentGraphFragment extends LineChart implements OnChartGestureL
     private long visibleRange;
     private int nodeCount;
 
+    private int prevHighX;
+    private int prevLowX;
+
     private GraphVPListener graphVPListener;
     private final int layoutId = R.layout.fragment_sentiment_graph;
 
@@ -364,12 +367,27 @@ public class SentimentGraphFragment extends LineChart implements OnChartGestureL
     }
 
     public void chartVisibleRangeChange(long firstDay, long lastDay){
-       if(this.graphVPListener != null) {
-           DateTime startOfStartDay = new DateTime(firstDay).withTimeAtStartOfDay();
-           DateTime endOfEndDay = new DateTime(lastDay).plusDays(1).withTimeAtStartOfDay();
+       if (firstLastVisibleNodesChanged()) {
+           if (this.graphVPListener != null) {
+               DateTime startOfStartDay = new DateTime(firstDay).withTimeAtStartOfDay();
+               DateTime endOfEndDay = new DateTime(lastDay).plusDays(1).withTimeAtStartOfDay();
 
-           this.graphVPListener.onVPRangeChange(startOfStartDay.getMillis(), endOfEndDay.getMillis());
+               this.graphVPListener.onVPRangeChange(startOfStartDay.getMillis(), endOfEndDay.getMillis());
+           }
+
        }
+    }
+    public boolean firstLastVisibleNodesChanged(){
+        int curFirst = getLowestVisibleXIndex();
+        int curLast  = getHighestVisibleXIndex();
+
+        if(curFirst != prevLowX || curLast != prevHighX){
+            prevHighX = curLast;
+            prevLowX = curFirst;
+            return false;
+        }
+        return true;
+
     }
     public class MyCustomXAxisValueFormatter implements XAxisValueFormatter {
 

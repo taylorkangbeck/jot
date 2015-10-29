@@ -13,6 +13,7 @@ import android.view.ViewGroup;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.taylorandtucker.jot.Entry;
 import com.taylorandtucker.jot.NLP.InfoExtractor;
 import com.taylorandtucker.jot.R;
 import com.taylorandtucker.jot.localdb.EntityCursorLoader;
@@ -88,6 +89,9 @@ public class EntityFragment extends Fragment implements LoaderManager.LoaderCall
         mChart = (SentimentGraphFragment) getActivity().findViewById(R.id.chartE);
         mChart.updateData(ie.getEntriesForEntity(entityId));
 
+        for (Entry e: ie.getEntriesForEntity(entityId)){
+            System.out.println("============\n" + e.getBody());
+        }
         cardCursorAdapter = new CardCursorAdapter(getContext(), null);
         cardMergeAdapter.addAdapter(cardCursorAdapter);
         entriesFeed.setAdapter(cardMergeAdapter);
@@ -108,7 +112,7 @@ public class EntityFragment extends Fragment implements LoaderManager.LoaderCall
                     mChart.postDelayed(new Runnable() {
                         @Override
                         public void run() {
-                            mChart.updateData(ie.getAllEntries());
+                            mChart.updateData(ie.getEntriesForEntity(entityId));
                             mChart.setGradient();
                             System.out.println("2 delay resume");
                         }
@@ -128,7 +132,7 @@ public class EntityFragment extends Fragment implements LoaderManager.LoaderCall
                     mChart.postDelayed(new Runnable() {
                         @Override
                         public void run() {
-                            mChart.updateData(ie.getAllEntries());
+                            mChart.updateData(ie.getEntriesForEntity(entityId));
                             mChart.setGradient();
                             System.out.println("2 delay start");
                         }

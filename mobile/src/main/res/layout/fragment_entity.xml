@@ -35,37 +35,4 @@
         android:layout_below="@+id/chartE">
     </ListView>
 
-
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentRight="true"
-        android:gravity="bottom"
-        android:id="@+id/textEntryLayout"
-        android:background="@color/ColorPrimary"
-        android:visibility="invisible">
-
-        <EditText
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/textEntry"
-            android:layout_toLeftOf="@+id/submitButton"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentBottom="false" />
-
-        <Button
-            style="?android:attr/buttonStyleSmall"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Submit"
-            android:id="@+id/submitButton"
-            android:layout_alignParentEnd="false"
-            android:layout_alignParentRight="true"
-            android:onClick="onSubmit"
-            android:layout_alignBottom="@+id/textEntry" />
-    </RelativeLayout>
-
-
 </RelativeLayout>

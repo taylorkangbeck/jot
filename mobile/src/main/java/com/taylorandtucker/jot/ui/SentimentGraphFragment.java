@@ -350,15 +350,16 @@ public class SentimentGraphFragment extends LineChart implements OnChartGestureL
 
     @Override
     public void onValueSelected(Entry e, int dataSetIndex, Highlight h) {
-        Log.i("Entry selected", e.toString());
-        setGradient();
+        if (graphVPListener !=null) {
+            Log.i("Entry selected", e.toString());
+            setGradient();
 
-        long dayTimeMilli = startTime*DAYS + e.getXIndex()*DAYS;
-        DateTime startOfDay = new DateTime(dayTimeMilli).withTimeAtStartOfDay();
-        DateTime endOfDay = new DateTime(dayTimeMilli).plusDays(1).withTimeAtStartOfDay();
+            long dayTimeMilli = startTime * DAYS + e.getXIndex() * DAYS;
+            DateTime startOfDay = new DateTime(dayTimeMilli).withTimeAtStartOfDay();
+            DateTime endOfDay = new DateTime(dayTimeMilli).plusDays(1).withTimeAtStartOfDay();
 
-        this.graphVPListener.onNodeSelected(startOfDay.getMillis(), endOfDay.getMillis());
-
+            this.graphVPListener.onNodeSelected(startOfDay.getMillis(), endOfDay.getMillis());
+        }
     }
 
     @Override

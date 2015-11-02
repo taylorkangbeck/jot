@@ -108,6 +108,7 @@ public class ProcessedEntry {
         int count = 0;
         while (matcher.find())
             count++;
+        return count;
     }
 
     private int sentenceSentiment(Node sentence){

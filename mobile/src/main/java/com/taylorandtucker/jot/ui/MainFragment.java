@@ -526,7 +526,7 @@ public class MainFragment extends Fragment implements LoaderManager.LoaderCallba
             HttpPost httppost = new HttpPost("http://54.173.123.6:8000/entry");
             String line = "";
             String xml = "";
-            System.out.println("HHHEEEERRRREEE0");
+
             try {
                 HttpEntity entity = new ByteArrayEntity(entry.getBytes("UTF-8"));
                 httppost.setEntity(entity);
@@ -548,13 +548,13 @@ public class MainFragment extends Fragment implements LoaderManager.LoaderCallba
                 return null;
                 // TODO Auto-generated catch block
             }
-            final ProcessedEntry ent = new ProcessedEntry(xml);
+            final ProcessedEntry ent = new ProcessedEntry(xml, entry);
 
-            System.out.println("HHHEEEERRRREEE1");
+
             InfoExtractor ie = new InfoExtractor(getActivity());
 
             ie.processNewEntryData(Long.parseLong(entryID), ent);
-            System.out.println("HHHEEEERRRREEE2");
+
             final List entries = ie.getAllEntries();
 
 
@@ -562,7 +562,7 @@ public class MainFragment extends Fragment implements LoaderManager.LoaderCallba
                 @Override
                 public void run() {
                     if (mChart != null) {
-                        System.out.println("HHHEEEERRRREEE3");
+
                         mChart.updateData(entries);
                     }
                 }

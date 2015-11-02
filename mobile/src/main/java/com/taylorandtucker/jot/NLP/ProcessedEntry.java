@@ -11,6 +11,8 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -25,7 +27,10 @@ import javax.xml.xpath.XPathFactory;
 public class ProcessedEntry {
     private Document doc;
     private static XPath xpath;
-    public ProcessedEntry(String rawXML){
+    private String entryBody;
+    public ProcessedEntry(String rawXML, String entryBody){
+        this.entryBody = entryBody;
+
         try {
             DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
             DocumentBuilder builder =factory.newDocumentBuilder();
@@ -53,13 +58,56 @@ public class ProcessedEntry {
      List sentenceSents = new ArrayList<Integer>();
 
         NodeList sNodes = getSentenceNodes();
+        List<Integer> emojiSents = getSentenceEmojiSents();
         if(sNodes != null) {
             for (int i = 0; i < sNodes.getLength(); i++) {
                 int val = sentenceSentiment(sNodes.item(i));
+                if(emojiSents.get(i) !=0)
+                    val = emojiSents.get(i);
                 sentenceSents.add(val);
             }
         }
         return sentenceSents;
+    }
+    private List<String> getSentenceStrings(){
+        String sentenceRegex = "[^.!?]+[.?!]";
+
+
+        List<String> allMatches = new ArrayList<String>();
+        Matcher m = Pattern.compile(sentenceRegex)
+                .matcher(entryBody);
+        while (m.find()) {
+            System.out.println(m.group());
+            allMatches.add(m.group());
+        }
+
+        return allMatches;
+
+    }
+    public List<Integer> getSentenceEmojiSents(){
+        String positive = "U+1F603";
+        String negative = "U+1F621";
+
+        List<Integer> sentiments = new ArrayList<Integer>();
+        for(String sentence: getSentenceStrings()){
+            int sentSum = countOccurances(positive, sentence) - countOccurances(negative,sentence);
+
+            if (sentSum > 2)
+                sentSum = 2;
+            else if(sentSum < -2)
+                sentSum = -2;
+
+            sentiments.add(sentSum);
+        }
+        return sentiments;
+    }
+    private int countOccurances(String reg, String sentence){
+        Pattern pattern = Pattern.compile(reg);
+        Matcher  matcher = pattern.matcher(sentence);
+
+        int count = 0;
+        while (matcher.find())
+            count++;
     }
 
     private int sentenceSentiment(Node sentence){

@@ -85,7 +85,7 @@ public class InfoExtractor {
     public void processNewEntryData(long entryID, ProcessedEntry processedEntry){
 
         updateSentimentForEntry(entryID, processedEntry.getEntrySentiment());
-        System.out.println("HHHEEEERRRREEE1.2");
+
         Map<String, Integer> pMap = processedEntry.personSentiment();
 
         for (Map.Entry<String, Integer> ent: pMap.entrySet()) {
@@ -109,7 +109,7 @@ public class InfoExtractor {
         return newRowId;
     }
     public void updateSentimentForEntry(long entryID, double sentSum){
-        System.out.println("Sent sum: " + sentSum);
+
         ContentValues values = new ContentValues();
         values.put(DBContract.EntryContract.COLUMN_SENTIMENT, sentSum);
         String[] Values = new String[1];
@@ -158,11 +158,12 @@ public class InfoExtractor {
         Entity ent = getEntityByName(name);
 
         if (ent != null) {
-            double sent =ent.getSentiment();
+            double sentOld =ent.getSentiment();
             int imp = ent.getImportance();
-            sent = calcSentForEntity(newSentiment, sent, imp);
+            double sentNew = calcSentForEntity(newSentiment, sentOld, imp);
             imp = recalculateImportance(name, imp);
-            updateEntityByName(name, imp, sent);
+            System.out.println("Entity: " + name + " currentSent = " + sentOld + " incoming sent = " + newSentiment + "  sentNew = " + sentNew );
+            updateEntityByName(name, imp, sentNew);
         }else{
             insertEntity(name, newSentiment);
         }

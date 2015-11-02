@@ -450,7 +450,7 @@ public class MainFragment extends Fragment implements LoaderManager.LoaderCallba
                 break;
             case 2:
                 projection = DBUtils.entityProjection;
-                sortOrder = EntityContract.COLUMN_IMPORTANCE + " DESC";
+                sortOrder = EntityContract.COLUMN_IMPORTANCE + " * 1 DESC";
                 uri = DBContentProvider.ENTITY_URI;
                 selection = null;
                 selectionArgs = null;

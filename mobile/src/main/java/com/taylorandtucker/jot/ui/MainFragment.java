@@ -443,7 +443,8 @@ public class MainFragment extends Fragment implements LoaderManager.LoaderCallba
 
             RetrieveNLPdata nlp = new RetrieveNLPdata(idStr, entry.getBody());
             nlp.execute();
-        }
+        }else
+            System.out.println("EMOJI ISNT A CHARACTER");
         View view = getActivity().getCurrentFocus();
         if (view != null) {
             InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
@@ -553,7 +554,9 @@ public class MainFragment extends Fragment implements LoaderManager.LoaderCallba
             String xml = "";
 
             try {
-                HttpEntity entity = new ByteArrayEntity(entry.getBytes("UTF-8"));
+                String strippedEntry = entry.replace(NEG_EMOJI, "");
+                strippedEntry = strippedEntry.replace(POS_EMOJI, "");
+                HttpEntity entity = new ByteArrayEntity(strippedEntry.getBytes("UTF-8"));
                 httppost.setEntity(entity);
 
                 // Execute HTTP Post Request
@@ -566,13 +569,14 @@ public class MainFragment extends Fragment implements LoaderManager.LoaderCallba
                 }
             } catch (ClientProtocolException e) {
                 System.out.println(e);
-                return null;
+
                 // TODO Auto-generated catch block
             } catch (IOException e) {
                 System.out.println(e);
-                return null;
+
                 // TODO Auto-generated catch block
             }
+            System.out.println("here");
             final ProcessedEntry ent = new ProcessedEntry(xml, entry);
 
 
@@ -587,9 +591,10 @@ public class MainFragment extends Fragment implements LoaderManager.LoaderCallba
                 @Override
                 public void run() {
                     if (mChart != null) {
-
                         mChart.updateData(entries);
+
                     }
+                    getLoaderManager().restartLoader(LOADER_ID, null, MainFragment.this);
                 }
             });
             System.out.println("===================== ENTITIES =======================");

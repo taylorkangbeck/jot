@@ -34,6 +34,7 @@ public class ProcessedEntry {
         try {
             DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
             DocumentBuilder builder =factory.newDocumentBuilder();
+            System.out.println(rawXML);
             doc = builder.parse(new InputSource(new StringReader(rawXML)));
         }catch (Exception e){
             System.out.println(e);
@@ -62,15 +63,25 @@ public class ProcessedEntry {
         if(sNodes != null) {
             for (int i = 0; i < sNodes.getLength(); i++) {
                 int val = sentenceSentiment(sNodes.item(i));
-                if(emojiSents.get(i) !=0)
-                    val = emojiSents.get(i);
+
                 sentenceSents.add(val);
             }
+        }
+        for(int i=0; i<emojiSents.size();i++){
+            int sentVal = emojiSents.get(i);
+            if(sNodes==null || sNodes.getLength()<= i){
+                sentenceSents.add(sentVal);
+            }else{
+                if(sentVal != 0 ) {
+                    sentenceSents.set(i, sentVal);
+                }
+            }
+
         }
         return sentenceSents;
     }
     private List<String> getSentenceStrings(){
-        String sentenceRegex = "[^.!?]+[.?!]";
+        String sentenceRegex = "[^.!?]*[.?!]";
 
 
         List<String> allMatches = new ArrayList<String>();
@@ -93,8 +104,9 @@ public class ProcessedEntry {
 
         List<Integer> sentiments = new ArrayList<Integer>();
         for(String sentence: getSentenceStrings()){
+            System.out.println(sentence);
             int sentSum = countOccurances(positive, sentence) - countOccurances(negative,sentence);
-
+            System.out.println(sentSum);
             if (sentSum > 2)
                 sentSum = 2;
             else if(sentSum < -2)

@@ -165,12 +165,17 @@ public class MainFragment extends Fragment implements LoaderManager.LoaderCallba
                             final int index = i;
                             if (entryTime <= endOfDay && entryTime >= startOfDay ) {
                                 System.out.println(i);
-                                View v = (View) entriesFeed.getChildAt(i);
-                                if(v !=null){
-                                    v.performClick();
-                                }else {
+
+                                    System.out.println("NULL y");
                                     CardCursorAdapter.needsClick = true;
                                     CardCursorAdapter.clickDate = startOfDay;
+                                if(entriesFeed.getFirstVisiblePosition() <= i && entriesFeed.getLastVisiblePosition() >= i) {
+                                    System.out.println(entriesFeed.getFirstVisiblePosition());
+                                    System.out.println(entriesFeed.getLastVisiblePosition());
+                                    System.out.println(i);
+                                    View v = (View) entriesFeed.getChildAt(i-entriesFeed.getFirstVisiblePosition());
+                                    System.out.println(v.findViewById(R.id.entryBody));
+                                    v.performClick();
                                 }
 
                                if(!hasScrolled) {

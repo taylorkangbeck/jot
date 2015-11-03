@@ -26,6 +26,7 @@ public class CardCursorAdapter extends CursorAdapter {
 
     //TODO maybe change from being singleton
 
+    static long clickDate;
     public long date;
 
     public CardCursorAdapter(Context context, Cursor cursor) {

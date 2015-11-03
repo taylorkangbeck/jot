@@ -163,7 +163,9 @@ public class MainFragment extends Fragment implements LoaderManager.LoaderCallba
 
                             final int index = i;
                             if (entryTime <= endOfDay && entryTime >= startOfDay) {
+                                System.out.println(i);
                                 entriesFeed.setSelectionFromTop(i, 0);
+                                break;
                             }
                         }
                     }

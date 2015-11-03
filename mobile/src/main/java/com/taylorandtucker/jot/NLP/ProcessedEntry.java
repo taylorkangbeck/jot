@@ -211,6 +211,12 @@ public class ProcessedEntry {
                 }
             }
         }
+        for(Map.Entry<String, Integer> mapEntry: psMap.entrySet()){
+            if (mapEntry.getValue() > 2)
+                psMap.put(mapEntry.getKey(), 2);
+            else if (mapEntry.getValue() < -2)
+                psMap.put(mapEntry.getKey(), -2);
+        }
         //todo: consider this. maybe not necessary? maybe even wrong ?
         combineAliasValues(psMap);
         return psMap;

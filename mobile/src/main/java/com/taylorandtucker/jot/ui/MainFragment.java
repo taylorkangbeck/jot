@@ -76,6 +76,9 @@ public class MainFragment extends Fragment implements LoaderManager.LoaderCallba
     private long minTimeChart = 0;
     private long maxTimeChart = Long.MAX_VALUE;
 
+    private String POS_EMOJI = new String(Character.toChars(0x1F601));
+    private String NEG_EMOJI = new String(Character.toChars(0x1F620));
+
     /**
      * Returns a new instance of this fragment for the given section
      * number.
@@ -152,24 +155,20 @@ public class MainFragment extends Fragment implements LoaderManager.LoaderCallba
                     @Override
                     public void onNodeSelected(long startOfDay, long endOfDay) {
 
-                        for (int i = 0 ; i < cardMergeAdapter.getCount(); i++) {
+                        for (int i = 0; i < cardMergeAdapter.getCount(); i++) {
                             Cursor c = (Cursor) cardMergeAdapter.getItem(i);
 
-                            long entryTime = 1000*c.getLong(c.getColumnIndexOrThrow(EntryContract.COLUMN_DATE));
+                            long entryTime = 1000 * c.getLong(c.getColumnIndexOrThrow(EntryContract.COLUMN_DATE));
 
                             final int index = i;
                             if (entryTime <= endOfDay && entryTime >= startOfDay) {
-
-
                                 entriesFeed.setSelectionFromTop(i, 0);
-                                //entriesFeed.smoothScrollToPosition(i);
-
                             }
                         }
                     }
+
                     @Override
-                    public void onVPRangeChange(long startDate, long endDate)
-                    {
+                    public void onVPRangeChange(long startDate, long endDate) {
                         minTimeChart = startDate;
                         maxTimeChart = endDate;
                         getLoaderManager().restartLoader(LOADER_ID, null, MainFragment.this);
@@ -181,6 +180,7 @@ public class MainFragment extends Fragment implements LoaderManager.LoaderCallba
                 cardMergeAdapter.addAdapter(cardCursorAdapter);
                 entriesFeed.setAdapter(cardMergeAdapter);
 
+                setupEmojiButtons();
                 setupFAB();
                 break;
             case 2:
@@ -203,6 +203,30 @@ public class MainFragment extends Fragment implements LoaderManager.LoaderCallba
         }
     }
 
+    private void setupEmojiButtons(){
+        Button pos = (Button) getActivity().findViewById(R.id.addPosEmoji);
+        Button neg = (Button) getActivity().findViewById(R.id.addNegEmoji);
+
+        pos.setText(POS_EMOJI);
+        neg.setText(NEG_EMOJI);
+        pos.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                writeEmoji(POS_EMOJI);
+            }
+        });
+        neg.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                writeEmoji(NEG_EMOJI);
+            }
+        });
+
+    }
+    private void writeEmoji(String emojiChars){
+        EditText textEntry = (EditText) getActivity().findViewById(R.id.textEntry);
+        textEntry.getText().insert(textEntry.getSelectionStart(), emojiChars);
+    }
     private void setupFAB() {
         // submit listener
         Button submitButton = (Button) getActivity().findViewById(R.id.submitButton);
@@ -591,32 +615,6 @@ public class MainFragment extends Fragment implements LoaderManager.LoaderCallba
 
     }
 
-    public void setupUIKeyboardDisapear(View view) {
-
-        //Set up touch listener for non-text box views to hide keyboard.
-        if (!(view instanceof EditText)) {
-
-            view.setOnTouchListener(new View.OnTouchListener() {
-
-                public boolean onTouch(View v, MotionEvent event) {
-                    hideSoftKeyboard(getActivity());
-                    return false;
-                }
-
-            });
-        }
-
-        //If a layout container, iterate over children and seed recursion.
-        if (view instanceof ViewGroup) {
-
-            for (int i = 0; i < ((ViewGroup) view).getChildCount(); i++) {
-
-                View innerView = ((ViewGroup) view).getChildAt(i);
-
-                setupUIKeyboardDisapear(innerView);
-            }
-        }
-    }
 
     public static void hideSoftKeyboard(Activity activity) {
         InputMethodManager inputMethodManager = (InputMethodManager) activity.getSystemService(Activity.INPUT_METHOD_SERVICE);

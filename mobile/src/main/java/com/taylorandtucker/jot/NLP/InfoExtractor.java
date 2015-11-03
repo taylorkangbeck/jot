@@ -85,7 +85,6 @@ public class InfoExtractor {
     public void processNewEntryData(long entryID, ProcessedEntry processedEntry){
 
         updateSentimentForEntry(entryID, processedEntry.getEntrySentiment());
-        System.out.println("HHHEEEERRRREEE1.2");
         Map<String, Integer> pMap = processedEntry.personSentiment();
 
         for (Map.Entry<String, Integer> ent: pMap.entrySet()) {

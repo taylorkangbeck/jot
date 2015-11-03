@@ -81,12 +81,15 @@ public class ProcessedEntry {
             allMatches.add(m.group());
         }
 
+        if (allMatches.size() == 0)
+            allMatches.add(entryBody);
+
         return allMatches;
 
     }
     public List<Integer> getSentenceEmojiSents(){
-        String positive = "U+1F603";
-        String negative = "U+1F621";
+        String positive = "\uD83D\uDE01";
+        String negative = "\uD83D\uDE20";
 
         List<Integer> sentiments = new ArrayList<Integer>();
         for(String sentence: getSentenceStrings()){

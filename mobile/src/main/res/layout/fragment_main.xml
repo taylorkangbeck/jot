@@ -28,32 +28,83 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentRight="true"
-        android:gravity="bottom"
         android:id="@+id/textEntryLayout"
-        android:background="@color/ColorPrimary"
-        android:visibility="invisible">
+        android:visibility="invisible"
+        android:gravity="bottom"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="false"
+        android:layout_alignParentBottom="true"
+        android:padding="0dp">
 
-        <EditText
-            android:layout_width="wrap_content"
+
+        <RelativeLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:id="@+id/textEntry"
-            android:layout_toLeftOf="@+id/submitButton"
+            android:layout_alignParentBottom="false"
             android:layout_alignParentLeft="true"
-            android:layout_alignParentBottom="false" />
-
-        <Button
-            style="?android:attr/buttonStyleSmall"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Submit"
-            android:id="@+id/submitButton"
-            android:layout_alignParentEnd="false"
             android:layout_alignParentRight="true"
-            android:onClick="onSubmit"
-            android:layout_alignBottom="@+id/textEntry" />
+            android:gravity="bottom"
+            android:id="@+id/textEntryLayoutInner"
+            android:background="@color/ColorPrimary"
+            android:padding="0dp">
+
+            <EditText
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/textEntry"
+                android:layout_toLeftOf="@+id/submitButton"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentBottom="false"
+                android:inputType="text" />
+
+
+            <Button
+                style="?android:attr/buttonStyleSmall"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Submit"
+                android:id="@+id/submitButton"
+                android:layout_alignParentEnd="false"
+                android:layout_alignParentRight="true"
+                android:onClick="onSubmit"
+                android:layout_alignBottom="@+id/textEntry" />
+        </RelativeLayout>
+
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:layout_alignParentEnd="false"
+            android:weightSum="1"
+            android:layout_below="@+id/textEntryLayoutInner"
+            android:layout_alignParentLeft="false"
+            android:layout_alignParentBottom="false"
+            android:layout_alignParentRight="false"
+            android:padding="0dp"
+            android:background="@color/ColorPrimary">
+
+            <Button
+                style="?android:attr/buttonStyleSmall"
+                android:layout_width="0dp"
+                android:layout_height="fill_parent"
+                android:text=""
+                android:id="@+id/addNegEmoji"
+                android:layout_weight=".5"
+                android:layout_gravity="center_horizontal|bottom"
+                android:padding="0dp"
+                android:textSize="25sp"  />
+
+            <Button
+                style="?android:attr/buttonStyleSmall"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:text="New Button"
+                android:id="@+id/addPosEmoji"
+                android:layout_weight=".5"
+                android:layout_gravity="center_horizontal"
+                android:textSize="25sp" />
+
+        </LinearLayout>
     </RelativeLayout>
 
     <FrameLayout

@@ -150,7 +150,7 @@ public class DemoHelper {
                     xml += line;
                 }
 
-                final ProcessedEntry ent = new ProcessedEntry(xml);
+                final ProcessedEntry ent = new ProcessedEntry(xml, entry);
 
 
                 InfoExtractor ie = new InfoExtractor(activity);

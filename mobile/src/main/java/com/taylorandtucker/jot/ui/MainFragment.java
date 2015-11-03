@@ -156,16 +156,27 @@ public class MainFragment extends Fragment implements LoaderManager.LoaderCallba
                     @Override
                     public void onNodeSelected(long startOfDay, long endOfDay) {
 
+                        boolean hasScrolled = false;
                         for (int i = 0; i < cardMergeAdapter.getCount(); i++) {
                             Cursor c = (Cursor) cardMergeAdapter.getItem(i);
 
                             long entryTime = 1000 * c.getLong(c.getColumnIndexOrThrow(EntryContract.COLUMN_DATE));
 
                             final int index = i;
-                            if (entryTime <= endOfDay && entryTime >= startOfDay) {
+                            if (entryTime <= endOfDay && entryTime >= startOfDay ) {
                                 System.out.println(i);
-                                entriesFeed.setSelectionFromTop(i, 0);
-                                break;
+                                View v = (View) entriesFeed.getChildAt(i);
+                                if(v !=null){
+                                    v.performClick();
+                                }else {
+                                    CardCursorAdapter.needsClick = true;
+                                    CardCursorAdapter.clickDate = startOfDay;
+                                }
+
+                               if(!hasScrolled) {
+                                   entriesFeed.setSelectionFromTop(i, 0);
+                                   hasScrolled = true;
+                               }
                             }
                         }
                     }

@@ -27,7 +27,8 @@ public class CardCursorAdapter extends CursorAdapter {
     //TODO maybe change from being singleton
 
     static long clickDate;
-    public long date;
+    static boolean needsClick = false;
+    public long dateMil;
 
     public CardCursorAdapter(Context context, Cursor cursor) {
         super(context, cursor, 0);
@@ -62,7 +63,7 @@ public class CardCursorAdapter extends CursorAdapter {
         String body = cursor.getString(cursor.getColumnIndexOrThrow(EntryContract.COLUMN_BODY));
         double sent = cursor.getDouble(cursor.getColumnIndexOrThrow(EntryContract.COLUMN_SENTIMENT));
 
-        date = dateSec*1000;
+        dateMil = dateSec*1000;
         // Populate fields with extracted properties
         Date date = new Date(dateSec*1000);
         SimpleDateFormat formatter = new SimpleDateFormat("EEEE MMM dd, yyyy    h:mm a");
@@ -102,6 +103,11 @@ public class CardCursorAdapter extends CursorAdapter {
                 //colorAnimation.reverse();
             }
         });
+
+        if(needsClick && dateMil > clickDate && dateMil < clickDate+24*60*60*1000){
+            view.performClick();
+            needsClick = false;
+        }
 
     }
 

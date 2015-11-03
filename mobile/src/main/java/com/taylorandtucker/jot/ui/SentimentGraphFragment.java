@@ -52,6 +52,9 @@ public class SentimentGraphFragment extends LineChart implements OnChartGestureL
     private long visibleRange;
     private int nodeCount;
 
+    private int prevHighX;
+    private int prevLowX;
+
     private GraphVPListener graphVPListener;
     private final int layoutId = R.layout.fragment_sentiment_graph;
 
@@ -347,15 +350,16 @@ public class SentimentGraphFragment extends LineChart implements OnChartGestureL
 
     @Override
     public void onValueSelected(Entry e, int dataSetIndex, Highlight h) {
-        Log.i("Entry selected", e.toString());
-        setGradient();
+        if (graphVPListener !=null) {
+            Log.i("Entry selected", e.toString());
+            setGradient();
 
-        long dayTimeMilli = startTime*DAYS + e.getXIndex()*DAYS;
-        DateTime startOfDay = new DateTime(dayTimeMilli).withTimeAtStartOfDay();
-        DateTime endOfDay = new DateTime(dayTimeMilli).plusDays(1).withTimeAtStartOfDay();
+            long dayTimeMilli = startTime * DAYS + e.getXIndex() * DAYS;
+            DateTime startOfDay = new DateTime(dayTimeMilli).withTimeAtStartOfDay();
+            DateTime endOfDay = new DateTime(dayTimeMilli).plusDays(1).withTimeAtStartOfDay();
 
-        this.graphVPListener.onNodeSelected(startOfDay.getMillis(), endOfDay.getMillis());
-
+            this.graphVPListener.onNodeSelected(startOfDay.getMillis(), endOfDay.getMillis());
+        }
     }
 
     @Override
@@ -364,10 +368,26 @@ public class SentimentGraphFragment extends LineChart implements OnChartGestureL
     }
 
     public void chartVisibleRangeChange(long firstDay, long lastDay){
-        DateTime startOfStartDay = new DateTime(firstDay).withTimeAtStartOfDay();
-        DateTime endOfEndDay = new DateTime(lastDay).plusDays(1).withTimeAtStartOfDay();
+       if (firstLastVisibleNodesChanged()) {
+           if (this.graphVPListener != null) {
+               DateTime startOfStartDay = new DateTime(firstDay).withTimeAtStartOfDay();
+               DateTime endOfEndDay = new DateTime(lastDay).plusDays(1).withTimeAtStartOfDay();
 
-        this.graphVPListener.onVPRangeChange(startOfStartDay.getMillis(), endOfEndDay.getMillis());
+               this.graphVPListener.onVPRangeChange(startOfStartDay.getMillis(), endOfEndDay.getMillis());
+           }
+
+       }
+    }
+    public boolean firstLastVisibleNodesChanged(){
+        int curFirst = getLowestVisibleXIndex();
+        int curLast  = getHighestVisibleXIndex();
+
+        if(curFirst != prevLowX || curLast != prevHighX){
+            prevHighX = curLast;
+            prevLowX = curFirst;
+            return false;
+        }
+        return true;
 
     }
     public class MyCustomXAxisValueFormatter implements XAxisValueFormatter {

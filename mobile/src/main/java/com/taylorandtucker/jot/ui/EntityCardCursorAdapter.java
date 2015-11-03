@@ -33,11 +33,28 @@ public class EntityCardCursorAdapter extends CursorAdapter {
 
         final String name = cursor.getString(cursor.getColumnIndexOrThrow("name"));
         final long entityId = cursor.getLong(cursor.getColumnIndexOrThrow("_id"));
+
+        return view;
+    }
+
+    @Override
+    public void bindView(View view, final Context context, Cursor cursor) {
+
+        TextView entityNameTextView = (TextView) view.findViewById(R.id.entityName);
+        TextView entityMentionTextView = (TextView) view.findViewById(R.id.entityMentions);
+        View background = (View) view.findViewById((R.id.cardContent));
+
+        // Extract properties from cursor
+        final String name = cursor.getString(cursor.getColumnIndexOrThrow(EntityContract.COLUMN_NAME));
+        double sent = cursor.getDouble(cursor.getColumnIndexOrThrow(EntityContract.COLUMN_SENTIMENT));
+        int mentions = cursor.getInt(cursor.getColumnIndex(EntityContract.COLUMN_IMPORTANCE));
+
+        final long entityId = cursor.getLong(cursor.getColumnIndexOrThrow("_id"));
         view.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
-                FragmentManager fm = ((FragmentActivity)context).getSupportFragmentManager();
+                FragmentManager fm = ((FragmentActivity) context).getSupportFragmentManager();
                 Bundle data = new Bundle();
                 data.putLong("entityId", entityId);
                 data.putString("entityName", name);
@@ -45,21 +62,6 @@ public class EntityCardCursorAdapter extends CursorAdapter {
                 fm.beginTransaction().replace(R.id.container, ef, "entityFrag1").commit();
             }
         });
-
-        return view;
-    }
-
-    @Override
-    public void bindView(View view, Context context, Cursor cursor) {
-
-        TextView entityNameTextView = (TextView) view.findViewById(R.id.entityName);
-        TextView entityMentionTextView = (TextView) view.findViewById(R.id.entityMentions);
-        View background = (View) view.findViewById((R.id.cardContent));
-
-        // Extract properties from cursor
-        String name = cursor.getString(cursor.getColumnIndexOrThrow(EntityContract.COLUMN_NAME));
-        double sent = cursor.getDouble(cursor.getColumnIndexOrThrow(EntityContract.COLUMN_SENTIMENT));
-        int mentions = cursor.getInt(cursor.getColumnIndex(EntityContract.COLUMN_IMPORTANCE));
 
         // Populate fields with extracted properties
         entityNameTextView.setText(name);

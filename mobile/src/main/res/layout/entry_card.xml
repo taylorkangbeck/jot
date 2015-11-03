@@ -5,7 +5,8 @@
     android:layout_height="wrap_content"
     android:paddingLeft="@dimen/cardEdgePadding"
     android:paddingRight="@dimen/cardEdgePadding"
-    android:paddingTop="@dimen/cardEdgePadding"
+    android:paddingTop="@dimen/cardEdgeTopBottomPadding"
+    android:paddingBottom="@dimen/cardEdgeTopBottomPadding"
     android:alpha="1">
 
     <GridLayout

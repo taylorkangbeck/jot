@@ -124,6 +124,7 @@ public class InfoExtractor {
         values.put(EntityContract.COLUMN_SENTIMENT, sentVal);
         values.put(EntityContract.COLUMN_IMPORTANCE, getInitialImportance());
 
+        context.getContentResolver().insert(DBContentProvider.ENTITY_URI, values);
         
     }
     public Entity getEntityByName(String name){

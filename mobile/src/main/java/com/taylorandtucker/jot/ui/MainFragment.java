@@ -104,15 +104,15 @@ public class MainFragment extends Fragment implements LoaderManager.LoaderCallba
 
         switch (getArguments().getInt(ARG_SECTION_NUMBER)) {
             case 1:
-                System.out.println("CASE1");
+                
                 rootView = inflater.inflate(R.layout.fragment_main, container, false);
                 break;
             case 2:
-                System.out.println("CASE2");
+                
                 rootView = inflater.inflate(R.layout.fragment_entities_list, container, false);
                 break;
             case 3:
-                System.out.println("CASE3");
+                
                 rootView = inflater.inflate(R.layout.fragment_main, container, false);
                 break;
             default:
@@ -149,7 +149,7 @@ public class MainFragment extends Fragment implements LoaderManager.LoaderCallba
                 if (ie.getAllEntries().size() <= 2) {
                     DemoHelper dh = new DemoHelper(getActivity());
                     //DemoHelper dh = new DemoHelper(60, 4 * 24 * 60 * 60, getActivity(), mChart);
-                    System.out.println("DEMO HELPER FINISHED MAKING CALLS");
+                    
                 }
                 mChart.updateData(ie.getAllEntries());
 
@@ -165,17 +165,17 @@ public class MainFragment extends Fragment implements LoaderManager.LoaderCallba
 
                             final int index = i;
                             if (entryTime <= endOfDay && entryTime >= startOfDay ) {
-                                System.out.println(i);
+                                
 
-                                    System.out.println("NULL y");
+                                    
                                     CardCursorAdapter.needsClick = true;
                                     CardCursorAdapter.clickDate = startOfDay;
                                 if(entriesFeed.getFirstVisiblePosition() <= i && entriesFeed.getLastVisiblePosition() >= i) {
-                                    System.out.println(entriesFeed.getFirstVisiblePosition());
-                                    System.out.println(entriesFeed.getLastVisiblePosition());
-                                    System.out.println(i);
+                                    
+                                    
+                                    
                                     View v = (View) entriesFeed.getChildAt(i - entriesFeed.getFirstVisiblePosition());
-                                    System.out.println(v.findViewById(R.id.entryBody));
+                                    
                                     v.performClick();
                                 }
 
@@ -272,7 +272,7 @@ public class MainFragment extends Fragment implements LoaderManager.LoaderCallba
                 textEntry.setFocusableInTouchMode(true);
                 textEntry.requestFocus();
 
-                InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+                InputMethodManager imm = (InputMethodManager) getActivity().get
                 imm.showSoftInput(textEntry, InputMethodManager.SHOW_IMPLICIT);
             }
         });
@@ -286,7 +286,7 @@ public class MainFragment extends Fragment implements LoaderManager.LoaderCallba
 
                 if (textEntryLayout.getVisibility() == View.VISIBLE) {
                     textEntryHide();
-                    InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+                    InputMethodManager imm = (InputMethodManager) getActivity().get
                     imm.hideSoftInputFromWindow(v.getWindowToken(), 0);
                 }
                 return false;
@@ -310,7 +310,7 @@ public class MainFragment extends Fragment implements LoaderManager.LoaderCallba
                 if (!hasFocus) {
                     View view = getActivity().getCurrentFocus();
                     if (view != null) {
-                        InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+                        InputMethodManager imm = (InputMethodManager) getActivity().get
                         imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
                     }
                 }
@@ -330,7 +330,7 @@ public class MainFragment extends Fragment implements LoaderManager.LoaderCallba
                         public void run() {
                             mChart.updateData(ie.getAllEntries());
                             mChart.setGradient();
-                            System.out.println("2 delay resume");
+                            
                         }
                     }, 30);
                 }
@@ -350,7 +350,7 @@ public class MainFragment extends Fragment implements LoaderManager.LoaderCallba
                         public void run() {
                             mChart.updateData(ie.getAllEntries());
                             mChart.setGradient();
-                            System.out.println("2 delay start");
+                            
                         }
                     }, 30);
                 }
@@ -463,10 +463,10 @@ public class MainFragment extends Fragment implements LoaderManager.LoaderCallba
             RetrieveNLPdata nlp = new RetrieveNLPdata(idStr, entry.getBody());
             nlp.execute();
         }else
-            System.out.println("EMOJI ISNT A CHARACTER");
+            
         View view = getActivity().getCurrentFocus();
         if (view != null) {
-            InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+            InputMethodManager imm = (InputMethodManager) getActivity().get
             imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
             entryText.setText("");
             textEntryHide();
@@ -587,15 +587,15 @@ public class MainFragment extends Fragment implements LoaderManager.LoaderCallba
                     xml += line;
                 }
             } catch (ClientProtocolException e) {
-                System.out.println(e);
+                
 
                 // TODO Auto-generated catch block
             } catch (IOException e) {
-                System.out.println(e);
+                
 
                 // TODO Auto-generated catch block
             }
-            System.out.println("here");
+            
             final ProcessedEntry ent = new ProcessedEntry(xml, entry, false);
 
 
@@ -616,18 +616,18 @@ public class MainFragment extends Fragment implements LoaderManager.LoaderCallba
                     getLoaderManager().restartLoader(LOADER_ID, null, MainFragment.this);
                 }
             });
-            System.out.println("===================== ENTITIES =======================");
+            
 
             Map<String, Double> entityMap = ent.personSentiment();
 
 
             for (Map.Entry<String, Double> a : entityMap.entrySet()) {
-                System.out.println(a.getKey() + " : " + a.getValue());
+                
             }
-            System.out.println("entity count : " + ie.getAllEntitiesByImportance().size());
+            
 
 
-            System.out.println("===================== ENTRIES =======================");
+            
 
                 /*
                     DBUtils utils = DBUtils.getInstance(getContext());
@@ -642,7 +642,7 @@ public class MainFragment extends Fragment implements LoaderManager.LoaderCallba
 
 
     public static void hideSoftKeyboard(Activity activity) {
-        InputMethodManager inputMethodManager = (InputMethodManager) activity.getSystemService(Activity.INPUT_METHOD_SERVICE);
+        InputMethodManager inputMethodManager = (InputMethodManager) activity.get
         inputMethodManager.hideSoftInputFromWindow(activity.getCurrentFocus().getWindowToken(), 0);
     }
 

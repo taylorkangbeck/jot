@@ -124,7 +124,7 @@ public class InfoExtractor {
         values.put(EntityContract.COLUMN_SENTIMENT, sentVal);
         values.put(EntityContract.COLUMN_IMPORTANCE, getInitialImportance());
 
-        System.out.println(context.getContentResolver().insert(DBContentProvider.ENTITY_URI, values));
+        
     }
     public Entity getEntityByName(String name){
         String[] Values = new String[1];
@@ -162,7 +162,7 @@ public class InfoExtractor {
             int imp = ent.getImportance();
             double sentNew = calcSentForEntity(newSentiment, sentOld, imp);
             imp = recalculateImportance(name, imp);
-            System.out.println("Entity: " + name + " currentSent = " + sentOld + " incoming sent = " + newSentiment + "  sentNew = " + sentNew );
+            
             updateEntityByName(name, imp, sentNew);
         }else{
             insertEntity(name, newSentiment);

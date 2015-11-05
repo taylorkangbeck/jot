@@ -463,7 +463,7 @@ public class MainFragment extends Fragment implements LoaderManager.LoaderCallba
             RetrieveNLPdata nlp = new RetrieveNLPdata(idStr, entry.getBody());
             nlp.execute();
         }
-            
+
         View view = getActivity().getCurrentFocus();
         if (view != null) {
             InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);

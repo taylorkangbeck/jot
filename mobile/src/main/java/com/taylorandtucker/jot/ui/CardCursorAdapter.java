@@ -85,7 +85,7 @@ public class CardCursorAdapter extends CursorAdapter {
             public void onClick(View v) {
                 final View view = v;
                 Integer colorFrom = view.getSolidColor();
-                Integer colorTo = Color.YELLOW;
+                Integer colorTo = Color.BLUE;
                 ValueAnimator colorAnimation = ValueAnimator.ofObject(new ArgbEvaluator(), colorFrom, colorTo, colorFrom);
                 System.out.println("card clicked");
                 colorAnimation.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {

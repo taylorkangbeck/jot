@@ -152,7 +152,7 @@ I’m going with my mom to visit Grandma Jean in New York for thanksgiving[[0]].
 Only 2 days of school until break[[1]]!
 
 *20/11/2015 13:45
-I just finished my last assignment before break[[1]]! Samantha and I celebrated by going to get ice cream[[.8]]!
+I just finished my last assignment before break[[1]]! Samantha and I celebrated by going to get ice cream[[0.8]]!
 
 *25/11/2015 18:15
 Mom and I woke up really early to catch our flight[[0]]. I really don’t like flying, it really scares me[[-1.5]]. I cried when we were taking off, it was super embarrassing[[-1.5]]. I hope no one could hear me over the engines[[0]].

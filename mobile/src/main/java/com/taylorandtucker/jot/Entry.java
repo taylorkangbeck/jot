@@ -25,7 +25,7 @@ public class Entry {
     }
 
     private String removeFakeSentTags(String body){
-        return body.replaceAll("\\[\\[(.+)\\]\\]", "");
+        return body.replaceAll("\\[\\[-?\\d\\.?\\d?\\]\\]", "");
     }
     public Date getCreatedOn() {
         return createdOn;

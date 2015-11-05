@@ -272,7 +272,7 @@ public class MainFragment extends Fragment implements LoaderManager.LoaderCallba
                 textEntry.setFocusableInTouchMode(true);
                 textEntry.requestFocus();
 
-                InputMethodManager imm = (InputMethodManager) getActivity().get
+                InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
                 imm.showSoftInput(textEntry, InputMethodManager.SHOW_IMPLICIT);
             }
         });
@@ -286,7 +286,7 @@ public class MainFragment extends Fragment implements LoaderManager.LoaderCallba
 
                 if (textEntryLayout.getVisibility() == View.VISIBLE) {
                     textEntryHide();
-                    InputMethodManager imm = (InputMethodManager) getActivity().get
+                    InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
                     imm.hideSoftInputFromWindow(v.getWindowToken(), 0);
                 }
                 return false;
@@ -310,7 +310,7 @@ public class MainFragment extends Fragment implements LoaderManager.LoaderCallba
                 if (!hasFocus) {
                     View view = getActivity().getCurrentFocus();
                     if (view != null) {
-                        InputMethodManager imm = (InputMethodManager) getActivity().get
+                        InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
                         imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
                     }
                 }
@@ -466,7 +466,7 @@ public class MainFragment extends Fragment implements LoaderManager.LoaderCallba
             
         View view = getActivity().getCurrentFocus();
         if (view != null) {
-            InputMethodManager imm = (InputMethodManager) getActivity().get
+            InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
             imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
             entryText.setText("");
             textEntryHide();
@@ -642,7 +642,7 @@ public class MainFragment extends Fragment implements LoaderManager.LoaderCallba
 
 
     public static void hideSoftKeyboard(Activity activity) {
-        InputMethodManager inputMethodManager = (InputMethodManager) activity.get
+        InputMethodManager inputMethodManager = (InputMethodManager) activity.getSystemService(Activity.INPUT_METHOD_SERVICE);
         inputMethodManager.hideSoftInputFromWindow(activity.getCurrentFocus().getWindowToken(), 0);
     }
 

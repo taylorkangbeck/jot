@@ -28,8 +28,10 @@ public class ProcessedEntry {
     private Document doc;
     private static XPath xpath;
     private String entryBody;
-    public ProcessedEntry(String rawXML, String entryBody){
+    private boolean fakeDemo = false;
+    public ProcessedEntry(String rawXML, String entryBody, boolean fakeDemo){
         this.entryBody = entryBody;
+        this.fakeDemo = fakeDemo;
 
         try {
             DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
@@ -44,35 +46,37 @@ public class ProcessedEntry {
     }
 
     //returns a value between -1 and 1 for the overall entry sentiment
-    public float getEntrySentiment(){
-        int sum =0;
-        List<Integer> sents = getSentenceSentiments();
+    public double getEntrySentiment(){
+        double sum =0;
+        List<Double> sents = getSentenceSentiments(fakeDemo);
         //todo: bound this
-        for (Integer i: sents){
+        for (Double i: sents){
+            System.out.println("zzz i: " + i);
             sum += i ;
         }
+        System.out.println("zzz sum: " + sum);
 
-        return sum/((float)sents.size());
+        return (double) sum/((double)sents.size());
     }
     //returns a list of integer sentiment values for each sentence
-    public List<Integer> getSentenceSentiments(){
-     List sentenceSents = new ArrayList<Integer>();
+    public List<Double> getSentenceSentiments(boolean fakeForDemo){
+     List sentenceSents = new ArrayList<Double>();
 
         NodeList sNodes = getSentenceNodes();
-        List<Integer> emojiSents = getSentenceEmojiSents();
+        List<Double> emojiSents = getSentenceEmojiSents(fakeForDemo);
         if(sNodes != null) {
             for (int i = 0; i < sNodes.getLength(); i++) {
-                int val = sentenceSentiment(sNodes.item(i));
+                double val = sentenceSentiment(sNodes.item(i));
 
                 sentenceSents.add(val);
             }
         }
         for(int i=0; i<emojiSents.size();i++){
-            int sentVal = emojiSents.get(i);
+            double sentVal = emojiSents.get(i);
             if(sNodes==null || sNodes.getLength()<= i){
                 sentenceSents.add(sentVal);
             }else{
-                if(sentVal != 0 ) {
+                if(sentVal != 0 || fakeForDemo) {
                     sentenceSents.set(i, sentVal);
                 }
             }
@@ -81,37 +85,40 @@ public class ProcessedEntry {
         return sentenceSents;
     }
     private List<String> getSentenceStrings(){
-        String sentenceRegex = "[^.!?]*[.?!]";
 
-
-        List<String> allMatches = new ArrayList<String>();
-        Matcher m = Pattern.compile(sentenceRegex)
-                .matcher(entryBody);
-        while (m.find()) {
-            System.out.println(m.group());
-            allMatches.add(m.group());
-        }
-
-        if (allMatches.size() == 0)
-            allMatches.add(entryBody);
-
-        return allMatches;
-
+        String[] sents = entryBody.split("(?<!\\w\\.\\w.)(?<![A-Z][a-z]\\.)(?<=\\.|\\?|!)\\s");
+        return Arrays.asList(sents);
     }
-    public List<Integer> getSentenceEmojiSents(){
+    public List<Double> getSentenceEmojiSents(Boolean useFakeSent){
         String positive = "\uD83D\uDE01";
         String negative = "\uD83D\uDE20";
 
-        List<Integer> sentiments = new ArrayList<Integer>();
+        List<Double> sentiments = new ArrayList<Double>();
         for(String sentence: getSentenceStrings()){
-            System.out.println(sentence);
-            int sentSum = countOccurances(positive, sentence) - countOccurances(negative,sentence);
-            System.out.println(sentSum);
-            if (sentSum > 2)
-                sentSum = 2;
-            else if(sentSum < -2)
-                sentSum = -2;
 
+            double sentSum=0;
+
+            if(!useFakeSent) {
+                sentSum = countOccurances(positive, sentence) - countOccurances(negative, sentence);
+
+                if (sentSum > 2)
+                    sentSum = 2;
+                else if (sentSum < -2)
+                    sentSum = -2;
+            }else{
+                Pattern p = Pattern.compile("\\[\\[(.+)\\]\\]");
+                Matcher m = p.matcher(sentence);
+
+                if (m.find()) {
+
+                    sentSum = Double.parseDouble(m.group(1));
+                    System.out.println("here");
+                }
+                if (sentence.contains("Mister Sniffles bit me")){
+                    System.out.println("Mister Sniffle Test1234: " + sentSum);
+                }
+
+            }
             sentiments.add(sentSum);
         }
         return sentiments;
@@ -171,60 +178,62 @@ public class ProcessedEntry {
 
         return names;
     }
-    public Map<String, Integer> personSentiment(){
+    public Map<String, Double> personSentiment(){
         return entitySentiment("PERSON");
     }
-    public Map<String, Integer> locationSentiment(){
+    public Map<String, Double> locationSentiment(){
         return entitySentiment("LOCATION");
     }
-    private Map<String, Integer> entitySentiment(String entityType){
+    private Map<String, Double> entitySentiment(String entityType){
         //todo: use coreference to attribute pronouns to a person and assign sentiment properly
         // i.e. John came over yesterday. he was mean to me.
         // currently john is not given a negative score
-        DefaultHashMap<String, Integer> psMap = new DefaultHashMap<String, Integer>();
+        DefaultHashMap<String, Double> psMap = new DefaultHashMap<String, Double>();
 
         NodeList sNodes = getSentenceNodes();
-        List<Integer> sentSents = getSentenceSentiments();
+        List<Double> sentSents = getSentenceSentiments(fakeDemo);
 
         if(sNodes != null) {
             //for each sentence
+
             for (int i = 0; i < sNodes.getLength(); i++) {
 
                 //find the sentiment
-                int sentVal = sentenceSentiment(sNodes.item(i));
+
+                double sentVal = sentSents.get(i);
 
                 //for all people in each sentence
                 for (String name : entityMentions(sNodes.item(i), entityType)) {
 
                     //add the sentiment of the 'primary' sentence
 
-                    int primarySentVal = psMap.getOrDefault(name, 0) + sentVal;
+                    double primarySentVal = psMap.getOrDefault(name, 0.0) + sentVal;
                     psMap.put(name, primarySentVal);
 
                     // for all other places this person is referenced
                     for(int sentence:  corefSentenceApearances(name)) {
 
                         //add the sentiment of that sentence to their existing score
-                        int corefSentVal = psMap.getOrDefault(name, 0) + sentSents.get(sentence-1);
+                        double corefSentVal = psMap.getOrDefault(name, 0.0) + sentSents.get(sentence-1);
                         psMap.put(name, corefSentVal);
                     }
                 }
             }
         }
-        for(Map.Entry<String, Integer> mapEntry: psMap.entrySet()){
+        for(Map.Entry<String, Double> mapEntry: psMap.entrySet()){
             if (mapEntry.getValue() > 2)
-                psMap.put(mapEntry.getKey(), 2);
+                psMap.put(mapEntry.getKey(), 2.0);
             else if (mapEntry.getValue() < -2)
-                psMap.put(mapEntry.getKey(), -2);
+                psMap.put(mapEntry.getKey(), -2.0);
         }
         //todo: consider this. maybe not necessary? maybe even wrong ?
         combineAliasValues(psMap);
         return psMap;
     }
-    public Map<String, Integer> combineAliasValues(Map<String, Integer> psMap){
+    public Map<String, Double> combineAliasValues(Map<String, Double> psMap){
        Map<String, String> Aliases = new DefaultHashMap<String, String>();
 
-        for(Map.Entry<String, Integer> entry: psMap.entrySet()){
+        for(Map.Entry<String, Double> entry: psMap.entrySet()){
             for(String name: psMap.keySet()){
 
                 String after = entry.getKey() + " ";

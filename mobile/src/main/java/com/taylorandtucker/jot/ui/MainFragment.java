@@ -60,6 +60,7 @@ public class MainFragment extends Fragment implements LoaderManager.LoaderCallba
      */
     private static final String ARG_SECTION_NUMBER = "section_number";
 
+    private View rootView;
     private CardMergeAdapter cardMergeAdapter;
     private CardFragmentAdapter cardFragmentAdapter;
     private CardCursorAdapter cardCursorAdapter;
@@ -100,7 +101,7 @@ public class MainFragment extends Fragment implements LoaderManager.LoaderCallba
                              Bundle savedInstanceState) {
 
         ie = new InfoExtractor(getActivity());
-        View rootView;
+
         switch (getArguments().getInt(ARG_SECTION_NUMBER)) {
             case 1:
                 System.out.println("CASE1");
@@ -127,8 +128,6 @@ public class MainFragment extends Fragment implements LoaderManager.LoaderCallba
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
-        View rootView;
-
         //merging adapters for the entries feed
         cardMergeAdapter = new CardMergeAdapter();
         cardFragmentAdapter = new CardFragmentAdapter(getContext());
@@ -143,6 +142,8 @@ public class MainFragment extends Fragment implements LoaderManager.LoaderCallba
 
                 final ListView entriesFeed = (ListView) getActivity().findViewById(R.id.entriesFeed);
 
+                //View emptyFooter = LayoutInflater.from(context).inflate(R.layout.blankplace_card, entriesFeed);
+                //entriesFeed.addFooterView(emptyFooter);
                 mChart = (SentimentGraphFragment) getActivity().findViewById(R.id.chart);
 
                 if (ie.getAllEntries().size() <= 2) {
@@ -173,7 +174,7 @@ public class MainFragment extends Fragment implements LoaderManager.LoaderCallba
                                     System.out.println(entriesFeed.getFirstVisiblePosition());
                                     System.out.println(entriesFeed.getLastVisiblePosition());
                                     System.out.println(i);
-                                    View v = (View) entriesFeed.getChildAt(i-entriesFeed.getFirstVisiblePosition());
+                                    View v = (View) entriesFeed.getChildAt(i - entriesFeed.getFirstVisiblePosition());
                                     System.out.println(v.findViewById(R.id.entryBody));
                                     v.performClick();
                                 }
@@ -595,7 +596,7 @@ public class MainFragment extends Fragment implements LoaderManager.LoaderCallba
                 // TODO Auto-generated catch block
             }
             System.out.println("here");
-            final ProcessedEntry ent = new ProcessedEntry(xml, entry);
+            final ProcessedEntry ent = new ProcessedEntry(xml, entry, false);
 
 
             InfoExtractor ie = new InfoExtractor(getActivity());
@@ -617,10 +618,10 @@ public class MainFragment extends Fragment implements LoaderManager.LoaderCallba
             });
             System.out.println("===================== ENTITIES =======================");
 
-            Map<String, Integer> entityMap = ent.personSentiment();
+            Map<String, Double> entityMap = ent.personSentiment();
 
 
-            for (Map.Entry<String, Integer> a : entityMap.entrySet()) {
+            for (Map.Entry<String, Double> a : entityMap.entrySet()) {
                 System.out.println(a.getKey() + " : " + a.getValue());
             }
             System.out.println("entity count : " + ie.getAllEntitiesByImportance().size());

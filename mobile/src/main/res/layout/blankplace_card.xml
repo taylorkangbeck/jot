@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:paddingLeft="@dimen/cardEdgePadding"
+    android:paddingRight="@dimen/cardEdgePadding"
+    android:paddingTop="@dimen/cardEdgePadding">
+    <GridLayout
+        android:layout_width="match_parent"
+        android:layout_height="80dp"
+        android:padding="@dimen/entryCardContentPadding"
+        android:background="@color/entryCardBackground"
+        android:id="@+id/placeholder">
+
+    </GridLayout>
+</RelativeLayout>

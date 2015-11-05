@@ -1,174 +1,174 @@
 *23/8/2015 12:00
-Today I got a new diary app. I’m pretty excited about it.
+Today I got a new diary app[[0]]. I’m pretty excited about it[[1]].
 
 *24/8/2015 18:15
-Tomorrow is the first day of school and I’m pretty nervous. Samantha is going to a different school this year and I’m worried we won’t be friends anymore.
+Tomorrow is the first day of school and I’m pretty nervous[[-0.8]]. Samantha is going to a different school this year and I’m worried we won’t be friends anymore[[-1]].
 
 *25/8/2015 15:21
-I met my homeroom teacher today. Her name is Mrs. Mary and she seems really nice. She has a gerbil named Mister Sniffles and he is the coolest!
+I met my homeroom teacher today[[0]]. Her name is Mrs. Mary and she seems really nice[[1]]. She has a gerbil named Mister Sniffles and he is the coolest[[2]]!
 
 *29/8/2015 16:45
-There are lots of nice people in my class, but I haven’t gotten to know any of them yet. One kid named Henry keeps flicking pencils across the room when Mrs. Mary isn’t looking, it’s hilarious!
+There are lots of nice people in my class, but I haven’t gotten to know any of them yet[[0]]. One kid named Henry keeps flicking pencils across the room when Mrs. Mary isn’t looking, it’s hilarious[[1.5]]!
 
 *05/9/2015 17:09
-Today in social studies we got our first homework. It was a report on the dynasties of China. We had to do it in a group and I got stuck with Jessica. I don’t think she likes me. She doesn’t do or say anything mean, but she doesn’t seem to like to talk to me.
+Today in social studies we got our first homework[[0]]. It was a report on the dynasties of China[[0]]. We had to do it in a group and I got stuck with Jessica[[-1.2]]. I don’t think she likes me[[-1]]. She doesn’t do or say anything mean, but she doesn’t seem to like to talk to me[[0]].
 
 *08/9/2015 18:58
-I’m really sad I haven’t gotten to see Samantha in a long time. Every day she is busy with school or sports and can’t hang out with me.
+I’m really sad I haven’t gotten to see Samantha in a long time[[-2]]. Every day she is busy with school or sports and can’t hang out with me[[-0.5]].
 
 *10/9/2015 20:35
-Today was the worst!
+Today was the worst[[-2]]!
 
 *15/9/2015 22:15
-I said something stupid in class and everyone made fun of me.
+I said something stupid in class and everyone made fun of me[[-1.5]].
 
 *18/9/2015 12:30
-I don’t want to go to school tomorrow, it’s the worst.
+I don’t want to go to school tomorrow, it’s the worst[[-1.7]].
 
 *23/9/2015 18:15
-Today Henry starting flicking pencils at my head and it really hurt. Why won’t he just leave me alone!
+Today Henry starting flicking pencils at my head and it really hurt[[-1]]. Why won’t he just leave me alone[[-1]]!
 
 *25/9/2015 18:43
-Henry keeps being mean to me. I hate him!
+Henry keeps being mean to me[[-1]]. I hate him[[-2]]!
 
 *27/9/2015 16:55
-Today in math I sat next to Kayla and she kept telling me really funny jokes and making fun of the substitute teacher.
+Today in math I sat next to Kayla and she kept telling me really funny jokes and making fun of the substitute teacher[[1]].
 
 *29/9/2015 13:45
-Kayla invited me to eat lunch with her, Ashley, Sarah and Brian. They were all really nice.
+Kayla invited me to eat lunch with her, Ashley, Sarah and Brian[[0]]. They were all really nice[[1.2]].
 
 *1/10/2015 19:28
-School is pretty fun now that I’m friends with Kayla.
+School is pretty fun now that I’m friends with Kayla[[1]].
 
 *2/10/2015 17:51
-This week is my week to take care of Mister Sniffles! I’m gonna decorate his cage and it’s gonna be so pretty!
+This week is my week to take care of Mister Sniffles[[0]]! I’m gonna decorate his cage and it’s gonna be so pretty[[1]]!
 
 *4/10/2015 20:41
-I got to take Mister Sniffles home with me and he slept with me in my bed! He is so cute when he sleeps!
+I got to take Mister Sniffles home with me and he slept with me in my bed[[1]]! He is so cute when he sleeps[[1.5]]!
 
 *5/10/2015 1:15
-Mister Sniffles bit me and it really hurt!
+Mister Sniffles bit me and it really hurt[[-1.5]]!
 
 *6/10/2015 13:08
-Kayla’s birthday is this friday and we’re going to wonderworld! I’ve never been there, but I’ve heard it’s the coolest place ever I’m super excited!
+Kayla’s birthday is this friday and we’re going to Wonderworld[[1]]! I’ve never been there, but I’ve heard it’s the coolest place ever I’m super excited[[1.5]]!
 
 *7/10/2015 18:15
-Tomorrow I need to buy toothpaste when I got to target with mom.
+Tomorrow I need to buy toothpaste when I got to target with mom[[0]].
 
 *9/10/2015 20:47
-Kayla, Ashley, Sarah, Brian and I went home with Kayla’s mom after school so we could help set up for her birthday. I can’t wait it’s gonna be awesome!
+Kayla, Ashley, Sarah, Brian and I went home with Kayla’s mom after school so we could help set up for her birthday[[0]]. I can’t wait it’s gonna be awesome[[2]]!
 
 *10/10/2015 10:15
-Jessica didn’t get invited because she is mean to Kayla about her mole. I don’t blame Kayla, Jessica had it coming.
+Jessica didn’t get invited because she is mean to Kayla about her mole[[-1]]. I don’t blame Kayla, Jessica had it coming[[0]].
 
 *12/10/2015 9:11
-Kayla’s birthday was the best!!!! All of the games and rides were free and we ate so much birthday cake and her mom gave us all gift bags when we left! Kayla is my best friend.
+Kayla’s birthday was the best[[1.5]]!!!! All of the games and rides were free and we ate so much birthday cake and her mom gave us all gift bags when we left[[1]]! Kayla is my best friend[[1.8]].
 
 *13/10/2015 14:34
-Henry keeps bothering me from time to time. I don’t hate him anymore, but sometimes I wonder what his deal is.
+Henry keeps bothering me from time to time[[-0.5]]. I don’t hate him anymore, but sometimes I wonder what his deal is[[-0.5]].
 
 *16/10/2015 17:15
-I got assigned to the same group project as Brian and Sarah.
+I got assigned to the same group project as Brian and Sarah[[0]].
 
 *17/10/2015 20:12
-This is my last day as Mister Sniffles’s caretaker. Next week is Jessica’s week to take care of him, I hope she remembers to feed him.
+This is my last day as Mister Sniffles’s caretaker[[0]]. Next week is Jessica’s week to take care of him, I hope she remembers to feed him[[0]].
 
 *19/10/2015 13:24
-Today I taught Jessica how to clean Mister Sniffles’s cage and how to feed him. She was surprisingly nice.
+Today I taught Jessica how to clean Mister Sniffles’s cage and how to feed him[[0]]. She was surprisingly nice[[1]].
 
 *23/10/2015 17:18
-Next week is halloween, so I went to look at costumes with Ashley. We couldn’t decide between being bumblebees or minions so we decided we’ll go back later with Kayla to decide.
+Next week is halloween, so I went to look at costumes with Ashley[[0]]. We couldn’t decide between being bumblebees or minions so we decided we’ll go back later with Kayla to decide[[0]].
 
-*24/8/2015 18:15
-Surprisingly, Jessica invited me over to have dinner and play with Mister Sniffles tomorrow. She has been a lot nicer lately, but I’m still not sure if i want to go.
+*24/10/2015 18:15
+Surprisingly, Jessica invited me over to have dinner and play with Mister Sniffles tomorrow[[0.5]]. She has been a lot nicer lately, but I’m still not sure if I want to go[[1]].
 
 *25/10/2015 17:18
-I ended up going over to Jessica’s house for dinner and it was really fun. We had Pappa John’s Pizza, which is my favorite then we had a tea party with Mister Sniffles and her pet iguana, Rusty.
+I ended up going over to Jessica’s house for dinner and it was really fun[[1.5]]. We had Chinese takeout, which is my favorite then we had a tea party with Mister Sniffles and her pet iguana, Rusty[[1]].
 
 *26/10/2015 20:35
-We had a math test today that was really hard. I just don’t understand why we need to know what the graph of a function looks like.
+We had a math test today that was really hard[[-0.3]]. I just don’t understand why we need to know what the graph of a function looks like[[-0.3]].
 
 *28/10/2015 14:34
-3 days until Halloween!!!
+3 days until Halloween[[0.8]]!!!
 
 *28/10/2015 18:15
-Tonight Ashley, Kayla and I are going back to look at halloween costumes. We decided to invite Jessica because she’s been a lot nicer to all of us recently.
+Tonight Ashley, Kayla and I are going back to look at halloween costumes[[0]]. We decided to invite Jessica because she’s been a lot nicer to all of us recently[[1.1]].
 
 *29/10/2015 20:35
-We found the coolest chimera costume with an extra head so all four of us can wear it! I got the lion head, Jessica got the snake head, Kayla got the goat head and Ashley got the bird head.
+We found the coolest chimera costume with an extra head so all four of us can wear it[[1]]! I got the lion head, Jessica got the snake head, Kayla got the goat head and Ashley got the bird head[[0]].
 
 *31/10/2015 18:15
-School was so fun today because everyone was in costumes! Henry, as the jokester he is, had the funniest fat clown costume! We basically just had fun and ate candy all day!
+School was so fun today because everyone was in costumes[[1.3]]! Henry, as the jokester he is, had the funniest fat clown costume[[1]]! We basically just had fun and ate candy all day[[1.3]]!
 
 *01/11/2015 14:34
-Trick-or-Treating was the best! We invited almost the entire class over to my house and we all went around my neighborhood. Kayla, Jessica, Ashley, Sarah and I came over right after school. Brian came pretty soon after with his friend Lucas. Henry came with Alex and Mike right before we started trick-or-treating. I even got Samantha to come over! I was so glad she came!
+Trick-or-Treating was the best[[1.8]]! We invited almost the entire class over to my house and we all went around my neighborhood[[0]]. Kayla, Jessica, Ashley, Sarah and I came over right after school[[0]]. Brian came pretty soon after with his friend Lucas[[0]]. Henry came with Alex and Mike right before we started trick-or-treating[[0]]. I even got Samantha to come over[[1]]! I was so glad she came[[1]]!
 
 *02/11/2015 19:28
-After Halloween I gained five pounds. I hope I don’t get diabetes, that would be awful.
+After Halloween I gained five pounds[[0]]. I hope I don’t get diabetes, that would be awful[[-1.2]].
 
 *03/11/2015 18:15
-Today was amazing day at school. Everyone is friends in our class now and it’s just wonderful.
+Today was amazing day at school[[2]]. Everyone is friends in our class now and it’s just wonderful[[1.2]].
 
 *03/11/2015 20:35
-A new kid came to school today, his name is Fred. He seems nice, but he’s very shy.
+A new kid came to school today, his name is Fred[[0]]. He seems nice, but he’s very shy[[0.5]].
 
 *04/11/2015 14:34
-Henry is so mean, he keeps picking on the new kid, Fred.
+Henry is so mean, he keeps picking on the new kid, Fred[[-1]].
 
 *05/11/2015 19:28
-Henry has started to pick on me again. Ashley says he’s flirting with me. I think that’s stupid.
+Henry has started to pick on me again[[-.8]]. Ashley says he’s flirting with me[[0.5]]. I think that’s stupid[[-1.5]].
 
 *05/11/2015 18:15
-Mrs. Mary has started to get a lot stricter. She keeps making us do really hard homeworks. She keeps talking about some tests she’s preparing us for that’s “super important,” but I don’t care, I hate having all this work.
+Mrs. Mary has started to get a lot stricter[[-1]]. She keeps making us do really hard homeworks[[-0.5]]. She keeps talking about some tests she’s preparing us for that’s “super important,” but I don’t care, I hate having all this work[[-2]].
 
 *05/11/2015 17:18
-Mister Sniffles is sick. Mrs. Mary had to take him to see the vet.
+Mister Sniffles is sick[[-1]]. Mrs. Mary had to take him to see the vet[[0]].
 
 *06/11/2015 20:35
-We’re all worried that Mister Sniffles won’t make it. He’s strong, but Mrs. Mary says he’s very old for a gerbil.
+We’re all worried that Mister Sniffles won’t make it[[-1.3]]. He’s strong, but Mrs. Mary says he’s very old for a gerbil[[0]].
 
 *06/11/2015 13:45
-We keep having more and more homework, this is so annoying. Samantha keeps asking to hang out but I never have time because of all this homework. I’m mad.
+We keep having more and more homework, this is so annoying[[-1]]. Samantha keeps asking to hang out but I never have time because of all this homework[[-0.2]]. I’m mad[[-1.5]].
 
 *07/11/2015 16:45
-Mister Sniffles died today. I’m so sad. This is the worst day ever! Why is the world so unfair?
+Mister Sniffles died today[[-1.5]]. I’m so sad[[-2]]. This is the worst day ever[[-2]]! Why is the world so unfair[[-2]]?
 
 *08/11/2015 18:15
-We buried Mister Sniffles in a shoebox in the garden this morning.
+We buried Mister Sniffles in a shoebox in the garden this morning[[0]].
 
 *09/11/2015 19:28
-I’ve started to get to know Fred. He’s been here for a while now and people aren’t referring to him as the new kid any more. Ashley, Kayla and I all really like him. He’s really nice.
+I’ve started to get to know Fred[[0]]. He’s been here for a while now and people aren’t referring to him as the new kid any more[[0]]. Ashley, Kayla and I all really like him[[1]]. He’s really nice[[2]].
 
 *10/11/2015 13:45
-Classes keep getting harder! it’s like they’re trying to kill us!
+Classes keep getting harder[[-1]]! It’s like they’re trying to kill us[[-2]]!
 
 *13/11/2015 18:15
-Mrs. Mary just reminded us that thanksgiving break is only a week away so that’s super exciting.
+Mrs. Mary just reminded us that thanksgiving break is only a week away so that’s super exciting[[1.5]].
 
 *15/11/2015 16:45
-I’m going with my mom to visit Grandma Jean in New York for thanksgiving. It should be super fun. Grandma Jean always gives me lots of the best presents.
+I’m going with my mom to visit Grandma Jean in New York for thanksgiving[[0]]. It should be super fun[[1.5]]. Grandma Jean always gives me lots of the best presents[[1]].
 
 *18/11/2015 20:35
-Only 2 days of school until break!
+Only 2 days of school until break[[1]]!
 
 *20/11/2015 13:45
-I just finished my last assignment before break! Samantha and I celebrated by going to get ice cream!
+I just finished my last assignment before break[[1]]! Samantha and I celebrated by going to get ice cream[[.8]]!
 
 *25/11/2015 18:15
-Mom and I woke up really early to catch our flight. I really don’t like flying, it really scares me. I cried when we were taking off, it was super embarrassing. I hope no one could hear me over the engines.
+Mom and I woke up really early to catch our flight[[0]]. I really don’t like flying, it really scares me[[-1.5]]. I cried when we were taking off, it was super embarrassing[[-1.5]]. I hope no one could hear me over the engines[[0]].
 
 *26/11/2015 17:18
- Today has been pretty fun. Grandma Jean bought be the cutest earrings and we spent the whole day cooking delicious thanksgiving food together.
+ Today has been pretty fun[[1]]. Grandma Jean bought be the cutest earrings and we spent the whole day cooking delicious thanksgiving food together[[1.5]].
 
 *27/11/2015 13:45
-Last night’s dinner was definitely a success. Everyone was very complimentary of my yams.
+Last night’s dinner was definitely a success[[1]]. Everyone was very complimentary of my yams[[1]].
 
 *29/11/2015 20:35
-We have to fly back tomorrow which is sad, but I’m ready to be back in my own bed.
+We have to fly back tomorrow which is sad, but I’m ready to be back in my own bed[[-0.2]].
 
 *01/12/2015 16:45
-School started up again, in my opinion too soon. Mrs. Mary seems a lot more happy and hasn’t been assigning us nearly as much work.
+School started up again, in my opinion too soon[[-1]]. Mrs. Mary seems a lot more happy and hasn’t been assigning us nearly as much work[[1]].
 
 *04/12/2015 18:15
-I finally had time this week to hang out with Samantha. She told me all about her new school and it sounds pretty cool. She is also starting to play softball and really likes it. I want to try softball, that could be fun.
+I finally had time this week to hang out with Samantha[[1]]. She told me all about her new school and it sounds pretty cool[[1]]. She is also starting to play softball and really likes it[[1]]. I want to try softball, that could be fun[[1]].
 

@@ -21,8 +21,12 @@ public class Entry {
     public Entry(Date createdOn, String body) {
         this.createdOn = createdOn;
         this.body = body;
+        this.body = removeFakeSentTags(this.body);
     }
 
+    private String removeFakeSentTags(String body){
+        return body.replaceAll("\\[\\[(.+)\\]\\]", "");
+    }
     public Date getCreatedOn() {
         return createdOn;
     }

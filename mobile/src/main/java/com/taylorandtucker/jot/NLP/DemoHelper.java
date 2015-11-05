@@ -15,7 +15,6 @@ import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.entity.ByteArrayEntity;
 import org.apache.http.impl.client.DefaultHttpClient;
-import org.xml.sax.InputSource;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -27,9 +26,6 @@ import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
-
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
 
 
 /**
@@ -132,7 +128,7 @@ public class DemoHelper {
         String[] segments = uri.getPath().split("/");
         String idStr = segments[segments.length - 1];
 
-        RetrieveNLPdata nlp = new RetrieveNLPdata(idStr, entry.getBody());
+        RetrieveNLPdata nlp = new RetrieveNLPdata(idStr, entryText);
         nlp.execute();
     }
 
@@ -162,15 +158,12 @@ public class DemoHelper {
                 String line = "";
                 String xml = "";
 
-                DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
-                DocumentBuilder builder;
-                InputSource is;
 
                 while ((line = rd.readLine()) != null) {
                     xml += line;
                 }
 
-                final ProcessedEntry ent = new ProcessedEntry(xml, entry);
+                final ProcessedEntry ent = new ProcessedEntry(xml, entry, true);
 
 
                 InfoExtractor ie = new InfoExtractor(activity);
@@ -190,19 +183,19 @@ public class DemoHelper {
 
                 String entryText = ie.getEntryById(Long.parseLong(entryID)).getBody();
 
-                Map<String, Integer> a = ent.personSentiment();
+                Map<String, Double> a = ent.personSentiment();
                 double b = ent.getEntrySentiment();
                 System.out.println("===============================================================");
                 System.out.println(entryText);
-                System.out.print("ENTRY CUM SUM: ");
+                System.out.print("zzzENTRY CUM SUM: ");
                 System.out.println(b);
                 System.out.print("IND SENT SENT: ");
-                for (int val : ent.getSentenceSentiments()) {
+                for (double val : ent.getSentenceSentiments(false)) {
                     System.out.print(val);
                 }
                 System.out.println();
                 System.out.print("ENTITIES: ");
-                for (Map.Entry<String, Integer> entry : a.entrySet()) {
+                for (Map.Entry<String, Double> entry : a.entrySet()) {
                     System.out.print(entry.getKey() + " : " + entry.getValue());
                 }
                 System.out.println();

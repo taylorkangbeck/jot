@@ -86,9 +86,9 @@ public class InfoExtractor {
 
         updateSentimentForEntry(entryID, processedEntry.getEntrySentiment());
 
-        Map<String, Integer> pMap = processedEntry.personSentiment();
+        Map<String, Double> pMap = processedEntry.personSentiment();
 
-        for (Map.Entry<String, Integer> ent: pMap.entrySet()) {
+        for (Map.Entry<String, Double> ent: pMap.entrySet()) {
             updateEntityWithNewSent(entryID, ent.getKey(), ent.getValue());
         }
     }
@@ -118,7 +118,7 @@ public class InfoExtractor {
 
     }
 
-    public void insertEntity(String name, int sentVal){
+    public void insertEntity(String name, double sentVal){
         ContentValues values = new ContentValues();
         values.put(EntityContract.COLUMN_NAME, name);
         values.put(EntityContract.COLUMN_SENTIMENT, sentVal);
@@ -154,7 +154,7 @@ public class InfoExtractor {
         context.getContentResolver().update(DBContentProvider.ENTITY_URI, values, "name = ?", Values);
 
     }
-    private void updateEntityWithNewSent(long entryID, String name, int newSentiment){
+    private void updateEntityWithNewSent(long entryID, String name, double newSentiment){
         Entity ent = getEntityByName(name);
 
         if (ent != null) {
@@ -172,7 +172,7 @@ public class InfoExtractor {
         addEtoEdata(entryID, name, newSentiment);
     }
 
-    private void addEtoEdata(long entryID, String name, int newSentiment){
+    private void addEtoEdata(long entryID, String name, double newSentiment){
         
         Entity ent = getEntityByName(name);
         //some reason doesnt start on the first item - this will be false if no items are in the cursor
@@ -185,7 +185,7 @@ public class InfoExtractor {
             context.getContentResolver().insert(DBContentProvider.EtoE_URI, values);
         }
     }
-    private double calcSentForEntity(int newSent, double oldSent, int importance){
+    private double calcSentForEntity(double newSent, double oldSent, int importance){
         double sum = oldSent*importance;
         return (sum+newSent)/(importance+1);
     }

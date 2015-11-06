@@ -2,6 +2,7 @@
  * Created by tuckerkirven on 11/5/15.
  */
 import javax.swing.*;
+import javax.swing.border.EmptyBorder;
 import java.awt.*;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
@@ -39,35 +40,42 @@ public class testPrompts {
             writer.close();
             getPrompts();
 
+
             JFrame guiFrame = new JFrame();
+            guiFrame.setLayout(new GridLayout(3,1));
+
             guiFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
             guiFrame.setTitle("Jot speed test prompts");
-            guiFrame.setSize(1000, 600);
+            guiFrame.setSize(1000, 400);
 
             guiFrame.setLocationRelativeTo(null);
 
 
-            JLabel listLbl = new JLabel("");
+            JLabel headerLabel = new JLabel("<html><h2>Find this Entry: </h2></html>",JLabel.CENTER );
+            headerLabel.setBorder(new EmptyBorder(30, 0, 0, 0));
 
-            listLbl.setHorizontalAlignment(SwingConstants.CENTER);
+
+            JLabel promptArea = new JLabel();
+
+            promptArea.setBorder(new EmptyBorder(0, 50, 95, 50));
 
             JButton nextPromptBut = new JButton( "Next New Prompt");
             JButton backBut = new JButton( "<-- Back");
             JButton forwardBut = new JButton( "Forward -->");
 
 
-
-
-
             JPanel buttonFrame = new JPanel(new FlowLayout(FlowLayout.CENTER,200,10));
-            buttonFrame.setSize(500, 200);
+
 
             buttonFrame.add(backBut);
             buttonFrame.add(nextPromptBut);
             buttonFrame.add(forwardBut);
-            guiFrame.add(buttonFrame, BorderLayout.SOUTH);
-            guiFrame.add(listLbl, BorderLayout.CENTER);
+
+
+            guiFrame.add(headerLabel);
+            guiFrame.add(promptArea, BorderLayout.CENTER);
+            guiFrame.add(buttonFrame);
 
 
 
@@ -78,15 +86,21 @@ public class testPrompts {
                     // the setVisible value of the listPanel
                     // and //comboPanel is switched from true to
                     // value or vice versa.
-                    current = count;
+
                     count++;
-                    prompt p = getRandomPrompt();
-                    doneList.add(p);
-                    listLbl.setText(count + ".) " + p.body);
-                    writer.println("Prompt: " + p.number + " at " + df.format(new Date()));
-                    System.out.println(count);
-                    if(current%TRIALS_PER_FEATURE ==0){
-                        JOptionPane.showMessageDialog(null, "Next Test: "+randTrials.get(current/TRIALS_PER_FEATURE));
+
+                    if (current >= TRIALS_PER_FEATURE * trialNames.length) {
+                        promptArea.setText("");
+                        JOptionPane.showMessageDialog(null, "All done.\n Thank You!");
+                    } else {
+                        current = count;
+                        prompt p = getRandomPrompt();
+                        doneList.add(p);
+                        promptArea.setText("<html><h3>"+count + ".) " + p.body+"</h3></html");
+                        writer.println("Prompt: " + p.number + " at " + df.format(new Date()));
+                    }
+                    if (current % TRIALS_PER_FEATURE == 0 && current < TRIALS_PER_FEATURE * trialNames.length) {
+                        JOptionPane.showMessageDialog(null, "Next Test: " + randTrials.get(current / TRIALS_PER_FEATURE));
                     }
 
                 }
@@ -97,7 +111,7 @@ public class testPrompts {
                 public void actionPerformed(ActionEvent e) {
                     if (current>0) {
                         prompt p = doneList.get(--current);
-                        listLbl.setText(current+1 + ".) " + p.body);
+                        promptArea.setText(current+1 + ".) " + p.body);
                     }
 
 
@@ -109,7 +123,7 @@ public class testPrompts {
                 public void actionPerformed(ActionEvent e) {
                     if (current<doneList.size()-1) {
                         prompt p = doneList.get(++current);
-                        listLbl.setText(current+1 + ".) " + p.body);
+                        promptArea.setText(current+1 + ".) " + p.body);
                     }
                 }
             });

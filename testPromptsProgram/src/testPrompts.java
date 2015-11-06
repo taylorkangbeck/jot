@@ -2,18 +2,19 @@
  * Created by tuckerkirven on 11/5/15.
  */
 import javax.swing.*;
-import javax.swing.text.DateFormatter;
 import java.awt.*;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import java.io.*;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Date;
+import java.util.*;
 import java.util.List;
-import java.util.Random;
 
 public class testPrompts {
+    int TRIALS_PER_FEATURE=4;
+    String[] trialNames = {"Grey List", "Colored List", "Grey Graph", "Colored Graph"};
+    List<String> randTrials;
+
     List<prompt> fullList = new ArrayList<prompt>();
     int count = 0;
     List<prompt> doneList = new ArrayList<>();
@@ -31,6 +32,9 @@ public class testPrompts {
         try {
             final PrintWriter writer = new PrintWriter("src/test--"+df.format(d)+".txt", "UTF-8");
 
+            long seed = System.nanoTime();
+            randTrials = Arrays.asList(trialNames);
+            Collections.shuffle(randTrials, new Random(seed));
 
             writer.close();
             getPrompts();
@@ -48,7 +52,7 @@ public class testPrompts {
 
             listLbl.setHorizontalAlignment(SwingConstants.CENTER);
 
-            JButton nextPromptBut = new JButton( "Next Prompt");
+            JButton nextPromptBut = new JButton( "Next New Prompt");
             JButton backBut = new JButton( "<-- Back");
             JButton forwardBut = new JButton( "Forward -->");
 
@@ -81,6 +85,9 @@ public class testPrompts {
                     listLbl.setText(count + ".) " + p.body);
                     writer.println("Prompt: " + p.number + " at " + df.format(new Date()));
                     System.out.println(count);
+                    if(current%TRIALS_PER_FEATURE ==0){
+                        JOptionPane.showMessageDialog(null, "Next Test: "+randTrials.get(current/TRIALS_PER_FEATURE));
+                    }
 
                 }
             });

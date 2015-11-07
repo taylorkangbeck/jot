@@ -86,9 +86,9 @@ public class testPrompts {
                     // the setVisible value of the listPanel
                     // and //comboPanel is switched from true to
                     // value or vice versa.
-
-                    count++;
                     current = count;
+                    count++;
+
                     if (current >= TRIALS_PER_FEATURE * trialNames.length) {
                         promptArea.setText("");
                         JOptionPane.showMessageDialog(null, "All done.\n Thank You!");

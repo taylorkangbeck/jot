@@ -88,12 +88,12 @@ public class testPrompts {
                     // value or vice versa.
 
                     count++;
-
+                    current = count;
                     if (current >= TRIALS_PER_FEATURE * trialNames.length) {
                         promptArea.setText("");
                         JOptionPane.showMessageDialog(null, "All done.\n Thank You!");
                     } else {
-                        current = count;
+
                         prompt p = getRandomPrompt();
                         doneList.add(p);
                         promptArea.setText("<html><h3>"+count + ".) " + p.body+"</h3></html");

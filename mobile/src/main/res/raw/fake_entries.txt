@@ -116,7 +116,7 @@ A new kid came to school today, his name is Fred[[0]]. He seems nice, but he’s
 Henry is so mean, he keeps picking on the new kid, Fred[[-1]].
 
 *05/11/2015 19:28
-Henry has started to pick on me again[[-.8]]. Ashley says he’s flirting with me[[0.5]]. I think that’s stupid[[-1.5]].
+Henry has started to pick on me again[[-0.8]]. Ashley says he’s flirting with me[[0.5]]. I think that’s stupid[[-1.5]].
 
 *05/11/2015 18:15
 Mrs. Mary has started to get a lot stricter[[-1]]. She keeps making us do really hard homeworks[[-0.5]]. She keeps talking about some tests she’s preparing us for that’s “super important,” but I don’t care, I hate having all this work[[-2]].

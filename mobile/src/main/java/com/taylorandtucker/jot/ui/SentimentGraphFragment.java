@@ -327,7 +327,7 @@ public class SentimentGraphFragment extends LineChart implements OnChartGestureL
 
     @Override
     public void onChartScale(MotionEvent me, float scaleX, float scaleY) {
-        chartVisibleRangeChange(getMinViewX(), getMaxViewX());
+        chartVisibleRangeChange(getMinViewX(), getMaxViewX(), false);
         visibleRange = getMaxViewX()-getMinViewX();
     }
 
@@ -345,7 +345,7 @@ public class SentimentGraphFragment extends LineChart implements OnChartGestureL
         if (range == getHighestVisibleXIndex()){
             min = max-visibleRange;
         }
-        chartVisibleRangeChange(min, max);
+        chartVisibleRangeChange(min, max, false);
     }
 
     @Override
@@ -367,12 +367,12 @@ public class SentimentGraphFragment extends LineChart implements OnChartGestureL
         Log.i("Nothing selected", "Nothing selected.");
     }
 
-    public void chartVisibleRangeChange(long firstDay, long lastDay){
-       if (firstLastVisibleNodesChanged()) {
+    public void chartVisibleRangeChange(long firstDay, long lastDay, boolean force){
+       if (firstLastVisibleNodesChanged() || force) {
            if (this.graphVPListener != null) {
                DateTime startOfStartDay = new DateTime(firstDay).withTimeAtStartOfDay();
                DateTime endOfEndDay = new DateTime(lastDay).plusDays(1).withTimeAtStartOfDay();
-
+               System.out.println("VISIBLE RANGE CHANGE");
                this.graphVPListener.onVPRangeChange(startOfStartDay.getMillis(), endOfEndDay.getMillis());
            }
 
@@ -487,5 +487,23 @@ public class SentimentGraphFragment extends LineChart implements OnChartGestureL
         List<String> label = new ArrayList<String>();
         label.add(text);
         SentimentGraphFragment.this.getLegend().setComputedLabels(label);
+    }
+    public void showAll(){
+        System.out.println("zzoomm");
+
+        fitScreen();
+this.invalidate();
+        this.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                long min = getMinViewX() - DAYS * 100;
+                long max = getMaxViewX() + DAYS * 100;
+                
+                visibleRange = max - min;
+                SentimentGraphFragment.this.chartVisibleRangeChange(min, max, true);
+
+            }
+        }, 300);
+
     }
 }

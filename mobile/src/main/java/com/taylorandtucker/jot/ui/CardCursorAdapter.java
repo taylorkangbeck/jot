@@ -29,11 +29,19 @@ public class CardCursorAdapter extends CursorAdapter {
     static long clickDate;
     static boolean needsClick = false;
     public long dateMil;
+    private static long startTimeMil=0;
+    private static MainFragment.TestCover testCover;
 
     public CardCursorAdapter(Context context, Cursor cursor) {
         super(context, cursor, 0);
     }
 
+    public static void setStartTime(){
+        startTimeMil = new Date().getTime();
+    }
+    public static void setTestCover(MainFragment.TestCover tc){
+        testCover=tc;
+    }
     private static CardCursorAdapter instance;
     public static CardCursorAdapter getInstance(Context context, Cursor cursor) {
         if (instance == null)
@@ -101,6 +109,23 @@ public class CardCursorAdapter extends CursorAdapter {
 
                 colorAnimation.start();
                 //colorAnimation.reverse();
+            }
+        });
+
+        view.setLongClickable(true);
+        view.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View v) {
+                final View view = v;
+
+                System.out.println("card clicked2");
+                long timeTakenMil = new Date().getTime() - startTimeMil;
+                System.out.println("Time taken = " + timeTakenMil);
+
+                if (testCover != null) {
+                    testCover.coverAll();
+                }
+                return true;
             }
         });
 

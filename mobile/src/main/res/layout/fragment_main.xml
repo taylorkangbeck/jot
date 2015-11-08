@@ -126,4 +126,25 @@
         android:layout_alignParentEnd="true"
         android:layout_margin="@dimen/fabMargin" />
 
+    <RelativeLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/ChartDarkGrey"
+        android:id="@+id/listCover"
+        android:layout_alignParentEnd="false">
+
+        <Button
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:text="Start"
+            android:id="@+id/startTimerButton"
+            android:layout_alignParentEnd="false"
+            android:layout_alignParentBottom="true"
+            android:layout_marginBottom="100dp"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp" />
+
+    </RelativeLayout>
+
 </RelativeLayout>

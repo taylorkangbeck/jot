@@ -104,15 +104,15 @@ public class MainFragment extends Fragment implements LoaderManager.LoaderCallba
 
         switch (getArguments().getInt(ARG_SECTION_NUMBER)) {
             case 1:
-                
+
                 rootView = inflater.inflate(R.layout.fragment_main, container, false);
                 break;
             case 2:
-                
+
                 rootView = inflater.inflate(R.layout.fragment_entities_list, container, false);
                 break;
             case 3:
-                
+
                 rootView = inflater.inflate(R.layout.fragment_main, container, false);
                 break;
             default:
@@ -149,7 +149,7 @@ public class MainFragment extends Fragment implements LoaderManager.LoaderCallba
                 if (ie.getAllEntries().size() <= 2) {
                     DemoHelper dh = new DemoHelper(getActivity());
                     //DemoHelper dh = new DemoHelper(60, 4 * 24 * 60 * 60, getActivity(), mChart);
-                    
+
                 }
                 mChart.updateData(ie.getAllEntries());
 
@@ -164,25 +164,23 @@ public class MainFragment extends Fragment implements LoaderManager.LoaderCallba
                             long entryTime = 1000 * c.getLong(c.getColumnIndexOrThrow(EntryContract.COLUMN_DATE));
 
                             final int index = i;
-                            if (entryTime <= endOfDay && entryTime >= startOfDay ) {
-                                
+                            if (entryTime <= endOfDay && entryTime >= startOfDay) {
 
-                                    
-                                    CardCursorAdapter.needsClick = true;
-                                    CardCursorAdapter.clickDate = startOfDay;
-                                if(entriesFeed.getFirstVisiblePosition() <= i && entriesFeed.getLastVisiblePosition() >= i) {
-                                    
-                                    
-                                    
+
+                                CardCursorAdapter.needsClick = true;
+                                CardCursorAdapter.clickDate = startOfDay;
+                                if (entriesFeed.getFirstVisiblePosition() <= i && entriesFeed.getLastVisiblePosition() >= i) {
+
+
                                     View v = (View) entriesFeed.getChildAt(i - entriesFeed.getFirstVisiblePosition());
-                                    
+
                                     v.performClick();
                                 }
 
-                               if(!hasScrolled) {
-                                   entriesFeed.setSelectionFromTop(i, 0);
-                                   hasScrolled = true;
-                               }
+                                if (!hasScrolled) {
+                                    entriesFeed.setSelectionFromTop(i, 0);
+                                    hasScrolled = true;
+                                }
                             }
                         }
                     }
@@ -192,7 +190,8 @@ public class MainFragment extends Fragment implements LoaderManager.LoaderCallba
                         minTimeChart = startDate;
                         maxTimeChart = endDate;
                         getLoaderManager().restartLoader(LOADER_ID, null, MainFragment.this);
-                        entriesFeed.smoothScrollToPosition(0);
+                        //todo find some way to make scroll here not awful
+                        //entriesFeed.smoothScrollToPosition(0);
                     }
                 });
 
@@ -200,6 +199,9 @@ public class MainFragment extends Fragment implements LoaderManager.LoaderCallba
                 cardMergeAdapter.addAdapter(cardCursorAdapter);
                 entriesFeed.setAdapter(cardMergeAdapter);
 
+                TestCover testCover = new TestCover(entriesFeed, mChart, cardCursorAdapter);
+
+                cardCursorAdapter.setTestCover(testCover);
                 setupEmojiButtons();
                 setupFAB();
                 break;
@@ -223,7 +225,7 @@ public class MainFragment extends Fragment implements LoaderManager.LoaderCallba
         }
     }
 
-    private void setupEmojiButtons(){
+    private void setupEmojiButtons() {
         Button pos = (Button) getActivity().findViewById(R.id.addPosEmoji);
         Button neg = (Button) getActivity().findViewById(R.id.addNegEmoji);
 
@@ -243,10 +245,12 @@ public class MainFragment extends Fragment implements LoaderManager.LoaderCallba
         });
 
     }
-    private void writeEmoji(String emojiChars){
+
+    private void writeEmoji(String emojiChars) {
         EditText textEntry = (EditText) getActivity().findViewById(R.id.textEntry);
         textEntry.getText().insert(textEntry.getSelectionStart(), emojiChars);
     }
+
     private void setupFAB() {
         // submit listener
         Button submitButton = (Button) getActivity().findViewById(R.id.submitButton);
@@ -330,7 +334,7 @@ public class MainFragment extends Fragment implements LoaderManager.LoaderCallba
                         public void run() {
                             mChart.updateData(ie.getAllEntries());
                             mChart.setGradient();
-                            
+
                         }
                     }, 30);
                 }
@@ -350,7 +354,7 @@ public class MainFragment extends Fragment implements LoaderManager.LoaderCallba
                         public void run() {
                             mChart.updateData(ie.getAllEntries());
                             mChart.setGradient();
-                            
+
                         }
                     }, 30);
                 }
@@ -489,7 +493,7 @@ public class MainFragment extends Fragment implements LoaderManager.LoaderCallba
                 sortOrder = EntryContract.COLUMN_DATE + " DESC";
                 uri = DBContentProvider.ENTRY_URI;
                 selection = EntryContract.COLUMN_DATE + " BETWEEN ? and ? ";
-                selectionArgs = new String[] {Long.toString(minTimeChart / 1000), Long.toString(maxTimeChart/1000)};
+                selectionArgs = new String[]{Long.toString(minTimeChart / 1000), Long.toString(maxTimeChart / 1000)};
 
                 break;
             case 2:
@@ -587,15 +591,15 @@ public class MainFragment extends Fragment implements LoaderManager.LoaderCallba
                     xml += line;
                 }
             } catch (ClientProtocolException e) {
-                
+
 
                 // TODO Auto-generated catch block
             } catch (IOException e) {
-                
+
 
                 // TODO Auto-generated catch block
             }
-            
+
             final ProcessedEntry ent = new ProcessedEntry(xml, entry, false);
 
 
@@ -616,13 +620,13 @@ public class MainFragment extends Fragment implements LoaderManager.LoaderCallba
                     getLoaderManager().restartLoader(LOADER_ID, null, MainFragment.this);
                 }
             });
-            
+
 
             Map<String, Double> entityMap = ent.personSentiment();
 
 
             for (Map.Entry<String, Double> a : entityMap.entrySet()) {
-                
+
             }
             
 
@@ -646,4 +650,41 @@ public class MainFragment extends Fragment implements LoaderManager.LoaderCallba
         inputMethodManager.hideSoftInputFromWindow(activity.getCurrentFocus().getWindowToken(), 0);
     }
 
+    class TestCover {
+        private ListView entriesFeed;
+        private SentimentGraphFragment chart;
+        private CardCursorAdapter cardCursorAdapter;
+        final View coverView = getActivity().findViewById(R.id.listCover);
+
+        public TestCover(final ListView entriesFeed, SentimentGraphFragment chart, CardCursorAdapter cca) {
+            this.entriesFeed = entriesFeed;
+            this.chart = chart;
+            this.cardCursorAdapter = cca;
+
+            Button startTimerButton = (Button) getActivity().findViewById(R.id.startTimerButton);
+
+            startTimerButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+
+                    coverView.setVisibility(View.INVISIBLE);
+                    cardCursorAdapter.setStartTime();
+                }
+            });
+        }
+
+        public void coverAll() {
+            //zooms chart out so all entries will be put in list
+            chart.showAll();
+            coverView.setVisibility(View.VISIBLE);
+
+            entriesFeed.postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    entriesFeed.smoothScrollToPosition(0);
+                }
+            }, 500);
+
+        }
+    }
 }

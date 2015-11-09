@@ -6,18 +6,12 @@
     android:background="@color/mainBackground"
     android:id="@+id/mainfrag">
 
-    <com.taylorandtucker.jot.ui.SentimentGraphFragment
-        android:id="@+id/chart"
-        android:layout_height="200dp"
-        android:layout_width="match_parent" />
-
     <ListView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/entriesFeed"
         android:divider="@null"
         android:dividerHeight="0dp"
-        android:layout_below="@+id/chart"
         android:layout_alignParentBottom="true" >
         <!--
                 android:layout_alignParentBottom="true"
@@ -132,7 +126,8 @@
         android:layout_height="match_parent"
         android:background="@color/ChartDarkGrey"
         android:id="@+id/listCover"
-        android:layout_alignParentEnd="false">
+        android:layout_alignParentEnd="false"
+        android:visibility="visible">
 
         <Button
             android:layout_width="fill_parent"

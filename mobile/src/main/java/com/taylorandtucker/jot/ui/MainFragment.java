@@ -161,10 +161,6 @@ public class MainFragment extends Fragment implements LoaderManager.LoaderCallba
 
                 final ListView entriesFeed = (ListView) getActivity().findViewById(R.id.entriesFeed);
 
-                //View emptyFooter = LayoutInflater.from(context).inflate(R.layout.blankplace_card, entriesFeed);
-                //entriesFeed.addFooterView(emptyFooter);
-                mChart = (SentimentGraphFragment) getActivity().findViewById(R.id.chart);
-
                 if (ie.getAllEntries().size() <= 2) {
                     DemoHelper dh = new DemoHelper(getActivity());
                     //DemoHelper dh = new DemoHelper(60, 4 * 24 * 60 * 60, getActivity(), mChart);
@@ -172,49 +168,6 @@ public class MainFragment extends Fragment implements LoaderManager.LoaderCallba
                 }
                 mChart.updateData(ie.getAllEntries());
 
-                mChart.addVPListener(new SentimentGraphFragment.GraphVPListener() {
-                    @Override
-                    public void onNodeSelected(long startOfDay, long endOfDay) {
-
-                        boolean hasScrolled = false;
-                        for (int i = 0; i < cardMergeAdapter.getCount(); i++) {
-                            Cursor c = (Cursor) cardMergeAdapter.getItem(i);
-
-                            long entryTime = 1000 * c.getLong(c.getColumnIndexOrThrow(EntryContract.COLUMN_DATE));
-
-                            final int index = i;
-
-                            if (entryTime <= endOfDay && entryTime >= startOfDay ) {
-                                
-                                    CardCursorAdapter.needsClick = true;
-                                    CardCursorAdapter.clickDate = startOfDay;
-                                if(entriesFeed !=null && entriesFeed.getFirstVisiblePosition() <= i && entriesFeed.getLastVisiblePosition() >= i) {
-
-
-                                    View v = (View) entriesFeed.getChildAt(i - entriesFeed.getFirstVisiblePosition());
-
-                                    v.performClick();
-                                }
-
-                                if (!hasScrolled) {
-                                    entriesFeed.setSelectionFromTop(i, 0);
-                                    hasScrolled = true;
-                                }
-                            }
-                        }
-                    }
-
-                    @Override
-                    public void onVPRangeChange(long startDate, long endDate) {
-                        minTimeChart = startDate;
-                        maxTimeChart = endDate;
-                        if(isAdded()) {
-                            getLoaderManager().restartLoader(LOADER_ID, null, MainFragment.this);
-                            //todo find some way to make scroll here not awful
-                            //entriesFeed.smoothScrollToPosition(0);
-                        }
-                    }
-                });
 
                 cardCursorAdapter = new CardCursorAdapter(getContext(), null);
                 cardMergeAdapter.addAdapter(cardCursorAdapter);

@@ -54,7 +54,7 @@ public class ProcessedEntry {
 
             sum += i ;
         }
-        
+
         return (double) sum/((double)sents.size());
     }
     //returns a list of integer sentiment values for each sentence

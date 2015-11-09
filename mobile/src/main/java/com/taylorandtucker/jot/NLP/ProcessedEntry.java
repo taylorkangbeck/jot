@@ -36,7 +36,7 @@ public class ProcessedEntry {
         try {
             DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
             DocumentBuilder builder =factory.newDocumentBuilder();
-            System.out.println(rawXML);
+
             doc = builder.parse(new InputSource(new StringReader(rawXML)));
         }catch (Exception e){
             System.out.println(e);
@@ -51,10 +51,10 @@ public class ProcessedEntry {
         List<Double> sents = getSentenceSentiments(fakeDemo);
         //todo: bound this
         for (Double i: sents){
-            System.out.println("zzz i: " + i);
+
             sum += i ;
         }
-        System.out.println("zzz sum: " + sum);
+
 
         return (double) sum/((double)sents.size());
     }
@@ -112,7 +112,7 @@ public class ProcessedEntry {
                 if (m.find()) {
 
                     sentSum = Double.parseDouble(m.group(1));
-                    System.out.println("here");
+
                 }
             }
             sentiments.add(sentSum);
@@ -262,9 +262,7 @@ public class ProcessedEntry {
         }
         return appearances;
     }
-    public void print(String a){
-        System.out.println(a);
-    }
+
 
     public class DefaultHashMap<K,V> extends HashMap<K,V> {
         public V getOrDefault(K k, V d){

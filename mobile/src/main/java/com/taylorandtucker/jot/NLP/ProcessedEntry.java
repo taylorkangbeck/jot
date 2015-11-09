@@ -110,12 +110,7 @@ public class ProcessedEntry {
                 Matcher m = p.matcher(sentence);
 
                 if (m.find()) {
-
                     sentSum = Double.parseDouble(m.group(1));
-                    System.out.println("here");
-                }
-                if (sentence.contains("Mister Sniffles bit me")){
-                    System.out.println("Mister Sniffle Test1234: " + sentSum);
                 }
 
             }

@@ -199,9 +199,8 @@ public class MainFragment extends Fragment implements LoaderManager.LoaderCallba
                 cardMergeAdapter.addAdapter(cardCursorAdapter);
                 entriesFeed.setAdapter(cardMergeAdapter);
 
-                TestCover testCover = new TestCover(entriesFeed, mChart, cardCursorAdapter);
+                TestCover testCover = new TestCover(entriesFeed, mChart, cardCursorAdapter, getActivity());
 
-                cardCursorAdapter.setTestCover(testCover);
                 setupEmojiButtons();
                 setupFAB();
                 break;
@@ -650,41 +649,5 @@ public class MainFragment extends Fragment implements LoaderManager.LoaderCallba
         inputMethodManager.hideSoftInputFromWindow(activity.getCurrentFocus().getWindowToken(), 0);
     }
 
-    class TestCover {
-        private ListView entriesFeed;
-        private SentimentGraphFragment chart;
-        private CardCursorAdapter cardCursorAdapter;
-        final View coverView = getActivity().findViewById(R.id.listCover);
 
-        public TestCover(final ListView entriesFeed, SentimentGraphFragment chart, CardCursorAdapter cca) {
-            this.entriesFeed = entriesFeed;
-            this.chart = chart;
-            this.cardCursorAdapter = cca;
-
-            Button startTimerButton = (Button) getActivity().findViewById(R.id.startTimerButton);
-
-            startTimerButton.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-
-                    coverView.setVisibility(View.INVISIBLE);
-                    cardCursorAdapter.setStartTime();
-                }
-            });
-        }
-
-        public void coverAll() {
-            //zooms chart out so all entries will be put in list
-            chart.showAll();
-            coverView.setVisibility(View.VISIBLE);
-
-            entriesFeed.postDelayed(new Runnable() {
-                @Override
-                public void run() {
-                    entriesFeed.smoothScrollToPosition(0);
-                }
-            }, 500);
-
-        }
-    }
 }

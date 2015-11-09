@@ -30,7 +30,8 @@ public class CardCursorAdapter extends CursorAdapter {
     static boolean needsClick = false;
     public long dateMil;
     private static long startTimeMil=0;
-    private static MainFragment.TestCover testCover;
+    private static int entryCount = 0;
+
 
     public CardCursorAdapter(Context context, Cursor cursor) {
         super(context, cursor, 0);
@@ -38,10 +39,9 @@ public class CardCursorAdapter extends CursorAdapter {
 
     public static void setStartTime(){
         startTimeMil = new Date().getTime();
+        entryCount++;
     }
-    public static void setTestCover(MainFragment.TestCover tc){
-        testCover=tc;
-    }
+
     private static CardCursorAdapter instance;
     public static CardCursorAdapter getInstance(Context context, Cursor cursor) {
         if (instance == null)
@@ -120,11 +120,8 @@ public class CardCursorAdapter extends CursorAdapter {
 
                 System.out.println("card clicked2");
                 long timeTakenMil = new Date().getTime() - startTimeMil;
-                System.out.println("Time taken = " + timeTakenMil);
+                System.out.println("Time taken = " + timeTakenMil + " For entry test " + entryCount);
 
-                if (testCover != null) {
-                    testCover.coverAll();
-                }
                 return true;
             }
         });

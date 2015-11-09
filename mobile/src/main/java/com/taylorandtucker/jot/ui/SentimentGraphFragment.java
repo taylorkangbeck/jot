@@ -465,7 +465,6 @@ public class SentimentGraphFragment extends LineChart implements OnChartGestureL
 
         // return the fill position
         public float getFillLinePosition(LineDataSet dataSet, LineDataProvider lineDataProvider) {
-
             return 0;
             //return dataSet.getYValForXIndex(dataSet.getEntryCount());
         }
@@ -498,7 +497,7 @@ this.invalidate();
             public void run() {
                 long min = getMinViewX() - DAYS * 100;
                 long max = getMaxViewX() + DAYS * 100;
-                
+
                 visibleRange = max - min;
                 SentimentGraphFragment.this.chartVisibleRangeChange(min, max, true);
 

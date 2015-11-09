@@ -1,21 +1,15 @@
 package com.taylorandtucker.jot.ui;
 
-import android.app.SearchManager;
-import android.content.Context;
-import android.database.Cursor;
 import android.os.Bundle;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.SearchView;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.ImageButton;
 
 import com.taylorandtucker.jot.R;
-import com.taylorandtucker.jot.localdb.DBContentProvider;
-import com.taylorandtucker.jot.localdb.DBUtils;
 
 //import android.support.v7.widget.SearchView;
 
@@ -89,7 +83,7 @@ public class MainActivity extends AppCompatActivity
             // decide what to show in the action bar.
             getMenuInflater().inflate(R.menu.main, menu);
             restoreActionBar();
-            SearchManager searchManager = (SearchManager) getSystemService(Context.SEARCH_SERVICE);
+            /*SearchManager searchManager = (SearchManager) getSystemService(Context.SEARCH_SERVICE);
             SearchView searchView = (SearchView) menu.findItem(R.id.menu_search).getActionView();
             searchView.setSearchableInfo(searchManager.getSearchableInfo(getComponentName()));
             searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
@@ -119,7 +113,7 @@ public class MainActivity extends AppCompatActivity
                 }
 
             });
-
+*/
             return true;
         }
         return super.onCreateOptionsMenu(menu);
@@ -137,7 +131,10 @@ public class MainActivity extends AppCompatActivity
         if (id == R.id.action_settings) {
             return true;
         }*/
-
+        TestCover tc = TestCover.getInstance();
+        if(tc != null){
+            tc.coverAll();
+        }
         return super.onOptionsItemSelected(item);
     }
 }

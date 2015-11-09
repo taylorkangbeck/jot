@@ -1,2 +1,2 @@
-include ':mobile', ':wear', ':MPChartLib'
+include ':MPChartLib', ':mobile'
 project(':MPChartLib').projectDir = new File('MPChartLib1')

@@ -79,6 +79,10 @@ public class SentimentGraphFragment extends LineChart implements OnChartGestureL
         setupChart();
     }
 
+    public int dateMilliToGraphIndex(long dateMilli) {
+        return (int) (dateMilli/DAYS) - (int)(startTime);
+    }
+
     public void addVPListener(GraphVPListener vpl){
         this.graphVPListener = vpl;
     }

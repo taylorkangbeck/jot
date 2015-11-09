@@ -1,17 +1,47 @@
 apply plugin: 'com.android.application'
 
+def debugsuffix = System.
+        getProperty('debugsuffix', project.getProperties().get('debugsuffix', null))
+
+def final yourApplicationId = 'com.taylorandtucker.jot'
+debugsuffix ="ch1co0"
 android {
     compileSdkVersion 23
     buildToolsVersion "23.0.1"
 
     defaultConfig {
-        applicationId "com.taylorandtucker.jot"
+        applicationId yourApplicationId
         minSdkVersion 21
         targetSdkVersion 23
         versionCode 1
         versionName "1.0"
+
+        //These are the values for the authorities and account types.
+        //Reference them in the java files with e.g. BuildConfig.ACCOUNT_TYPE.
+
+        //These are the values for the authorities and account types.
+        //Reference them in the java files with e.g. BuildConfig.ACCOUNT_TYPE.
+
+        buildConfigField "String", "ACCOUNT_TYPE", "\"${applicationId}.account\""
+        buildConfigField "String", "AUTHORITY", "\"${applicationId}.provider\""
+
+        //Reference them in .xml files.
+        resValue "string", "account_type", "${applicationId}.account"
+        resValue "string", "authority", "${applicationId}.provider"
     }
-    buildTypes {
+    productFlavors {
+        dev {
+            applicationId = yourApplicationId + ".dev" + debugsuffix
+            //Reference them again so they get overwritten by the flavor.
+
+            buildConfigField "String", "ACCOUNT_TYPE", "\"${applicationId}.account\""
+            buildConfigField "String", "AUTHORITY", "\"${applicationId}.provider\""
+
+            resValue "string", "account_type", "${applicationId}.account"
+            resValue "string", "authority", "${applicationId}.provider"
+        }
+    }
+            buildTypes {
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'

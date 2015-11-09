@@ -8,8 +8,9 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteQueryBuilder;
 import android.net.Uri;
 
-import com.taylorandtucker.jot.localdb.DBContract.EntryContract;
+import com.taylorandtucker.jot.BuildConfig;
 import com.taylorandtucker.jot.localdb.DBContract.EntityContract;
+import com.taylorandtucker.jot.localdb.DBContract.EntryContract;
 import com.taylorandtucker.jot.localdb.DBContract.EtoEContract;
 
 /**
@@ -25,7 +26,10 @@ public class DBContentProvider extends ContentProvider {
     private static final int ENTITY_ID = 4;
     private static final int EtoE = 5;
     private static final int EtoE_ID = 6;
-    private static final String AUTHORITY = "com.taylorandtucker.jot.provider";
+    public static final String AUTHORITY = BuildConfig.AUTHORITY;
+    public static final String AUCCOUNT_TYPE = BuildConfig.ACCOUNT_TYPE;
+
+
     private static final String ENTRY_PATH = "entry";
     private static final String ENTITY_PATH = "entity";
     private static final String EtoE_PATH = "entitiesToEntries";

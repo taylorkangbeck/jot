@@ -20,12 +20,15 @@ import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.TranslateAnimation;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.AbsListView;
+import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.ImageButton;
 import android.widget.ListView;
 
+import com.github.mikephil.charting.highlight.Highlight;
 import com.taylorandtucker.jot.Entry;
 import com.taylorandtucker.jot.NLP.DemoHelper;
 import com.taylorandtucker.jot.NLP.InfoExtractor;
@@ -95,6 +98,22 @@ public class MainFragment extends Fragment implements LoaderManager.LoaderCallba
     public MainFragment() {
     }
 
+    public void highlightGraphEntryAtListPos(int pos) {
+        Cursor c = (Cursor) cardMergeAdapter.getItem(pos);
+
+        //highlight on graph at this position
+        long entryTime = 1000 * c.getLong(c.getColumnIndexOrThrow(EntryContract.COLUMN_DATE));
+
+        int dataSetIndex = 0; //assumed
+
+        //accounting for rounding errors
+        int start = mChart.dateMilliToGraphIndex(entryTime);
+        List<com.github.mikephil.charting.data.Entry> nodes = mChart.getEntriesAtIndex(start);
+        for (int i = start + 1; nodes.isEmpty(); i++) //moving up: rounder error always misses under
+            nodes = mChart.getEntriesAtIndex(i);
+        int xIndex = nodes.get(0).getXIndex();
+        mChart.highlightValues(new Highlight[]{new Highlight(xIndex, dataSetIndex)});
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -199,6 +218,31 @@ public class MainFragment extends Fragment implements LoaderManager.LoaderCallba
                 cardCursorAdapter = new CardCursorAdapter(getContext(), null);
                 cardMergeAdapter.addAdapter(cardCursorAdapter);
                 entriesFeed.setAdapter(cardMergeAdapter);
+
+                //adding a scroll listener to adjust chart highlighting based on top list item
+                entriesFeed.setOnScrollListener(new AbsListView.OnScrollListener() {
+                    Cursor c;
+
+                    @Override
+                    public void onScrollStateChanged(AbsListView view, int scrollState) {
+                        int currentPos = entriesFeed.getFirstVisiblePosition() + 1; //looking at next FULLY visible entry
+                        highlightGraphEntryAtListPos(currentPos);
+                    }
+
+                    @Override
+                    public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
+                        //do nothing
+                    }
+                });
+
+                //TODO highlighting the clicked card on the graph
+                entriesFeed.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                    @Override
+                    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                        //TODO this is not being called, click is being consumed somewhere
+                        highlightGraphEntryAtListPos(position);
+                    }
+                });
 
                 setupEmojiButtons();
                 setupFAB();

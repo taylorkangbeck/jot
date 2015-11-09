@@ -2,9 +2,12 @@ package com.taylorandtucker.jot.ui;
 
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
+import android.animation.ArgbEvaluator;
+import android.animation.ValueAnimator;
 import android.app.Activity;
 import android.content.Context;
 import android.database.Cursor;
+import android.graphics.Color;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -193,9 +196,22 @@ public class MainFragment extends Fragment implements LoaderManager.LoaderCallba
                                     
                                     
                                     
-                                    View v = (View) entriesFeed.getChildAt(i - entriesFeed.getFirstVisiblePosition());
-                                    
-                                    v.performClick();
+                                    final View view = (View) entriesFeed.getChildAt(i - entriesFeed.getFirstVisiblePosition());
+
+                                    Integer colorFrom = view.getSolidColor();
+                                    Integer colorTo = Color.BLUE;
+                                    ValueAnimator colorAnimation = ValueAnimator.ofObject(new ArgbEvaluator(), colorFrom, colorTo, colorFrom);
+                                    System.out.println("card clicked");
+                                    colorAnimation.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+
+                                        @Override
+                                        public void onAnimationUpdate(ValueAnimator animator) {
+                                            view.setBackgroundColor((Integer) animator.getAnimatedValue());
+                                        }
+
+
+                                    });
+                                    colorAnimation.start();
                                 }
 
                                if(!hasScrolled) {
@@ -235,12 +251,30 @@ public class MainFragment extends Fragment implements LoaderManager.LoaderCallba
                     }
                 });
 
-                //TODO highlighting the clicked card on the graph
+                //highlighting the clicked entry on the graph and outlining its card
                 entriesFeed.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                     @Override
-                    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                        //TODO this is not being called, click is being consumed somewhere
+                    public void onItemClick(AdapterView<?> parent, View v, int position, long id) {
                         highlightGraphEntryAtListPos(position);
+
+                        //flash blue outline on entry card
+                        final View view = v;
+                        Integer colorFrom = view.getSolidColor();
+                        Integer colorTo = Color.BLUE;
+                        ValueAnimator colorAnimation = ValueAnimator.ofObject(new ArgbEvaluator(), colorFrom, colorTo, colorFrom);
+                        System.out.println("card clicked");
+                        colorAnimation.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+
+                            @Override
+                            public void onAnimationUpdate(ValueAnimator animator) {
+                                view.setBackgroundColor((Integer) animator.getAnimatedValue());
+                            }
+
+
+                        });
+
+                        colorAnimation.start();
+                        //colorAnimation.reverse();
                     }
                 });
 

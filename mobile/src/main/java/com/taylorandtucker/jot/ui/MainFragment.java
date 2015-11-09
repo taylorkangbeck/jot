@@ -208,9 +208,11 @@ public class MainFragment extends Fragment implements LoaderManager.LoaderCallba
                     public void onVPRangeChange(long startDate, long endDate) {
                         minTimeChart = startDate;
                         maxTimeChart = endDate;
-                        getLoaderManager().restartLoader(LOADER_ID, null, MainFragment.this);
-                        //todo find some way to make scroll here not awful
-                        //entriesFeed.smoothScrollToPosition(0);
+                        if(isAdded()) {
+                            getLoaderManager().restartLoader(LOADER_ID, null, MainFragment.this);
+                            //todo find some way to make scroll here not awful
+                            //entriesFeed.smoothScrollToPosition(0);
+                        }
                     }
                 });
 

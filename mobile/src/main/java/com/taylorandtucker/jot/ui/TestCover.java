@@ -42,8 +42,7 @@ class TestCover {
     }
 
     public void coverAll() {
-        //zooms chart out so all entries will be put in list
-        chart.showAll();
+
         coverView.setVisibility(View.VISIBLE);
 
         entriesFeed.postDelayed(new Runnable() {

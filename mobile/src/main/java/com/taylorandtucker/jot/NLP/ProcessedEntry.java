@@ -109,9 +109,11 @@ public class ProcessedEntry {
                 Pattern p = Pattern.compile("\\[\\[(.+)\\]\\]");
                 Matcher m = p.matcher(sentence);
 
-                sentSum=0;
-                
+                if (m.find()) {
 
+                    sentSum = Double.parseDouble(m.group(1));
+                    System.out.println("here");
+                }
             }
             sentiments.add(sentSum);
         }

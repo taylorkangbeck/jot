@@ -110,7 +110,6 @@ public class ProcessedEntry {
                 Matcher m = p.matcher(sentence);
 
                 if (m.find()) {
-
                     sentSum = Double.parseDouble(m.group(1));
 
                 }

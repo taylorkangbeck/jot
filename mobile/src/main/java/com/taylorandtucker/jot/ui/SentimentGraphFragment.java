@@ -80,7 +80,7 @@ public class SentimentGraphFragment extends LineChart implements OnChartGestureL
     }
 
     public int dateMilliToGraphIndex(long dateMilli) {
-        return (int) (dateMilli/DAYS) - (int)(startTime);
+        return (int) (dateMilli/DAYS - startTime);
     }
 
     public void addVPListener(GraphVPListener vpl){
@@ -333,6 +333,7 @@ public class SentimentGraphFragment extends LineChart implements OnChartGestureL
     public void onChartScale(MotionEvent me, float scaleX, float scaleY) {
         chartVisibleRangeChange(getMinViewX(), getMaxViewX(), false);
         visibleRange = getMaxViewX()-getMinViewX();
+        //TODO for some reason sometimes list does not update
     }
 
     @Override

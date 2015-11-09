@@ -83,7 +83,7 @@ public class CardCursorAdapter extends CursorAdapter {
         */
 
         if(needsClick && dateMil > clickDate && dateMil < clickDate+24*60*60*1000){
-            view.performClick();
+            MainFragment.flashBlueCardOutline(view);
             needsClick = false;
         }
 

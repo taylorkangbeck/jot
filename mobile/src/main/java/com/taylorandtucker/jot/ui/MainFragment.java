@@ -2,9 +2,12 @@ package com.taylorandtucker.jot.ui;
 
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
+import android.animation.ArgbEvaluator;
+import android.animation.ValueAnimator;
 import android.app.Activity;
 import android.content.Context;
 import android.database.Cursor;
+import android.graphics.Color;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -28,6 +31,7 @@ import android.widget.FrameLayout;
 import android.widget.ImageButton;
 import android.widget.ListView;
 
+import com.github.mikephil.charting.data.LineDataSet;
 import com.github.mikephil.charting.highlight.Highlight;
 import com.taylorandtucker.jot.Entry;
 import com.taylorandtucker.jot.NLP.DemoHelper;
@@ -100,19 +104,25 @@ public class MainFragment extends Fragment implements LoaderManager.LoaderCallba
 
     public void highlightGraphEntryAtListPos(int pos) {
         Cursor c = (Cursor) cardMergeAdapter.getItem(pos);
-
+        if (c == null) return;
         //highlight on graph at this position
         long entryTime = 1000 * c.getLong(c.getColumnIndexOrThrow(EntryContract.COLUMN_DATE));
 
         int dataSetIndex = 0; //assumed
 
         //accounting for rounding errors
-        int start = mChart.dateMilliToGraphIndex(entryTime);
-        List<com.github.mikephil.charting.data.Entry> nodes = mChart.getEntriesAtIndex(start);
-        for (int i = start + 1; nodes.isEmpty(); i++) //moving up: rounder error always misses under
-            nodes = mChart.getEntriesAtIndex(i);
-        int xIndex = nodes.get(0).getXIndex();
-        mChart.highlightValues(new Highlight[]{new Highlight(xIndex, dataSetIndex)});
+        int xIndexGuess = mChart.dateMilliToGraphIndex(entryTime);
+        com.github.mikephil.charting.data.Entry matchingEntry = null;
+        LineDataSet data = mChart.getData().getDataSetByIndex(dataSetIndex);
+        int listStart = data.getEntryIndex(xIndexGuess);
+        List<com.github.mikephil.charting.data.Entry> entries = data.getYVals();
+        int i;
+        for (i = listStart; entries.get(i).getXIndex() < xIndexGuess; ++i) //moving up: rounder error always misses under
+        {
+            //DO NOTHING
+        }
+
+        mChart.highlightValues(new Highlight[]{new Highlight(entries.get(i).getXIndex(), dataSetIndex)});
     }
 
     @Override
@@ -188,12 +198,14 @@ public class MainFragment extends Fragment implements LoaderManager.LoaderCallba
                                 
                                     CardCursorAdapter.needsClick = true;
                                     CardCursorAdapter.clickDate = startOfDay;
+
                                 if(entriesFeed !=null && entriesFeed.getFirstVisiblePosition() <= i && entriesFeed.getLastVisiblePosition() >= i) {
 
 
                                     View v = (View) entriesFeed.getChildAt(i - entriesFeed.getFirstVisiblePosition());
 
                                     v.performClick();
+
                                 }
 
                                 if (!hasScrolled) {
@@ -208,10 +220,14 @@ public class MainFragment extends Fragment implements LoaderManager.LoaderCallba
                     public void onVPRangeChange(long startDate, long endDate) {
                         minTimeChart = startDate;
                         maxTimeChart = endDate;
+
                         if(isAdded()) {
                             getLoaderManager().restartLoader(LOADER_ID, null, MainFragment.this);
                             //todo find some way to make scroll here not awful
                             //entriesFeed.smoothScrollToPosition(0);
+
+                        entriesFeed.setSelection(0); //.smoothScrollToPosition(0); not used to avoid extra highlighting on scroll
+
                         }
                     }
                 });
@@ -239,12 +255,14 @@ public class MainFragment extends Fragment implements LoaderManager.LoaderCallba
                     }
                 });
 
-                //TODO highlighting the clicked card on the graph
+                //highlighting the clicked entry on the graph and outlining its card
                 entriesFeed.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                     @Override
-                    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                        //TODO this is not being called, click is being consumed somewhere
+                    public void onItemClick(AdapterView<?> parent, View v, int position, long id) {
                         highlightGraphEntryAtListPos(position);
+
+                        //flash blue outline on entry card
+                        flashBlueCardOutline(v);
                     }
                 });
 
@@ -273,7 +291,27 @@ public class MainFragment extends Fragment implements LoaderManager.LoaderCallba
         }
     }
 
-    private void setupEmojiButtons() {
+    public static void flashBlueCardOutline(View v) {
+        final View view = v;
+        Integer colorFrom = view.getSolidColor();
+        Integer colorTo = Color.BLUE;
+        ValueAnimator colorAnimation = ValueAnimator.ofObject(new ArgbEvaluator(), colorFrom, colorTo, colorFrom);
+        System.out.println("card clicked");
+        colorAnimation.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+
+            @Override
+            public void onAnimationUpdate(ValueAnimator animator) {
+                view.setBackgroundColor((Integer) animator.getAnimatedValue());
+            }
+
+
+        });
+
+        colorAnimation.start();
+        //colorAnimation.reverse();
+    }
+    private void setupEmojiButtons(){
+
         Button pos = (Button) getActivity().findViewById(R.id.addPosEmoji);
         Button neg = (Button) getActivity().findViewById(R.id.addNegEmoji);
 

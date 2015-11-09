@@ -105,8 +105,9 @@ public class ProcessedEntry {
                 else if (sentSum < -2)
                     sentSum = -2;
             }else{
-              sentSum=0;
 
+		sentSum=0;
+                }
             }
             sentiments.add(sentSum);
         }

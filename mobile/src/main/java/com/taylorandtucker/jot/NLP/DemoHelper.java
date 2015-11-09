@@ -187,7 +187,11 @@ public class DemoHelper {
                 double b = ent.getEntrySentiment();
 
                 for (double val : ent.getSentenceSentiments(false)) {
-                    System.out.print(val);
+
+                }
+
+                for (Map.Entry<String, Double> entry : a.entrySet()) {
+
                 }
 
                 for (Map.Entry<String, Double> entry : a.entrySet()) {

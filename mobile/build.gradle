@@ -4,7 +4,7 @@ def debugsuffix = System.
         getProperty('debugsuffix', project.getProperties().get('debugsuffix', null))
 
 def final yourApplicationId = 'com.taylorandtucker.jot'
-debugsuffix ="ch1co0"
+debugsuffix ="ch1co1"
 android {
     compileSdkVersion 23
     buildToolsVersion "23.0.1"

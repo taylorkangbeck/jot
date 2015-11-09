@@ -80,7 +80,7 @@ public class SentimentGraphFragment extends LineChart implements OnChartGestureL
     }
 
     public int dateMilliToGraphIndex(long dateMilli) {
-        return (int) (dateMilli/DAYS) - (int)(startTime);
+        return (int) (dateMilli/DAYS - startTime);
     }
 
     public void addVPListener(GraphVPListener vpl){
@@ -333,6 +333,7 @@ public class SentimentGraphFragment extends LineChart implements OnChartGestureL
     public void onChartScale(MotionEvent me, float scaleX, float scaleY) {
         chartVisibleRangeChange(getMinViewX(), getMaxViewX(), false);
         visibleRange = getMaxViewX()-getMinViewX();
+        //TODO for some reason sometimes list does not update
     }
 
     @Override
@@ -376,7 +377,7 @@ public class SentimentGraphFragment extends LineChart implements OnChartGestureL
            if (this.graphVPListener != null) {
                DateTime startOfStartDay = new DateTime(firstDay).withTimeAtStartOfDay();
                DateTime endOfEndDay = new DateTime(lastDay).plusDays(1).withTimeAtStartOfDay();
-               System.out.println("VISIBLE RANGE CHANGE");
+
                this.graphVPListener.onVPRangeChange(startOfStartDay.getMillis(), endOfEndDay.getMillis());
            }
 
@@ -492,7 +493,6 @@ public class SentimentGraphFragment extends LineChart implements OnChartGestureL
         SentimentGraphFragment.this.getLegend().setComputedLabels(label);
     }
     public void showAll(){
-        System.out.println("zzoomm");
 
         fitScreen();
 this.invalidate();

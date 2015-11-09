@@ -214,6 +214,7 @@ public class MainFragment extends Fragment implements LoaderManager.LoaderCallba
                 cardMergeAdapter.addAdapter(entityCardCursorAdapter);
                 entitiesFeed.setAdapter(cardMergeAdapter);
 
+                cardCursorAdapter.testType = "Chart-Colors";
                 setupFAB();
 
                 break;

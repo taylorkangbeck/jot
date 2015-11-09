@@ -17,6 +17,7 @@ import com.taylorandtucker.jot.localdb.DBContract.EntryContract;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Random;
 
 /**
  * Created by Taylor on 9/16/2015.
@@ -31,6 +32,8 @@ public class CardCursorAdapter extends CursorAdapter {
     public long dateMil;
     private static long startTimeMil=0;
     private static int entryCount = 0;
+    public static String testType;
+    private static int testID =-1;
 
 
     public CardCursorAdapter(Context context, Cursor cursor) {
@@ -39,6 +42,10 @@ public class CardCursorAdapter extends CursorAdapter {
 
     public static void setStartTime(){
         startTimeMil = new Date().getTime();
+        if(testID==-1){
+            Random rand = new Random();
+            testID = rand.nextInt(100);
+        }
         entryCount++;
     }
 
@@ -112,6 +119,7 @@ public class CardCursorAdapter extends CursorAdapter {
             }
         });
 
+
         view.setLongClickable(true);
         view.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
@@ -120,7 +128,10 @@ public class CardCursorAdapter extends CursorAdapter {
 
                 System.out.println("card clicked2");
                 long timeTakenMil = new Date().getTime() - startTimeMil;
-                System.out.println("Time taken = " + timeTakenMil + " For entry test " + entryCount);
+                String TestDataString = "Time: "+ timeTakenMil + " ms "+ " Test Type: " + testType + " Test ID:  "+testID;
+
+                FeedBackAsync fa = new FeedBackAsync(TestDataString);
+
 
                 return true;
             }
@@ -132,5 +143,6 @@ public class CardCursorAdapter extends CursorAdapter {
         }
 
     }
+
 
 }

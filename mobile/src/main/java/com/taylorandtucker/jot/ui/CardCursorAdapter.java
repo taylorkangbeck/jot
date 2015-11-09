@@ -1,7 +1,5 @@
 package com.taylorandtucker.jot.ui;
 
-import android.animation.ArgbEvaluator;
-import android.animation.ValueAnimator;
 import android.content.Context;
 import android.database.Cursor;
 import android.graphics.Color;
@@ -80,32 +78,12 @@ public class CardCursorAdapter extends CursorAdapter {
        // entrySentimentGradient.setgradient(sent);
 
 
-        view.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                final View view = v;
-                Integer colorFrom = view.getSolidColor();
-                Integer colorTo = Color.BLUE;
-                ValueAnimator colorAnimation = ValueAnimator.ofObject(new ArgbEvaluator(), colorFrom, colorTo, colorFrom);
-                System.out.println("card clicked");
-                colorAnimation.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
-
-                    @Override
-                    public void onAnimationUpdate(ValueAnimator animator) {
-                        view.setBackgroundColor((Integer) animator.getAnimatedValue());
-                    }
-
-
-                });
-
-
-                colorAnimation.start();
-                //colorAnimation.reverse();
-            }
-        });
+        /*
+        * onclick blue outline was moved to MainFragment onCreateView
+        */
 
         if(needsClick && dateMil > clickDate && dateMil < clickDate+24*60*60*1000){
-            view.performClick();
+            MainFragment.flashBlueCardOutline(view);
             needsClick = false;
         }
 

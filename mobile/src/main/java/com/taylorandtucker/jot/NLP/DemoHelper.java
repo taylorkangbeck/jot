@@ -185,24 +185,15 @@ public class DemoHelper {
 
                 Map<String, Double> a = ent.personSentiment();
                 double b = ent.getEntrySentiment();
-                System.out.println("===============================================================");
-                System.out.println(entryText);
-                System.out.print("zzzENTRY CUM SUM: ");
-                System.out.println(b);
-                System.out.print("IND SENT SENT: ");
+
                 for (double val : ent.getSentenceSentiments(false)) {
                     System.out.print(val);
                 }
-                System.out.println();
-                System.out.print("ENTITIES: ");
+
                 for (Map.Entry<String, Double> entry : a.entrySet()) {
-                    System.out.print(entry.getKey() + " : " + entry.getValue());
+
                 }
-                System.out.println();
 
-
-
-                System.out.println("===================== ENTRIES =======================");
 
                 /*
                     DBUtils utils = DBUtils.getInstance(getContext());

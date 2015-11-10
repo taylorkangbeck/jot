@@ -106,14 +106,12 @@ public class CardCursorAdapter extends CursorAdapter {
             public boolean onLongClick(View v) {
                 final View view = v;
 
-                System.out.println("card clicked2");
                 long timeTakenMil = new Date().getTime() - startTimeMil;
                 String testDataString = "";
                 testDataString += "Test ID:  "+testID;
                 testDataString += ", Entry " + entryCount;
-                testDataString += ", Time: "+ timeTakenMil+" ms,";
+                testDataString += ", Time: "+ timeTakenMil+" ms";
                 testDataString += ", Test Type: " + testType;
-                testDataString += ", Test ID:  "+testID;
                 testDataString += ", Position in list From bottom: " + entryNumInList;
 
                 FeedBackAsync fa = new FeedBackAsync(testDataString);

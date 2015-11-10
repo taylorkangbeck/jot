@@ -29,9 +29,6 @@ import android.widget.FrameLayout;
 import android.widget.ImageButton;
 import android.widget.ListView;
 
-
-import com.github.mikephil.charting.data.LineDataSet;
-import com.github.mikephil.charting.highlight.Highlight;
 import com.taylorandtucker.jot.Entry;
 import com.taylorandtucker.jot.NLP.DemoHelper;
 import com.taylorandtucker.jot.NLP.InfoExtractor;
@@ -177,7 +174,7 @@ public class MainFragment extends Fragment implements LoaderManager.LoaderCallba
                 cardMergeAdapter.addAdapter(entityCardCursorAdapter);
                 entitiesFeed.setAdapter(cardMergeAdapter);
 
-                cardCursorAdapter.testType = "Chart-Colors";
+                cardCursorAdapter.testType = "No-Chart-Colors";
                 setupFAB();
 
                 break;

@@ -2,9 +2,12 @@ package com.taylorandtucker.jot.ui;
 
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
+import android.animation.ArgbEvaluator;
+import android.animation.ValueAnimator;
 import android.app.Activity;
 import android.content.Context;
 import android.database.Cursor;
+import android.graphics.Color;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -26,6 +29,9 @@ import android.widget.FrameLayout;
 import android.widget.ImageButton;
 import android.widget.ListView;
 
+
+import com.github.mikephil.charting.data.LineDataSet;
+import com.github.mikephil.charting.highlight.Highlight;
 import com.taylorandtucker.jot.Entry;
 import com.taylorandtucker.jot.NLP.DemoHelper;
 import com.taylorandtucker.jot.NLP.InfoExtractor;
@@ -93,7 +99,6 @@ public class MainFragment extends Fragment implements LoaderManager.LoaderCallba
 
     public MainFragment() {
     }
-
 
 
     @Override
@@ -183,7 +188,27 @@ public class MainFragment extends Fragment implements LoaderManager.LoaderCallba
         }
     }
 
-    private void setupEmojiButtons() {
+    public static void flashBlueCardOutline(View v) {
+        final View view = v;
+        Integer colorFrom = view.getSolidColor();
+        Integer colorTo = Color.BLUE;
+        ValueAnimator colorAnimation = ValueAnimator.ofObject(new ArgbEvaluator(), colorFrom, colorTo, colorFrom);
+        System.out.println("card clicked");
+        colorAnimation.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+
+            @Override
+            public void onAnimationUpdate(ValueAnimator animator) {
+                view.setBackgroundColor((Integer) animator.getAnimatedValue());
+            }
+
+
+        });
+
+        colorAnimation.start();
+        //colorAnimation.reverse();
+    }
+    private void setupEmojiButtons(){
+
         Button pos = (Button) getActivity().findViewById(R.id.addPosEmoji);
         Button neg = (Button) getActivity().findViewById(R.id.addNegEmoji);
 

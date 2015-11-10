@@ -55,7 +55,6 @@ public class ProcessedEntry {
             sum += i ;
         }
 
-
         return (double) sum/((double)sents.size());
     }
     //returns a list of integer sentiment values for each sentence
@@ -89,26 +88,26 @@ public class ProcessedEntry {
         String[] sents = entryBody.split("(?<!\\w\\.\\w.)(?<![A-Z][a-z]\\.)(?<=\\.|\\?|!)\\s");
         return Arrays.asList(sents);
     }
-    public List<Double> getSentenceEmojiSents(Boolean useFakeSent){
+    public List<Double> getSentenceEmojiSents(Boolean useFakeSent) {
         String positive = "\uD83D\uDE01";
         String negative = "\uD83D\uDE20";
 
         List<Double> sentiments = new ArrayList<Double>();
-        for(String sentence: getSentenceStrings()){
+        for (String sentence : getSentenceStrings()) {
 
-            double sentSum=0;
+            double sentSum = 0;
 
-            if(!useFakeSent) {
+            if (!useFakeSent) {
                 sentSum = countOccurances(positive, sentence) - countOccurances(negative, sentence);
 
                 if (sentSum > 2)
                     sentSum = 2;
                 else if (sentSum < -2)
                     sentSum = -2;
-            }else{
 
+            } else {
 
-                    sentSum =0;
+                sentSum = 0;
 
             }
             sentiments.add(sentSum);
@@ -258,7 +257,6 @@ public class ProcessedEntry {
         }
         return appearances;
     }
-
 
     public class DefaultHashMap<K,V> extends HashMap<K,V> {
         public V getOrDefault(K k, V d){

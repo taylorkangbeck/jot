@@ -1,7 +1,5 @@
 package com.taylorandtucker.jot.ui;
 
-import android.animation.ArgbEvaluator;
-import android.animation.ValueAnimator;
 import android.content.Context;
 import android.database.Cursor;
 import android.graphics.Color;
@@ -34,6 +32,7 @@ public class CardCursorAdapter extends CursorAdapter {
     private static int entryCount = 0;
     public static String testType;
     private static int testID =-1;
+    private int entryNumInList=0;
 
 
     public CardCursorAdapter(Context context, Cursor cursor) {
@@ -77,6 +76,7 @@ public class CardCursorAdapter extends CursorAdapter {
         long dateSec = cursor.getLong(cursor.getColumnIndexOrThrow(EntryContract.COLUMN_DATE));
         String body = cursor.getString(cursor.getColumnIndexOrThrow(EntryContract.COLUMN_BODY));
         double sent = cursor.getDouble(cursor.getColumnIndexOrThrow(EntryContract.COLUMN_SENTIMENT));
+        entryNumInList = cursor.getInt(cursor.getColumnIndexOrThrow(EntryContract.COLUMN_ENTRY_NUM));
 
         dateMil = dateSec*1000;
         // Populate fields with extracted properties
@@ -95,29 +95,9 @@ public class CardCursorAdapter extends CursorAdapter {
        // entrySentimentGradient.setgradient(sent);
 
 
-        view.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                final View view = v;
-                Integer colorFrom = view.getSolidColor();
-                Integer colorTo = Color.BLUE;
-                ValueAnimator colorAnimation = ValueAnimator.ofObject(new ArgbEvaluator(), colorFrom, colorTo, colorFrom);
-                System.out.println("card clicked");
-                colorAnimation.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
-
-                    @Override
-                    public void onAnimationUpdate(ValueAnimator animator) {
-                        view.setBackgroundColor((Integer) animator.getAnimatedValue());
-                    }
-
-
-                });
-
-
-                colorAnimation.start();
-                //colorAnimation.reverse();
-            }
-        });
+        /*
+        * onclick blue outline was moved to MainFragment onCreateView
+        */
 
 
         view.setLongClickable(true);
@@ -128,17 +108,23 @@ public class CardCursorAdapter extends CursorAdapter {
 
                 System.out.println("card clicked2");
                 long timeTakenMil = new Date().getTime() - startTimeMil;
-                String TestDataString = "Time: "+ timeTakenMil + " ms "+ " Test Type: " + testType + " Test ID:  "+testID;
+                String testDataString = "";
+                testDataString += "Test ID:  "+testID;
+                testDataString += ", Entry " + entryCount;
+                testDataString += ", Time: "+ timeTakenMil+" ms,";
+                testDataString += ", Test Type: " + testType;
+                testDataString += ", Test ID:  "+testID;
+                testDataString += ", Position in list From bottom: " + entryNumInList;
 
-                FeedBackAsync fa = new FeedBackAsync(TestDataString);
-
+                FeedBackAsync fa = new FeedBackAsync(testDataString);
+                fa.execute();
 
                 return true;
             }
         });
 
         if(needsClick && dateMil > clickDate && dateMil < clickDate+24*60*60*1000){
-            view.performClick();
+            MainFragment.flashBlueCardOutline(view);
             needsClick = false;
         }
 

@@ -103,6 +103,7 @@ public class InfoExtractor {
         values.put(DBContract.EntryContract.COLUMN_DATE, entry.getCreatedOn().getTime()/1000);
         values.put(DBContract.EntryContract.COLUMN_BODY, entry.getBody());
         values.put(DBContract.EntryContract.COLUMN_SENTIMENT, entry.getSentiment());
+        values.put(DBContract.EntryContract.COLUMN_ENTRY_NUM, entry.getEntryNumber());
 
         // Insert the new row, returning the primary key value of the new row
         newRowId = context.getContentResolver().insert(DBContentProvider.ENTRY_URI, values);
@@ -213,8 +214,9 @@ public class InfoExtractor {
                 sent  = c.getDouble(c.getColumnIndex(EntryContract.COLUMN_SENTIMENT));
 
             String body = c.getString(c.getColumnIndex(EntryContract.COLUMN_BODY));
+            int entryNum = c.getInt(c.getColumnIndex(EntryContract.COLUMN_ENTRY_NUM));
 
-            Entry ent  = new Entry(new Date(date*1000), body);
+            Entry ent  = new Entry(new Date(date*1000), body, entryNum);
             ent.setSentiment(sent);
             l.add(ent);
 

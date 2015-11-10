@@ -13,15 +13,17 @@ public class Entry {
     private String body;
     private String id;
     private double sentiment;
+    private int numInList=0;
 
     public Entry(String body) {
-        this(new Date(), body);
+        this(new Date(), body, 0);
     }
 
-    public Entry(Date createdOn, String body) {
+    public Entry(Date createdOn, String body, int numInList) {
         this.createdOn = createdOn;
         this.body = body;
         this.body = removeFakeSentTags(this.body);
+        this.numInList = numInList;
     }
 
     private String removeFakeSentTags(String body){
@@ -58,4 +60,8 @@ public class Entry {
     public double getSentiment() {return sentiment;}
 
     public void setSentiment(double value) {sentiment = value;}
+
+    public int getEntryNumber(){
+        return this.numInList;
+    }
 }

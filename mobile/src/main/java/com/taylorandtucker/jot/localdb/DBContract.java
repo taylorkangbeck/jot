@@ -14,6 +14,7 @@ public final class DBContract {
         public static final String COLUMN_DATE = "date";
         public static final String COLUMN_BODY = "body";
         public static final String COLUMN_SENTIMENT = "sentimentEntry";
+        public static final String COLUMN_ENTRY_NUM = "entryNum";
 
     }
 

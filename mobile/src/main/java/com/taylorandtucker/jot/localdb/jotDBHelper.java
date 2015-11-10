@@ -23,7 +23,8 @@ public class jotDBHelper extends SQLiteOpenHelper {
                 EntryContract._ID + " INTEGER PRIMARY KEY," +
                 EntryContract.COLUMN_DATE + TEXT_TYPE + COMMA_SEP +
                 EntryContract.COLUMN_BODY + TEXT_TYPE + COMMA_SEP +
-                EntryContract.COLUMN_SENTIMENT + TEXT_TYPE +
+                EntryContract.COLUMN_SENTIMENT + TEXT_TYPE + COMMA_SEP +
+                EntryContract.COLUMN_ENTRY_NUM + TEXT_TYPE +
         " )";
     private static final String SQL_CREATE_ENTITIES =
             "CREATE TABLE " + EntityContract.TABLE_NAME + " (" +

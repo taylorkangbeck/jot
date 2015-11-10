@@ -155,7 +155,7 @@ public class MainFragment extends Fragment implements LoaderManager.LoaderCallba
                 cardMergeAdapter.addAdapter(cardCursorAdapter);
                 entriesFeed.setAdapter(cardMergeAdapter);
 
-
+                cardCursorAdapter.testType = "No-Graph-Colors";
                 TestCover testCover = new TestCover(entriesFeed, null, cardCursorAdapter, getActivity());
 
                 //adding a scroll listener to adjust chart highlighting based on top list item

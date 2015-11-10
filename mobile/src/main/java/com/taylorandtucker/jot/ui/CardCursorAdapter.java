@@ -106,7 +106,6 @@ public class CardCursorAdapter extends CursorAdapter {
             public boolean onLongClick(View v) {
                 final View view = v;
 
-                System.out.println("card clicked2");
                 long timeTakenMil = new Date().getTime() - startTimeMil;
                 String testDataString = "";
                 testDataString += "Test ID:  "+testID;

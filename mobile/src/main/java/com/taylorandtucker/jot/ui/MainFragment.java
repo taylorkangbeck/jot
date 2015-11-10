@@ -154,7 +154,7 @@ public class MainFragment extends Fragment implements LoaderManager.LoaderCallba
                 cardCursorAdapter = new CardCursorAdapter(getContext(), null);
                 cardMergeAdapter.addAdapter(cardCursorAdapter);
                 entriesFeed.setAdapter(cardMergeAdapter);
-                cardCursorAdapter.testType = "No-Graph-Colors";
+                cardCursorAdapter.testType = "No-Graph-No-Colors";
 
                 TestCover testCover = new TestCover(entriesFeed, null, cardCursorAdapter, getActivity());
 
@@ -173,8 +173,7 @@ public class MainFragment extends Fragment implements LoaderManager.LoaderCallba
                 entityCardCursorAdapter = new EntityCardCursorAdapter(getContext(), null);
                 cardMergeAdapter.addAdapter(entityCardCursorAdapter);
                 entitiesFeed.setAdapter(cardMergeAdapter);
-
-                cardCursorAdapter.testType = "Chart-Colors";
+                
                 setupFAB();
 
                 break;

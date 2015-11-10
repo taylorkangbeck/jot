@@ -236,7 +236,7 @@ public class MainFragment extends Fragment implements LoaderManager.LoaderCallba
                 cardMergeAdapter.addAdapter(cardCursorAdapter);
                 entriesFeed.setAdapter(cardMergeAdapter);
 
-                cardCursorAdapter.testType = "Chart-No-Colors";
+                cardCursorAdapter.testType = "Graph-No-Colors";
 
                 TestCover testCover = new TestCover(entriesFeed, mChart, cardCursorAdapter, getActivity());
 

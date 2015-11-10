@@ -173,7 +173,7 @@ public class MainFragment extends Fragment implements LoaderManager.LoaderCallba
                 entityCardCursorAdapter = new EntityCardCursorAdapter(getContext(), null);
                 cardMergeAdapter.addAdapter(entityCardCursorAdapter);
                 entitiesFeed.setAdapter(cardMergeAdapter);
-                
+
                 setupFAB();
 
                 break;

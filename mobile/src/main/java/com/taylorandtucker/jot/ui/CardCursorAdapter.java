@@ -32,7 +32,6 @@ public class CardCursorAdapter extends CursorAdapter {
     private static int entryCount = 0;
     public static String testType;
     private static int testID =-1;
-    private int entryNumInList=0;
 
 
     public CardCursorAdapter(Context context, Cursor cursor) {
@@ -76,7 +75,7 @@ public class CardCursorAdapter extends CursorAdapter {
         long dateSec = cursor.getLong(cursor.getColumnIndexOrThrow(EntryContract.COLUMN_DATE));
         String body = cursor.getString(cursor.getColumnIndexOrThrow(EntryContract.COLUMN_BODY));
         double sent = cursor.getDouble(cursor.getColumnIndexOrThrow(EntryContract.COLUMN_SENTIMENT));
-        entryNumInList = cursor.getInt(cursor.getColumnIndexOrThrow(EntryContract.COLUMN_ENTRY_NUM));
+        final int entryNumInList = cursor.getInt(cursor.getColumnIndexOrThrow(EntryContract.COLUMN_ENTRY_NUM));
 
         dateMil = dateSec*1000;
         // Populate fields with extracted properties

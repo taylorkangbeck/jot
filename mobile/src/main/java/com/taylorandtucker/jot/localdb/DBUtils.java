@@ -21,7 +21,8 @@ public class DBUtils {
             EntryContract._ID,
             EntryContract.COLUMN_DATE,
             EntryContract.COLUMN_BODY,
-            EntryContract.COLUMN_SENTIMENT
+            EntryContract.COLUMN_SENTIMENT,
+            EntryContract.COLUMN_ENTRY_NUM
     };
     public static String[] entityProjection = {
             EntityContract._ID,
@@ -51,6 +52,7 @@ public class DBUtils {
         values.put(EntryContract.COLUMN_DATE, entry.getCreatedOn().toString());
         values.put(EntryContract.COLUMN_BODY, entry.getBody());
         values.put(EntryContract.COLUMN_SENTIMENT, entry.getSentiment());
+        values.put(EntryContract.COLUMN_ENTRY_NUM, entry.getEntryNumber());
 
         // Insert the new row, returning the primary key value of the new row
          newRowId = dbHelper.getWritableDatabase().insert(EntryContract.TABLE_NAME ,null, values);

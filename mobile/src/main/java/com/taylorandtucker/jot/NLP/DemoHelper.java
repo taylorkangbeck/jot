@@ -32,7 +32,7 @@ import java.util.Random;
  * Created by tuckerkirven on 10/11/15.
  */
 public class DemoHelper {
-
+     private int entryProcessedCount=0;
     String entryNeutralShort = "this is supposed to be a neutral sentence. ";
     String entryNeutralLong = "This is supposed to be a neutral sentence with more length. These are average words. ";
 
@@ -108,11 +108,12 @@ public class DemoHelper {
     }
 
     public void process(String entryText, long dateSec) {
-        final Entry entry = new Entry(new Date(dateSec * 1000), entryText);
+        final Entry entry = new Entry(new Date(dateSec * 1000), entryText, entryProcessedCount);
 
         InfoExtractor ie = new InfoExtractor(activity);
 
         Uri uri = ie.putEntry(entry);
+        entryProcessedCount++;
         String[] segments = uri.getPath().split("/");
         String idStr = segments[segments.length - 1];
 
@@ -120,11 +121,12 @@ public class DemoHelper {
         nlp.execute();
     }
     public void process(String entryText, Date date) {
-        final Entry entry = new Entry(date, entryText);
+        final Entry entry = new Entry(date, entryText, entryProcessedCount);
 
         InfoExtractor ie = new InfoExtractor(activity);
 
         Uri uri = ie.putEntry(entry);
+        entryProcessedCount++;
         String[] segments = uri.getPath().split("/");
         String idStr = segments[segments.length - 1];
 
@@ -158,7 +160,6 @@ public class DemoHelper {
                 String line = "";
                 String xml = "";
 
-
                 while ((line = rd.readLine()) != null) {
                     xml += line;
                 }
@@ -168,7 +169,6 @@ public class DemoHelper {
 
                 InfoExtractor ie = new InfoExtractor(activity);
                 ie.processNewEntryData(Long.parseLong(entryID), ent);
-
 
 
                 final List entries = ie.getAllEntries();

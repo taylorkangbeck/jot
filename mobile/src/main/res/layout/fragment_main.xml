@@ -144,11 +144,12 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textAppearance="?android:attr/textAppearanceLarge"
-            android:text="Read the next entry \n Then press start and find it"
+            android:text="Read the next entry \n\nThen press START and find it"
             android:id="@+id/textView"
             android:layout_centerVertical="true"
             android:layout_centerHorizontal="true"
-            android:textColor="@color/bright_foreground_inverse_material_light" />
+            android:textColor="@color/bright_foreground_inverse_material_light"
+            android:gravity="center_horizontal" />
 
     </RelativeLayout>
 

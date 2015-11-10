@@ -145,6 +145,16 @@
             android:layout_marginLeft="20dp"
             android:layout_marginRight="20dp" />
 
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:text="Read the next entry \n Then press start and find it"
+            android:id="@+id/textView"
+            android:layout_centerVertical="true"
+            android:layout_centerHorizontal="true"
+            android:textColor="@color/bright_foreground_inverse_material_light" />
+
     </RelativeLayout>
 
 </RelativeLayout>

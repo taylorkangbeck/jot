@@ -426,6 +426,7 @@ public class MainFragment extends Fragment implements LoaderManager.LoaderCallba
                     }, 30);
                 }
             });
+            
         }
     }
 

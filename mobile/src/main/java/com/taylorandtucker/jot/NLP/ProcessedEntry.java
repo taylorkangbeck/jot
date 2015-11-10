@@ -105,9 +105,14 @@ public class ProcessedEntry {
                 else if (sentSum < -2)
                     sentSum = -2;
             } else {
+                Pattern p = Pattern.compile("\\[\\[(.+)\\]\\]");
+                Matcher m = p.matcher(sentence);
 
-                sentSum = 0;
+                if (m.find()) {
 
+                    sentSum = Double.parseDouble(m.group(1));
+
+                }
             }
             sentiments.add(sentSum);
         }

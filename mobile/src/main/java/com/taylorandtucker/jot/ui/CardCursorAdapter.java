@@ -109,9 +109,8 @@ public class CardCursorAdapter extends CursorAdapter {
                 String testDataString = "";
                 testDataString += "Test ID:  "+testID;
                 testDataString += ", Entry " + entryCount;
-                testDataString += ", Time: "+ timeTakenMil+" ms,";
+                testDataString += ", Time: "+ timeTakenMil+" ms";
                 testDataString += ", Test Type: " + testType;
-                testDataString += ", Test ID:  "+testID;
                 testDataString += ", Position in list From bottom: " + entryNumInList;
 
                 FeedBackAsync fa = new FeedBackAsync(testDataString);

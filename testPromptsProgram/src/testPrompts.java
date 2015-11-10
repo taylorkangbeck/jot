@@ -37,7 +37,6 @@ public class testPrompts {
             randTrials = Arrays.asList(trialNames);
             Collections.shuffle(randTrials, new Random(seed));
 
-            writer.close();
             getPrompts();
 
 
@@ -92,12 +91,14 @@ public class testPrompts {
                     if (current >= TRIALS_PER_FEATURE * trialNames.length) {
                         promptArea.setText("");
                         JOptionPane.showMessageDialog(null, "All done.\n Thank You!");
+                        writer.close();
                     } else {
 
                         prompt p = getRandomPrompt();
                         doneList.add(p);
                         promptArea.setText("<html><h3>"+count + ".) " + p.body+"</h3></html");
                         writer.println("Prompt: " + p.number + " at " + df.format(new Date()));
+                        writer.flush();
                     }
                     if (current % TRIALS_PER_FEATURE == 0 && current < TRIALS_PER_FEATURE * trialNames.length) {
                         JOptionPane.showMessageDialog(null, "Next Test: " + randTrials.get(current / TRIALS_PER_FEATURE));

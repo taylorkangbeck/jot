@@ -5,7 +5,7 @@ def debugsuffix = System.
 
 def final yourApplicationId = 'com.taylorandtucker.jot'
 
-debugsuffix ="ch0co0"
+debugsuffix ="ch0co1"
 
 android {
     compileSdkVersion 23

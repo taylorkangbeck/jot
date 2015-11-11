@@ -37,7 +37,6 @@ public class testPrompts {
             randTrials = Arrays.asList(trialNames);
             Collections.shuffle(randTrials, new Random(seed));
 
-            writer.close();
             getPrompts();
 
 
@@ -46,7 +45,7 @@ public class testPrompts {
 
             guiFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
-            guiFrame.setTitle("Jot speed test prompts");
+            guiFrame.setTitle("Jot speed trial prompter");
             guiFrame.setSize(1000, 400);
 
             guiFrame.setLocationRelativeTo(null);
@@ -100,7 +99,7 @@ public class testPrompts {
                         writer.println("Prompt: " + p.number + " at " + df.format(new Date()));
                     }
                     if (current % TRIALS_PER_FEATURE == 0 && current < TRIALS_PER_FEATURE * trialNames.length) {
-                        JOptionPane.showMessageDialog(null, "Next Test: " + randTrials.get(current / TRIALS_PER_FEATURE));
+                        JOptionPane.showMessageDialog(null, "Next Trial: " + randTrials.get(current / TRIALS_PER_FEATURE )+ "\nFill out survey for previous trial!");
                     }
 
                 }

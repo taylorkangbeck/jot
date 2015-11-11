@@ -58,7 +58,7 @@ public class testPrompts {
 
             JLabel promptArea = new JLabel();
 
-            promptArea.setBorder(new EmptyBorder(0, 50, 95, 50));
+            promptArea.setBorder(new EmptyBorder(0, 20, 0, 20));
 
             JButton nextPromptBut = new JButton( "Next New Prompt");
             JButton backBut = new JButton( "<-- Back");

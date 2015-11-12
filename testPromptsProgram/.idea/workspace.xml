@@ -26,8 +26,8 @@
       <file leaf-file-name="testPrompts.java" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/testPrompts.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.3716216">
-              <caret line="47" column="55" selection-start-line="47" selection-start-column="55" selection-end-line="47" selection-end-column="55" />
+            <state vertical-scroll-proportion="-1.2297298">
+              <caret line="109" column="36" selection-start-line="109" selection-start-column="36" selection-end-line="109" selection-end-column="36" />
               <folding>
                 <element signature="n#!!doc" expanded="true" />
                 <element signature="imports" expanded="true" />
@@ -430,12 +430,12 @@
       <workItem from="1446791279130" duration="1166000" />
       <workItem from="1446848286598" duration="4494000" />
       <workItem from="1447025789476" duration="18000" />
-      <workItem from="1447199040994" duration="899000" />
+      <workItem from="1447199040994" duration="3407000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="14905000" />
+    <option name="totallyTimeSpent" value="17413000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="0" y="23" width="992" height="773" extended-state="0" />
@@ -554,8 +554,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/testPrompts.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.3716216">
-          <caret line="47" column="55" selection-start-line="47" selection-start-column="55" selection-end-line="47" selection-end-column="55" />
+        <state vertical-scroll-proportion="-1.2297298">
+          <caret line="109" column="36" selection-start-line="109" selection-start-column="36" selection-end-line="109" selection-end-column="36" />
           <folding>
             <element signature="n#!!doc" expanded="true" />
             <element signature="imports" expanded="true" />

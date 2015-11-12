@@ -110,7 +110,7 @@ public class testPrompts {
                 public void actionPerformed(ActionEvent e) {
                     if (current>0) {
                         prompt p = doneList.get(--current);
-                        promptArea.setText(current+1 + ".) " + p.body);
+                        promptArea.setText("<html><h3>"+current+1 + ".) " + p.body+"</h3></html");
                     }
 
 
@@ -122,7 +122,7 @@ public class testPrompts {
                 public void actionPerformed(ActionEvent e) {
                     if (current<doneList.size()-1) {
                         prompt p = doneList.get(++current);
-                        promptArea.setText(current+1 + ".) " + p.body);
+                        promptArea.setText("<html><h3>"+current+1  + ".) " + p.body+"</h3></html");
                     }
                 }
             });

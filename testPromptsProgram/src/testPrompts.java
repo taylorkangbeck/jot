@@ -13,9 +13,13 @@ import java.util.List;
 
 public class testPrompts {
     int TRIALS_PER_FEATURE=4;
+
     String[] trialNames = {"Grey List", "Colored List", "Grey Graph", "Colored Graph"};
-    int[] testEntries = {1,2,4,6};
+    Integer[] trainEntries= {18, 28, 47, 24};
+    Integer[] testEntries = {5,8,16,22,35,40,43,52, 3, 11, 14, 19, 31, 36, 46, 49};
     List<String> randTrials;
+    int testCount =0;
+    boolean first = true;
 
     List<prompt> fullList = new ArrayList<prompt>();
     int count = 0;
@@ -77,30 +81,39 @@ public class testPrompts {
             guiFrame.add(promptArea, BorderLayout.CENTER);
             guiFrame.add(buttonFrame);
 
-
-
             nextPromptBut.addActionListener(new ActionListener() {
                 @Override
                 public void actionPerformed(ActionEvent event) {
-                    //When the fruit of veg button is pressed
-                    // the setVisible value of the listPanel
-                    // and //comboPanel is switched from true to
-                    // value or vice versa.
-                    current = count;
-                    count++;
 
-                    if (current >= TRIALS_PER_FEATURE * trialNames.length) {
-                        promptArea.setText("");
-                        JOptionPane.showMessageDialog(null, "All done.\n Thank You!");
+                    if (testCount < trainEntries.length) {
+                        prompt p = getTrainPrompt();
+                        doneList.add(p);
+                        promptArea.setText("<html><h3>" + "Training: " + p.body + "</h3></html");
+                        writer.println("Prompt: " + p.number + " at " + df.format(new Date()));
+                        ++testCount;
                     } else {
 
-                        prompt p = getRandomPrompt();
-                        doneList.add(p);
-                        promptArea.setText("<html><h3>"+count + ".) " + p.body+"</h3></html");
-                        writer.println("Prompt: " + p.number + " at " + df.format(new Date()));
-                    }
-                    if (current % TRIALS_PER_FEATURE == 0 && current < TRIALS_PER_FEATURE * trialNames.length) {
-                        JOptionPane.showMessageDialog(null, "Next Trial: " + randTrials.get(current / TRIALS_PER_FEATURE )+ "\nFill out survey for previous trial!");
+                        current = count;
+                        count++;
+
+                        if (current >= TRIALS_PER_FEATURE * trialNames.length) {
+                            promptArea.setText("");
+                            JOptionPane.showMessageDialog(null, "All done.\n Thank You!");
+                        } else {
+
+                            prompt p = getRandomPrompt();
+                            doneList.add(p);
+                            promptArea.setText("<html><h3>" + count + ".) " + p.body + "</h3></html");
+                            writer.println("Prompt: " + p.number + " at " + df.format(new Date()));
+                        }
+                        if (current % TRIALS_PER_FEATURE == 0 && current < TRIALS_PER_FEATURE * trialNames.length) {
+                            String formPrompt = "\nFill out survey for previous trial!";
+                            if (first) {
+                                formPrompt = "";
+                                first=false;
+                            }
+                            JOptionPane.showMessageDialog(null, "Next Trial: " + randTrials.get(current / TRIALS_PER_FEATURE) + formPrompt);
+                        }
                     }
 
                 }
@@ -113,9 +126,6 @@ public class testPrompts {
                         prompt p = doneList.get(--current);
                         promptArea.setText("<html><h3>"+current+1 + ".) " + p.body+"</h3></html");
                     }
-
-
-
                 }
             });
             forwardBut.addActionListener(new ActionListener() {
@@ -149,7 +159,7 @@ public class testPrompts {
             int countPrompts = 0;
             while ((line = br.readLine()) != null) {
                 if(line.length() > 1){
-                    if(Arrays.asList(testEntries).contains(countPrompts))
+                    if(Arrays.asList(testEntries).contains(countPrompts) || Arrays.asList(trainEntries).contains(countPrompts))
                         fullList.add(new prompt(line, countPrompts));
 
                     ++countPrompts;
@@ -158,6 +168,19 @@ public class testPrompts {
         }catch (Exception e){
             System.out.println("FILE MESS: "+ e);
         }
+    }
+    private prompt getTrainPrompt(){
+
+        for(prompt p: fullList){
+
+            if(Arrays.asList(trainEntries).contains(p.number)) {
+
+                fullList.remove(p);
+                return p;
+            }
+        }
+
+        return null;
     }
     private prompt getRandomPrompt() {
         Random rand = new Random();

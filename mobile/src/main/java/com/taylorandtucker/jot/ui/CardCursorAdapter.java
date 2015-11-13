@@ -72,7 +72,7 @@ public class CardCursorAdapter extends CursorAdapter {
         //view.setBackgroundDrawable(d);
         int a = Color.WHITE;
         GradientDrawable d = new GradientDrawable(GradientDrawable.Orientation.BL_TR,
-                new int[] {a,a,a,a,a,a,a,a,GradientView.getColorFromGradient(sent)});
+                new int[] {GradientView.getColorFromGradient(sent),a,a,a,a,a,a,a,a,GradientView.getColorFromGradient(sent)});
         d.setCornerRadius(0f);
         background.setBackground(d);
        // entrySentimentGradient.setgradient(sent);
@@ -81,7 +81,13 @@ public class CardCursorAdapter extends CursorAdapter {
         /*
         * onclick blue outline was moved to MainFragment onCreateView
         */
-
+        view.setLongClickable(true);
+        view.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View v) {
+                return true;
+            }
+        });
         if(needsClick && dateMil > clickDate && dateMil < clickDate+24*60*60*1000){
             MainFragment.flashBlueCardOutline(view);
             needsClick = false;

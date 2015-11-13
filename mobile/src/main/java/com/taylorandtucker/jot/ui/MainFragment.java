@@ -167,8 +167,9 @@ public class MainFragment extends Fragment implements LoaderManager.LoaderCallba
         switch (getArguments().getInt(ARG_SECTION_NUMBER)) {
             case 1:
 
-                getLoaderManager().initLoader(LOADER_ID, null, this);
-
+                if(isAdded()) {
+                    getLoaderManager().initLoader(LOADER_ID, null, this);
+                }
                 final ListView entriesFeed = (ListView) getActivity().findViewById(R.id.entriesFeed);
 
                 //View emptyFooter = LayoutInflater.from(context).inflate(R.layout.blankplace_card, entriesFeed);
@@ -255,7 +256,7 @@ public class MainFragment extends Fragment implements LoaderManager.LoaderCallba
                 });
 
                 setupEmojiButtons();
-                setupFAB();
+                    setupFAB();
                 break;
             case 2:
 

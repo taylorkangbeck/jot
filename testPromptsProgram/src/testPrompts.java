@@ -13,7 +13,9 @@ import java.util.List;
 
 public class testPrompts {
     int TRIALS_PER_FEATURE=4;
+    
     String[] trialNames = {"Grey List", "Colored List", "Grey Graph", "Colored Graph"};
+
     List<String> randTrials;
 
     List<prompt> fullList = new ArrayList<prompt>();

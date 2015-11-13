@@ -1,5 +1,6 @@
 package com.taylorandtucker.jot.ui;
 
+import android.app.Activity;
 import android.content.Context;
 import android.graphics.Color;
 import android.graphics.LinearGradient;
@@ -8,9 +9,9 @@ import android.graphics.Shader;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.MotionEvent;
+import android.widget.TextView;
 
 import com.github.mikephil.charting.charts.LineChart;
-import com.github.mikephil.charting.components.Legend;
 import com.github.mikephil.charting.components.LimitLine;
 import com.github.mikephil.charting.components.XAxis;
 import com.github.mikephil.charting.components.YAxis;
@@ -54,6 +55,7 @@ public class SentimentGraphFragment extends LineChart implements OnChartGestureL
 
     private int prevHighX;
     private int prevLowX;
+    private Context context;
 
     private GraphVPListener graphVPListener;
     private final int layoutId = R.layout.fragment_sentiment_graph;
@@ -71,11 +73,13 @@ public class SentimentGraphFragment extends LineChart implements OnChartGestureL
 
     public SentimentGraphFragment(Context context) {
         super(context);
+        this.context = context;
         setupChart();
     }
 
     public SentimentGraphFragment(Context context, AttributeSet attrs) {
         super(context, attrs);
+        this.context = context;
         setupChart();
     }
 
@@ -147,17 +151,7 @@ public class SentimentGraphFragment extends LineChart implements OnChartGestureL
         //this.getViewPortHandler().setMaximumScaleY(2f);
 
 
-        xAxis.setLabelsToSkip(60 * 60*24);
-        //this.animateX(2500, Easing.EasingOption.EaseInOutQuart);
-
-        //this.addDatat(entries);
-        // get the legend (only possible after setting data)
-        Legend l = this.getLegend();
-        l.setTextColor(Color.WHITE);
-        l.setTextSize(20);
-        // modify the legend ...
-         l.setPosition(Legend.LegendPosition.ABOVE_CHART_LEFT);
-
+        xAxis.setLabelsToSkip(60 * 60 * 24);
 
         // // dont forget to refresh the drawing
          this.invalidate();
@@ -412,7 +406,8 @@ public class SentimentGraphFragment extends LineChart implements OnChartGestureL
 
             //System.out.println("Center: " + viewPortHandler.);
 
-            Date centerDate = new Date(getMinViewX());
+            Date leftDate = new Date(getMinViewX());
+            Date rightDate = new Date(getMaxViewX());
             int mYear = calendar.get(Calendar.YEAR);
 
             int nMonth = calendar.get(Calendar.MONTH);
@@ -421,7 +416,8 @@ public class SentimentGraphFragment extends LineChart implements OnChartGestureL
             int mDay = calendar.get(Calendar.DAY_OF_MONTH);
 
             String xStr = "idk";
-            String bigLabel = "";
+            String leftLabel = "";
+            String rightLabel="";
             long skipLabels = DAYS;
 
             long vpRange = getVPRange();
@@ -433,34 +429,55 @@ public class SentimentGraphFragment extends LineChart implements OnChartGestureL
                 skipLabels = YEARS;
             }
             else if (vpRange <= YEARS && vpRange > YEARS / 2) {
-                bigLabel = new SimpleDateFormat("yyyy").format(centerDate);
+                leftLabel = new SimpleDateFormat("yyyy").format(leftDate);
+                rightLabel = new SimpleDateFormat("yyyy").format(rightDate);
                 xStr = new SimpleDateFormat("MMM").format(calendar.getTime());
-                skipLabels = MONTHS*2;
+                if(!new SimpleDateFormat("d").format(calendar.getTime()).equals("01")) {
+                xStr="";
+                }
+                skipLabels = 0;//MONTHS*2;
             }
             else if (vpRange <= YEARS / 2 && vpRange > MONTHS) {
-                bigLabel = new SimpleDateFormat("yyyy").format(centerDate);
+                leftLabel = new SimpleDateFormat("yyyy").format(leftDate);
+                rightLabel = new SimpleDateFormat("yyyy").format(rightDate);
                 xStr = new SimpleDateFormat("MMM").format(calendar.getTime());
-                skipLabels = MONTHS;
+
+                if(!new SimpleDateFormat("dd").format(calendar.getTime()).equals("01")) {
+                    xStr = "";
+                }
+                skipLabels = 0;//MONTHS;
             }
             else if (vpRange <= MONTHS && vpRange > MONTHS/2) {
-                bigLabel = new SimpleDateFormat("MMMM").format(centerDate);
-                xStr = new SimpleDateFormat("dd").format(calendar.getTime());
-                skipLabels = DAYS*5;
-            }
-            else if (vpRange <= MONTHS/2 && vpRange > WEEKS){
-                bigLabel = new SimpleDateFormat("MMMM").format(centerDate);
+                leftLabel = new SimpleDateFormat("MMMM").format(leftDate);
+                rightLabel = new SimpleDateFormat("MMMM").format(rightDate);
                 xStr = new SimpleDateFormat("dd").format(calendar.getTime());
                 skipLabels = DAYS*2;
             }
+            else if (vpRange <= MONTHS/2 && vpRange > WEEKS){
+                leftLabel = new SimpleDateFormat("MMMM").format(leftDate);
+                rightLabel = new SimpleDateFormat("MMMM").format(rightDate);
+                xStr = new SimpleDateFormat("dd").format(calendar.getTime());
+                skipLabels = DAYS;
+            }
             else {
                 //todo find closest monday?
-                bigLabel = new SimpleDateFormat("MMMM").format(centerDate);
+                leftLabel = new SimpleDateFormat("MMMM").format(leftDate);
+                rightLabel = new SimpleDateFormat("MMMM").format(rightDate);
                 xStr = new SimpleDateFormat("E MM/d").format(calendar.getTime());
                 skipLabels = 0;
             }
 
             SentimentGraphFragment.this.getXAxis().setLabelsToSkip((int) (skipLabels/DAYS));
-            setBigLabel(bigLabel);
+            String centerLabel ="";
+            if(rightLabel.equals(leftLabel)) {
+                rightLabel="";
+                centerLabel=leftLabel;
+                leftLabel="";
+            }
+
+            setleftLabel(leftLabel);
+            setRightLabel(rightLabel);
+            setCenterLabel(centerLabel);
             return xStr;
 
         }
@@ -487,10 +504,19 @@ public class SentimentGraphFragment extends LineChart implements OnChartGestureL
     private long getMaxViewX(){
         return startTime*DAYS + getHighestVisibleXIndex()*DAYS;
     }
-    private void setBigLabel(String text){
-        List<String> label = new ArrayList<String>();
-        label.add(text);
-        SentimentGraphFragment.this.getLegend().setComputedLabels(label);
+    private void setleftLabel(String text){
+
+        TextView ll = (TextView) ((Activity) context).findViewById(R.id.leftDateLabel);
+        ll.setText(text);
+
+    }
+    private void setRightLabel(String text){
+        TextView rl = (TextView) ((Activity) context).findViewById(R.id.rightDateLabel);
+        rl.setText(text);
+    }
+    private void setCenterLabel(String text){
+        TextView cl = (TextView) ((Activity) context).findViewById(R.id.centerDateLabel);
+        cl.setText(text);
     }
     public void showAll(){
 

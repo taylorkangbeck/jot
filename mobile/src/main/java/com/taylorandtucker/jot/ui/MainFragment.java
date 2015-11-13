@@ -235,6 +235,7 @@ public class MainFragment extends Fragment implements LoaderManager.LoaderCallba
                 cardCursorAdapter = new CardCursorAdapter(getContext(), null);
                 cardMergeAdapter.addAdapter(cardCursorAdapter);
                 entriesFeed.setAdapter(cardMergeAdapter);
+                cardCursorAdapter.testType = "Graph-Colors";
 
                 cardCursorAdapter.testType = "Graph-No-Colors";
 
@@ -426,6 +427,7 @@ public class MainFragment extends Fragment implements LoaderManager.LoaderCallba
                     }, 30);
                 }
             });
+            
         }
     }
 

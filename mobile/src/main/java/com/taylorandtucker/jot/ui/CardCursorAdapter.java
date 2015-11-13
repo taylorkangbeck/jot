@@ -1,5 +1,6 @@
 package com.taylorandtucker.jot.ui;
 
+import android.app.Activity;
 import android.content.Context;
 import android.database.Cursor;
 import android.graphics.Color;
@@ -8,6 +9,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CursorAdapter;
+import android.widget.SeekBar;
 import android.widget.TextView;
 
 import com.taylorandtucker.jot.R;
@@ -32,6 +34,7 @@ public class CardCursorAdapter extends CursorAdapter {
     private static int entryCount = 0;
     public static String testType;
     private static int testID =-1;
+    private static Context context;
 
 
     public CardCursorAdapter(Context context, Cursor cursor) {
@@ -63,7 +66,7 @@ public class CardCursorAdapter extends CursorAdapter {
     }
 
     @Override
-    public void bindView(View view, Context context, Cursor cursor) {
+    public void bindView(View view, final Context context, Cursor cursor) {
 
         TextView entryDateTextView = (TextView) view.findViewById(R.id.entryDate);
         TextView entryBodyTextView = (TextView) view.findViewById(R.id.entryBody);
@@ -74,7 +77,7 @@ public class CardCursorAdapter extends CursorAdapter {
         // Extract properties from cursor
         long dateSec = cursor.getLong(cursor.getColumnIndexOrThrow(EntryContract.COLUMN_DATE));
         String body = cursor.getString(cursor.getColumnIndexOrThrow(EntryContract.COLUMN_BODY));
-        double sent = cursor.getDouble(cursor.getColumnIndexOrThrow(EntryContract.COLUMN_SENTIMENT));
+        final double sent = cursor.getDouble(cursor.getColumnIndexOrThrow(EntryContract.COLUMN_SENTIMENT));
         final int entryNumInList = cursor.getInt(cursor.getColumnIndexOrThrow(EntryContract.COLUMN_ENTRY_NUM));
 
         dateMil = dateSec*1000;
@@ -87,8 +90,8 @@ public class CardCursorAdapter extends CursorAdapter {
 
         //view.setBackgroundDrawable(d);
         int a = Color.WHITE;
-        GradientDrawable d = new GradientDrawable(GradientDrawable.Orientation.BL_TR,
-                new int[] {a,a,a,a,a,a,a,a,GradientView.getColorFromGradient(sent)});
+        GradientDrawable d = new GradientDrawable(GradientDrawable.Orientation.TL_BR,
+                new int[] {GradientView.getColorFromGradient(sent),a,a,a,a,a,a,a,a,GradientView.getColorFromGradient(sent)});
         d.setCornerRadius(0f);
         background.setBackground(d);
        // entrySentimentGradient.setgradient(sent);
@@ -105,14 +108,24 @@ public class CardCursorAdapter extends CursorAdapter {
             public boolean onLongClick(View v) {
                 final View view = v;
 
-                System.out.println("card clicked2");
+                SeekBar sb = (SeekBar)((Activity) context).findViewById(R.id.sentimentSeekBar);
+                double sentGuess = sb.getProgress()/25.0 - 2.0;
+
+                sb.setProgress(50);
+                double dif = 0;
+                if (sent<sentGuess)
+                    dif=sentGuess-sent;
+                else
+                    dif=sent-sentGuess;
+
                 long timeTakenMil = new Date().getTime() - startTimeMil;
                 String testDataString = "";
-                testDataString += "Test ID:  "+testID;
+                testDataString += "ID:  "+testID;
                 testDataString += ", Entry " + entryCount;
-                testDataString += ", Time: "+ timeTakenMil+" ms";
-                testDataString += ", Test Type: " + testType;
-                testDataString += ", Position in list From bottom: " + entryNumInList;
+                testDataString += ", Time: "+ timeTakenMil;
+                testDataString += ", Type: " + testType;
+                testDataString += ", Position: " + entryNumInList;
+                testDataString += ", sentGuessError: " + dif;
 
                 FeedBackAsync fa = new FeedBackAsync(testDataString);
                 fa.execute();

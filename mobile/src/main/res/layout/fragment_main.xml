@@ -6,6 +6,7 @@
     android:background="@color/mainBackground"
     android:id="@+id/mainfrag">
 
+
     <ListView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -144,12 +145,65 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textAppearance="?android:attr/textAppearanceLarge"
-            android:text="Read the next entry \n\nThen press START and find it"
+            android:text="Read the next entry"
             android:id="@+id/textView"
+            android:textColor="@color/bright_foreground_inverse_material_light"
+            android:gravity="center_horizontal"
+            android:layout_alignParentTop="true"
+            android:layout_centerHorizontal="true"
+            android:paddingTop="40dp" />
+
+        <SeekBar
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/sentimentSeekBar"
             android:layout_centerVertical="true"
             android:layout_centerHorizontal="true"
+            android:paddingLeft="40dp"
+            android:paddingRight="40dp"
+            android:progress="50"
+            android:progressBackgroundTint="@color/blue"
+            android:progressTint="@color/blue"
+            android:paddingTop="10dp" />
+
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="wrap_content"
+            android:layout_height="40dp"
+            android:layout_above="@+id/sentimentSeekBar"
+            android:layout_centerHorizontal="true"
+            android:paddingLeft="60dp"
+            android:paddingRight="60dp"
+
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentRight="true"
+            android:background="@drawable/gradient"
+            android:layout_marginLeft="40dp"
+            android:layout_marginRight="40dp"
+            android:id="@+id/linearLayout">
+
+        </LinearLayout>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:text="Then press START and find the entry"
+            android:id="@+id/textView2"
+            android:layout_above="@+id/startTimerButton"
+            android:layout_centerHorizontal="true"
+            android:textColor="@color/bright_foreground_inverse_material_light" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:text="Estimate the sentiment"
+            android:id="@+id/textView3"
             android:textColor="@color/bright_foreground_inverse_material_light"
-            android:gravity="center_horizontal" />
+            android:gravity="center_horizontal"
+            android:layout_above="@+id/linearLayout"
+            android:layout_centerHorizontal="true" />
 
     </RelativeLayout>
 

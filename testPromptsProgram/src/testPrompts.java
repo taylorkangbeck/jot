@@ -14,6 +14,7 @@ import java.util.List;
 public class testPrompts {
     int TRIALS_PER_FEATURE=4;
     String[] trialNames = {"Grey List", "Colored List", "Grey Graph", "Colored Graph"};
+    int[] testEntries = {1,2,4,6};
     List<String> randTrials;
 
     List<prompt> fullList = new ArrayList<prompt>();
@@ -148,7 +149,9 @@ public class testPrompts {
             int countPrompts = 0;
             while ((line = br.readLine()) != null) {
                 if(line.length() > 1){
-                    fullList.add(new prompt(line, countPrompts));
+                    if(Arrays.asList(testEntries).contains(countPrompts))
+                        fullList.add(new prompt(line, countPrompts));
+
                     ++countPrompts;
                 }
             }

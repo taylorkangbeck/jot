@@ -220,7 +220,7 @@ public class MainFragment extends Fragment implements LoaderManager.LoaderCallba
                         minTimeChart = startDate;
                         maxTimeChart = endDate;
                         getLoaderManager().restartLoader(LOADER_ID, null, MainFragment.this);
-                        entriesFeed.setSelection(0); //.smoothScrollToPosition(0); not used to avoid extra highlighting on scroll
+                        //entriesFeed.setSelection(0); //.smoothScrollToPosition(0); not used to avoid extra highlighting on scroll
                     }
                 });
 

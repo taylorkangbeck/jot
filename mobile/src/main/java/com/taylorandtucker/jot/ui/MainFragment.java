@@ -226,7 +226,7 @@ public class MainFragment extends Fragment implements LoaderManager.LoaderCallba
                             //todo find some way to make scroll here not awful
                             //entriesFeed.smoothScrollToPosition(0);
 
-                        entriesFeed.setSelection(0); //.smoothScrollToPosition(0); not used to avoid extra highlighting on scroll
+                        //entriesFeed.setSelection(0); 
 
                         }
                     }

@@ -18,7 +18,7 @@ public class testPrompts {
     Integer[] trainEntries= {18, 28, 47, 24};
     Integer[] testEntries = {5,8,16,22,35,40,43,52, 3, 11, 14, 19, 31, 36, 46, 49};
     List<String> randTrials;
-    int testCount =0;
+    int trainCount =0;
     boolean first = true;
 
     List<prompt> fullList = new ArrayList<prompt>();
@@ -85,12 +85,12 @@ public class testPrompts {
                 @Override
                 public void actionPerformed(ActionEvent event) {
 
-                    if (testCount < trainEntries.length) {
+                    if (trainCount < trainEntries.length) {
                         prompt p = getTrainPrompt();
                         doneList.add(p);
                         promptArea.setText("<html><h3>" + "Training: " + p.body + "</h3></html");
                         writer.println("Prompt: " + p.number + " at " + df.format(new Date()));
-                        ++testCount;
+                        ++trainCount;
                     } else {
 
                         current = count;
@@ -122,18 +122,18 @@ public class testPrompts {
             backBut.addActionListener(new ActionListener() {
                 @Override
                 public void actionPerformed(ActionEvent e) {
-                    if (current>0) {
-                        prompt p = doneList.get(--current);
-                        promptArea.setText("<html><h3>"+current+1 + ".) " + p.body+"</h3></html");
+                    if (current>0 && trainCount >=trainEntries.length) {
+                        prompt p = doneList.get(--current+ trainEntries.length);
+                        promptArea.setText("<html><h3>"+(current+1) + ".) " + p.body+"</h3></html");
                     }
                 }
             });
             forwardBut.addActionListener(new ActionListener() {
                 @Override
                 public void actionPerformed(ActionEvent e) {
-                    if (current<doneList.size()-1) {
-                        prompt p = doneList.get(++current);
-                        promptArea.setText("<html><h3>"+current+1  + ".) " + p.body+"</h3></html");
+                    if (current<doneList.size()-trainEntries.length-1 && trainCount >=trainEntries.length) {
+                        prompt p = doneList.get(++current+trainEntries.length);
+                        promptArea.setText("<html><h3>"+(current+1)  + ".) " + p.body+"</h3></html");
                     }
                 }
             });

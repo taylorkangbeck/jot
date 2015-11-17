@@ -53,7 +53,7 @@ Sir Calvin bit me and it really hurt[[-1.5]]!
 Kayla’s birthday is this friday and we’re going to Wonderworld[[1]]! I’ve never been there, but I’ve heard it’s the coolest place ever I’m super excited[[1.5]]!
 
 *7/10/2015 18:15
-Tomorrow I need to buy toothpaste when I got to target with mom[[0]].
+Tomorrow I need to buy toothpaste when I go to target with mom[[0]].
 
 *9/10/2015 20:47
 Kayla, Ashley, Sarah, Brian and I went home with Kayla’s mom after school so we could help set up for her birthday[[0]]. I can’t wait it’s gonna be awesome[[2]]!

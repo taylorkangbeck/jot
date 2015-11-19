@@ -174,6 +174,7 @@ public class MainFragment extends Fragment implements LoaderManager.LoaderCallba
                 //View emptyFooter = LayoutInflater.from(context).inflate(R.layout.blankplace_card, entriesFeed);
                 //entriesFeed.addFooterView(emptyFooter);
                 mChart = (SentimentGraphFragment) getActivity().findViewById(R.id.chart);
+                View graphHolder = getActivity().findViewById((R.id.graphHolder));
 
                 if (ie.getAllEntries().size() <= 2) {
                     DemoHelper dh = new DemoHelper(getActivity());
@@ -268,7 +269,7 @@ public class MainFragment extends Fragment implements LoaderManager.LoaderCallba
                     }
                 });
 
-
+                entriesFeed.addHeaderView(graphHolder);
                 setupEmojiButtons();
                 setupFAB();
                 break;
